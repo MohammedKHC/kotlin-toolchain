@@ -1529,7 +1529,7 @@ class MavenDependencyImpl internal constructor(
 
         // Selecting source sets related to target platforms (intersection).
         val sourceSetsIntersection = kotlinProjectStructureMetadata.projectStructure.variants
-            .filter { it.name in (allPlatformsVariants.keys + allPlatformsVariants.keys.map { it.removeSuffix("-published") }) }
+            .filter { it.name in (allPlatformsVariants.keys + allPlatformsVariants.keys.map { it.removeSuffix(PUBLISHED_SUFFIX) }) }
             .map { it.sourceSet.toSet() }
             .let {
                 if (it.isEmpty()) emptySet() else it.reduce { l1, l2 -> l1.intersect(l2) }
@@ -1794,7 +1794,7 @@ class MavenDependencyImpl internal constructor(
             .filter { sourceSetName in it.sourceSet }
             .map { it.name }
         return moduleMetadata.variants
-            .filter { it.name.removeSuffix("-published") in sourceSetVariants }
+            .filter { it.name.removeSuffix(PUBLISHED_SUFFIX) in sourceSetVariants }
             .mapNotNull { getLeafPlatformFromVariant(it) }
             .toSet()
     }
@@ -1853,7 +1853,7 @@ class MavenDependencyImpl internal constructor(
 
             appleVariants.firstOrNull {
                 // 3. Filter the first variant that declares sourceSet
-                it.first.name.removeSuffix("-published") in variantsWithSourceSet
+                it.first.name.removeSuffix(PUBLISHED_SUFFIX) in variantsWithSourceSet
             }?.let {
                 val platform = it.second
                 // 4. Try to download artifact from that variant and resolve dependency from that
@@ -2192,6 +2192,13 @@ class MavenDependencyImpl internal constructor(
          */
         private val packageTypeWithJavaExtension =
             setOf("test-jar", "ejb", "ejb-client", "maven-plugin", "bundle")
+
+        /**
+         * Suffix is added to the Gradle Metadata variant name.
+         * It is an implementtaion detail and is a subject to change,
+         * see https://docs.google.com/document/d/18MsmrX2iYuoKS3HvY-_xnk_SMenLQzSPArj4yuy1Hfw/edit?tab=t.0
+         */
+        private const val PUBLISHED_SUFFIX = "-published"
     }
 }
 
