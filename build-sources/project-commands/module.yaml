@@ -53,4 +53,4 @@ plugins:
         # https://projectlombok.org/download
         lombok: 1.18.38
         # https://spring.io/projects/spring-boot#learn
-        springBoot: 4.0.5
+        springBoot: 4.0.6

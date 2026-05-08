@@ -181,7 +181,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -370,7 +370,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -555,7 +555,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -743,7 +743,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -929,7 +929,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -1115,7 +1115,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -1304,7 +1304,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -1493,7 +1493,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -1679,7 +1679,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -1868,7 +1868,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -2054,7 +2054,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
@@ -2243,7 +2243,7 @@ Fragments:
       springBoot: <default> {
         applyBom: <default> true
         enabled: <default> false
-        version: <default> 4.0.5
+        version: <default> 4.0.6
       }
     }
 
