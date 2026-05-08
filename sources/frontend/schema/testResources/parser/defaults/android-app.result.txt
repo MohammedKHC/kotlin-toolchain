@@ -39,7 +39,7 @@ Fragments:
         enabled: <default> false
         experimental: <default> {
           hotReload: <default> {
-            version: <default> 1.0.0
+            version: <default> 1.1.1
           }
         }
         resources: <default> {
@@ -229,7 +229,7 @@ Fragments:
         enabled: <default> false
         experimental: <default> {
           hotReload: <default> {
-            version: <default> 1.0.0
+            version: <default> 1.1.1
           }
         }
         resources: <default> {

@@ -34,7 +34,7 @@ plugins:
         # Also, update the mapping between Compose and Material3 versions in composeMaterial3VersionForCMPVersion()
         compose: 1.10.3
         # https://github.com/JetBrains/compose-hot-reload/releases
-        composeHotReload: 1.0.0
+        composeHotReload: 1.1.1
         # https://www.oracle.com/nl/java/technologies/downloads/
         jdk: 21
         # https://github.com/junit-team/junit-framework/releases
