@@ -76,7 +76,10 @@ internal class KotlinArtifactsDownloader(
         groupId: String,
         artifactId: String,
         version: String,
-        repositories: List<Repository> = listOf(MavenCentral, KotlinBootstrap),
+        repositories: List<Repository> = listOf(
+            MavenRepository("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"),
+            KotlinBootstrap,
+        ),
     ): List<Path> =
         // using incrementalCache because currently DR takes ~3s even when the artifact is already cached
         incrementalCache.execute("resolve-$groupId-$artifactId-$version", emptyMap(), emptyList()) {

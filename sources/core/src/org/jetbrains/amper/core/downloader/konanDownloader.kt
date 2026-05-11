@@ -12,7 +12,7 @@ import org.jetbrains.amper.system.info.Arch
 import org.jetbrains.amper.system.info.OsFamily
 import java.nio.file.Path
 
-private const val MAVEN_CENTRAL_REPOSITORY_URL = "https://repo1.maven.org/maven2"
+private const val MAVEN_CENTRAL_REPOSITORY_URL = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
 private const val KOTLIN_BOOTSTRAP_REPOSITORY_URL = "https://packages.jetbrains.team/maven/p/kt/bootstrap"
 
 const val KOTLIN_GROUP_ID = "org.jetbrains.kotlin"

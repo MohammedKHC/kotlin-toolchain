@@ -74,7 +74,7 @@ class BuildGraphIncrementalCacheTest : BaseDRTest() {
     fun `check that recoverable network error prevents reusing of resolved graph`(testInfo: TestInfo) = runSlowDrTest(timeout = 10.minutes) {
 
         val coordinates = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2".toMavenCoordinates()
-        val repository = MavenRepository("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/")
+        val repository = REDIRECTOR_MAVEN_CENTRAL
 
         // Incremental cache root is calculated once and reused between all resolution runs.
         val tmpDir = uniqueNestedTempDir()
@@ -120,7 +120,7 @@ class BuildGraphIncrementalCacheTest : BaseDRTest() {
     fun `check that graph is recalculated if system property used for its calculation was changed`(testInfo: TestInfo, systemProperties: SystemProperties) =
         runSlowDrTest(timeout = 10.minutes) {
             val coordinates = "io.netty:netty-common:4.1.124.Final".toMavenCoordinates()
-            val repository = MavenRepository("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/")
+            val repository = REDIRECTOR_MAVEN_CENTRAL
 
             // Incremental cache root is calculated once and reused between all resolution runs.
             val tmpDir = uniqueNestedTempDir()
