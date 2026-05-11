@@ -17,6 +17,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.jetbrains.amper.concurrency.FileMutexGroup
 import org.jetbrains.amper.concurrency.withRetry
+import org.jetbrains.amper.dependency.resolution.MavenRepository.Companion.MavenCentral
 import org.jetbrains.amper.dependency.resolution.diagnostics.CollectingDiagnosticReporter
 import org.jetbrains.amper.dependency.resolution.diagnostics.DependencyResolutionDiagnostics.ContentLengthMismatch
 import org.jetbrains.amper.dependency.resolution.diagnostics.DependencyResolutionDiagnostics.HashesMismatch
@@ -968,7 +969,7 @@ open class DependencyFileImpl(
         val client = cache.computeIfAbsent(httpClientKey) { HttpClientProvider.getHttpClient() }
 
         val name = getNamePart(repository, nameWithoutExtension, extension, progress, cache, spanBuilderSource, diagnosticsReporter)
-        val url = repository.url.trimEnd('/') +
+        val url = repository.actualUrlForDownloading().trimEnd('/') +
                 "/${dependency.group.replace('.', '/')}" +
                 "/${dependency.module}" +
                 "/${dependency.version.orUnspecified()}" +
@@ -1084,6 +1085,15 @@ open class DependencyFileImpl(
         return false
     }
 
+    private fun MavenRepository.actualUrlForDownloading(): String {
+        if (url.trimEnd('/') == MavenCentral.url
+            && System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true
+        ) {
+            return REDIRECTOR_MAVEN_CENTRAL
+        }
+        return url
+    }
+
     private fun Builder.withBasicAuth(repository: MavenRepository): Builder = also {
         if (!repository.userName.isNullOrBlank() && !repository.password.isNullOrBlank()) {
             header("Authorization", getBasicAuthenticationHeader(repository.userName, repository.password))
@@ -1174,6 +1184,8 @@ open class DependencyFileImpl(
         object HttpHeaders {
             const val CONTENT_LENGTH: String = "Content-Length"
         }
+
+        private val REDIRECTOR_MAVEN_CENTRAL = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
 
         /**
          * Sometimes files with checksums have additional information, e.g., a path to a file.

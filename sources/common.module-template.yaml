@@ -55,6 +55,8 @@ settings:
     release: 21
     test:
       junitPlatformVersion: 6.0.3 # Keep it aligned with JUnit libs in our catalog
+      extraEnvironment:
+        AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR: true
   java:
     compileIncrementally: false # Disabled because of AMPER-4868
   internal:
