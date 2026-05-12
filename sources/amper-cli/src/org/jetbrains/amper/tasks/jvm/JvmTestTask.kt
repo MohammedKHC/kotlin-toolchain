@@ -80,7 +80,7 @@ class JvmTestTask(
         val jvmTestSettings = module.leafFragments.single { it.platform == platform && it.isTest }.settings.jvm.test
         // https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.1/junit-platform-console-standalone-1.10.1.jar
         val junitConsoleUrl = Downloader.getUriForMavenArtifact(
-            mavenRepository = "https://repo1.maven.org/maven2",
+            mavenRepository = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2",
             groupId = "org.junit.platform",
             artifactId = "junit-platform-console-standalone",
             packaging = "jar",
