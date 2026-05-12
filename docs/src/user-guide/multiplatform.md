@@ -309,7 +309,7 @@ settings@ios:       # specialization for all iOS platforms
     freeCompilerArgs: [y]
 
 settings@iosArm64:  # specialization for iOS arm64 platform 
-  ios:              # iOS toolchain
+  kotlin:           # Kotlin toolchain
     freeCompilerArgs: [z]
 ```
 
