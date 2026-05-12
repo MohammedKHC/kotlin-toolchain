@@ -5,7 +5,10 @@
 package org.jetbrains.amper.wrapper
 
 import java.nio.file.Path
+import java.nio.file.attribute.PosixFilePermission
 import kotlin.io.path.createDirectory
+import kotlin.io.path.getPosixFilePermissions
+import kotlin.io.path.setPosixFilePermissions
 import kotlin.io.path.writeText
 
 private data class AmperScript(
@@ -14,7 +17,6 @@ private data class AmperScript(
     val executable: Boolean = false,
 )
 
-@OptIn(ExperimentalStdlibApi::class)
 object AmperWrappers {
     private val templateProvider = TemplateProvider getTemplate@ { name ->
         val stream = javaClass.classLoader.getResourceAsStream("wrappers/$name")
@@ -25,27 +27,6 @@ object AmperWrappers {
         )
     }
 
-    private val wrappers = listOf(
-        AmperScript(
-            fileName = "amper",
-            templateName = "amper.template.sh",
-            executable = true,
-        ),
-        AmperScript(
-            fileName = "amper.bat",
-            templateName = "amper.template.bat",
-        ),
-    )
-
-    private val launchers = listOf(
-        // Common launcher script that is called directly on Linux/macOS and via the busybox-w32 on Windows.
-        AmperScript(
-            fileName = "launcher.sh",
-            templateName = "launcher.template.sh",
-            executable = true,
-        ),
-    )
-
     /**
      * Generates Amper wrapper scripts in the specified [targetDir].
      *
@@ -54,8 +35,26 @@ object AmperWrappers {
      *
      * @return the paths to the generated wrapper scripts
      */
-    fun generate(targetDir: Path, amperVersion: String, amperDistTgzSha256: String): List<Path> =
-        wrappers.map {
+    fun generate(
+        targetDir: Path,
+        amperVersion: String,
+        amperDistTgzSha256: String,
+        includePosix: Boolean = true,
+        includeWindows: Boolean = true,
+    ): List<Path> {
+        require(includePosix || includeWindows) { "Nothing to generate" }
+
+        return listOfNotNull(
+            AmperScript(
+                fileName = "amper",
+                templateName = "amper.template.sh",
+                executable = true,
+            ).takeIf { includePosix },
+            AmperScript(
+                fileName = "amper.bat",
+                templateName = "amper.template.bat",
+            ).takeIf { includeWindows },
+        ).map {
             it.generate(
                 targetDir = targetDir,
                 macroSubstitutions = mapOf(
@@ -64,6 +63,7 @@ object AmperWrappers {
                 )
             )
         }
+    }
 
     /**
      * Generates all necessary launcher scripts in the [targetDir] directory.
@@ -72,7 +72,13 @@ object AmperWrappers {
         targetDir: Path,
     ) {
         targetDir.createDirectory()
-        launchers.forEach { it.generate(targetDir, emptyMap()) }
+
+        // Common launcher script that is called directly on Linux/macOS and via the busybox-w32 on Windows.
+        AmperScript(
+            fileName = "launcher.sh",
+            templateName = "launcher.template.sh",
+            executable = true,
+        ).generate(targetDir, emptyMap())
     }
 
     private fun AmperScript.generate(
@@ -91,10 +97,8 @@ object AmperWrappers {
             )
         )
 
-        if (executable) {
-            check(path.toFile().setExecutable(true)) {
-                "Unable to make file $path executable"
-            }
+        if (executable && path.fileSystem.supportedFileAttributeViews().contains("posix")) {
+            path.setPosixFilePermissions(path.getPosixFilePermissions() + PosixFilePermission.OWNER_EXECUTE)
         }
         return path
     }

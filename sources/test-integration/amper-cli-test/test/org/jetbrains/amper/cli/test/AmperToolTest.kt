@@ -12,7 +12,7 @@ class AmperToolTest : AmperCliTestBase() {
 
     @Test
     fun `tool jdk jstack runs`() = runSlowTest {
-        val p = newEmptyProjectDir()
+        val p = newEmptyProjectDir(setupWrappers = true)
         val result = runCli(p, "tool", "jdk", "jstack", ProcessHandle.current().pid().toString())
 
         val requiredSubstring = "Full thread dump"

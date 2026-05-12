@@ -69,8 +69,7 @@ class AnnotationProcessingTest : AmperCliTestBase() {
 
     @Test
     fun `re-compilation happens after processorOptions changes`() = runSlowTest {
-        // we're going to modify project files => copy the project instead of running in place
-        val projectRoot = copyProjectToTempDir(testProject("ap-with-params"))
+        val projectRoot = testProject("ap-with-params")
 
         /*
           This test checks that the module is recompiled after a change in processorOptions (AMPER-4581).

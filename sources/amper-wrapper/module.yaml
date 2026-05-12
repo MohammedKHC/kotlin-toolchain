@@ -6,4 +6,5 @@ apply:
   - ../common.module-template.yaml
 
 dependencies:
+  - ../libraries/system-info
   - $libs.slf4j.api

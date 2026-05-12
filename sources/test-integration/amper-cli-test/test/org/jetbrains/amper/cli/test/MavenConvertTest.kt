@@ -28,7 +28,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `spring-boot`() = runSlowTest {
         val projectRoot = testProject("maven-convert/spring-boot")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "project.yaml").readText().isBlank())
@@ -76,7 +76,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `convert overwrites existing files when overwrite is enabled`() = runSlowTest {
         val projectRoot = testProject("maven-convert/spring-boot")
 
-        val firstRun = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val firstRun = runCli(projectRoot, "tool", "convert-project")
 
         val moduleYaml = firstRun.projectDir / "module.yaml"
         assertTrue(moduleYaml.exists())
@@ -93,7 +93,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `convert fails when files already exist and overwrite is not enabled`() = runSlowTest {
         val projectRoot = testProject("maven-convert/spring-boot")
 
-        val firstRun = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val firstRun = runCli(projectRoot, "tool", "convert-project")
 
         val secondRun = runCli(
             firstRun.projectDir,
@@ -109,7 +109,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `spring-boot-kotlin`() = runSlowTest {
         val projectRoot = testProject("maven-convert/spring-boot-kotlin")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "module.yaml").exists())
@@ -165,7 +165,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `spring-petclinic`() = runSlowTest {
         val projectRoot = testProject("maven-convert/spring-petclinic")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         val expectedProjectFile = projectRoot / "expected-project.yaml"
         val actualProjectFile = buildResult.projectDir.resolve("project.yaml")
@@ -198,7 +198,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `annotation-processing`() = runSlowTest {
         val projectRoot = testProject("maven-convert/annotation-processing")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "module.yaml").exists())
@@ -253,7 +253,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `multi-module`() = runSlowTest {
         val projectRoot = testProject("maven-convert/multi-module")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertEquals(
@@ -326,7 +326,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `multi-module-nested`() = runSlowTest {
         val projectRoot = testProject("maven-convert/multi-module-nested")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertEquals(
@@ -360,7 +360,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `pom-dependency-type-local`() = runSlowTest {
         val projectRoot = testProject("maven-convert/pom-dependency-type")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertEquals(
@@ -418,7 +418,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `pom-dependency-type-external`() = runSlowTest {
         val projectRoot = testProject("maven-convert/pom-dependency-type-external")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "module.yaml").exists())
@@ -459,7 +459,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `surefire-plugin`() = runSlowTest {
         val projectDir = testProject("maven-convert/surefire-plugin")
 
-        val buildResult = runCli(projectDir, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectDir, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "module.yaml").exists())
@@ -520,7 +520,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `parent with repository`() = runSlowTest {
         val projectRoot = testProject("maven-convert/parent-with-repository")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertEquals(
@@ -548,7 +548,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `duplicate-executions`() = runSlowTest {
         val projectRoot = testProject("maven-convert/duplicate-executions")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         val pomPath = buildResult.projectDir / "pom.xml"
         val actualModuleFile = buildResult.projectDir / "module.yaml"
@@ -567,7 +567,7 @@ class MavenConvertTest : AmperCliTestBase() {
     fun `transitive compile classpath visibility`() = runSlowTest {
         val projectRoot = testProject("maven-convert/transitive-compile-classpath-visibility")
 
-        val buildResult = runCli(projectRoot, "tool", "convert-project", copyToTempDir = true)
+        val buildResult = runCli(projectRoot, "tool", "convert-project")
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertEquals(
@@ -631,7 +631,6 @@ class MavenConvertTest : AmperCliTestBase() {
             projectRoot,
             "tool",
             "convert-project",
-            copyToTempDir = true,
         )
 
         assertTrue((buildResult.projectDir / "project.yaml").exists())
@@ -646,7 +645,6 @@ class MavenConvertTest : AmperCliTestBase() {
         val projectRoot = testProject("maven-convert/commons-lang")
         val buildResult = runCli(
             projectRoot, "tool", "convert-project",
-            copyToTempDir = true,
         )
         assertTrue((buildResult.projectDir / "project.yaml").exists())
         assertTrue((buildResult.projectDir / "module.yaml").exists())
@@ -663,7 +661,6 @@ class MavenConvertTest : AmperCliTestBase() {
         val buildResult = runCli(
             projectRoot,
             "tool", "convert-project", "--enable-compatibility-plugins",
-            copyToTempDir = true,
         )
 
         val moduleContent = (buildResult.projectDir / "module.yaml").readText()
@@ -688,7 +685,6 @@ class MavenConvertTest : AmperCliTestBase() {
         val buildResult = runCli(
             projectRoot,
             "tool", "convert-project", "--enable-compatibility-plugins",
-            copyToTempDir = true,
         )
 
         val moduleContent = (buildResult.projectDir / "module.yaml").readText()
@@ -716,7 +712,6 @@ class MavenConvertTest : AmperCliTestBase() {
         val buildResult = runCli(
             projectRoot,
             "tool", "convert-project", "--enable-compatibility-plugins",
-            copyToTempDir = true,
         )
 
         val moduleContent = (buildResult.projectDir / "module.yaml").readText()

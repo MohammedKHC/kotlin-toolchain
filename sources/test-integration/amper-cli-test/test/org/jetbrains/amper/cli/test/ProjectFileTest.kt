@@ -8,6 +8,7 @@ import org.jetbrains.amper.cli.test.utils.assertStdoutContains
 import org.jetbrains.amper.cli.test.utils.assertWarnings
 import org.jetbrains.amper.cli.test.utils.runSlowTest
 import org.jetbrains.amper.test.AmperCliResult
+import org.jetbrains.amper.test.LocalAmperPublication
 import org.junit.jupiter.api.Assertions.assertFalse
 import kotlin.io.path.div
 import kotlin.io.path.pathString
@@ -36,7 +37,11 @@ class ProjectFileTest : AmperCliTestBase() {
 
     @Test
     fun `single-module project under an unrelated project`() = runSlowTest {
-        val resultNested = runCli(testProject("nested-project-root") / "nested-project", "show", "modules", "--format=plain")
+        val resultNested = runCli(
+            testProject("nested-project-root") / "nested-project",
+            "show", "modules", "--format=plain",
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
+        )
         assertModulesList(resultNested, listOf("nested-project"))
 
         val resultRoot = runCli(testProject("nested-project-root"), "show", "modules", "--format=plain")
@@ -72,8 +77,10 @@ class ProjectFileTest : AmperCliTestBase() {
 
     @Test
     fun `project file with path errors`() = runSlowTest {
+        val projectDir = testProject("project-file-with-errors", setupWrappers = false) / "project"
+        LocalAmperPublication.setupWrappersIn(projectDir)
         val r = runCli(
-            projectDir = testProject("project-file-with-errors"),
+            projectDir = projectDir,
             "show", "tasks",
             expectedExitCode = 1,
             assertEmptyStdErr = false,

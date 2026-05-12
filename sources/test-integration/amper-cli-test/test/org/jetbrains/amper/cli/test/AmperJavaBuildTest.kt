@@ -9,6 +9,7 @@ import org.jetbrains.amper.cli.test.utils.assertStderrContains
 import org.jetbrains.amper.cli.test.utils.runSlowTest
 import org.jetbrains.amper.test.AmperCliResult
 import org.jetbrains.amper.test.Dirs
+import org.jetbrains.amper.test.LocalAmperPublication
 import java.nio.file.Path
 import java.util.*
 import kotlin.io.path.copyToRecursively
@@ -191,6 +192,7 @@ class AmperJavaBuildTest : AmperCliTestBase() {
         val tempProjectDir = tempRoot / UUID.randomUUID().hashCode().toString() / projectRootFromSources.fileName
         tempProjectDir.createDirectories()
         projectRootFromSources.copyToRecursively(target = tempProjectDir, overwrite = false, followLinks = true)
+        LocalAmperPublication.setupWrappersIn(tempProjectDir)
         return tempProjectDir
     }
 

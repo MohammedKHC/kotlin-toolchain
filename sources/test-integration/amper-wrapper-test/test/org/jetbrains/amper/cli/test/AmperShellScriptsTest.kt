@@ -14,12 +14,12 @@ import org.jetbrains.amper.incrementalcache.IncrementalCache
 import org.jetbrains.amper.jdk.provisioning.JdkProvider
 import org.jetbrains.amper.jdk.provisioning.JdkProvisioningCriteria
 import org.jetbrains.amper.jdk.provisioning.orThrow
-import org.jetbrains.amper.system.info.OsFamily
 import org.jetbrains.amper.test.AmperCliWithWrapperTestBase
 import org.jetbrains.amper.test.Dirs
 import org.jetbrains.amper.test.JavaHomeMode
 import org.jetbrains.amper.test.LocalAmperPublication
 import org.jetbrains.amper.test.TempDirExtension
+import org.jetbrains.amper.wrapper.AmperWrapperData
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -28,10 +28,8 @@ import kotlin.io.path.copyToRecursively
 import kotlin.io.path.div
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
-import kotlin.io.path.isExecutable
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.notExists
-import kotlin.io.path.readLines
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.test.assertEquals
@@ -204,10 +202,7 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
     fun `custom java home`() = runBlocking {
         val jdkHome = provisionZulu25()
 
-        val expectedAmperVersion = cliScript
-            .readLines()
-            .first { it.startsWith("set amper_version=") || it.startsWith("amper_version=") }
-            .substringAfterLast('=')
+        val expectedAmperVersion = AmperWrapperData.parseFromProjectRoot(tempDir)!!.version
 
         val result = runAmper(
             workingDir = tempDir,
@@ -247,7 +242,30 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
 
     @Test
     fun `fails on wrong amper distribution checksum`() = runBlocking {
-        assertWrongChecksum(Regex("\\b(amper_sha256=)[0-9a-fA-F]+"))
+        val data = AmperWrapperData.parseFromProjectRoot(tempDir)
+            ?: error("Test setup is broken, no wrapper file found in the temp directory")
+        cliScript.writeText(
+            cliScript.readText()
+                .replace(data.sha256, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        )
+        val bootstrapCacheDir = tempDir.resolve("boot strap")
+        assertTrue("Bootstrap cache dir should start empty") {
+            bootstrapCacheDir.notExists() || bootstrapCacheDir.listDirectoryEntries().isEmpty()
+        }
+        val result = runAmper(
+            workingDir = tempDir,
+            args = listOf("--version"),
+            expectedExitCode = 1,
+            assertEmptyStdErr = false,
+            bootstrapCacheDir = bootstrapCacheDir,
+            amperJavaHomeMode = JavaHomeMode.ForceUnset,
+        )
+        val expectedErrorRegex =
+            Regex("""ERROR: Checksum mismatch for .+ \(downloaded from .+\): expected checksum aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa but got \w+""")
+        assertTrue("Process stderr must match '$expectedErrorRegex'. Actual stderr:\n${result.stderr}") {
+            // cmd.exe breaks lines unpredictably when calling powershell (it depends on its own buffer)
+            result.stderr.replace("\r", "").replace("\n", "").matches(expectedErrorRegex)
+        }
     }
 
     @Test
@@ -288,37 +306,6 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
             expectedExitCode = 1,
             assertEmptyStdErr = false,
             bootstrapCacheDir = bootstrapCacheDir,
-            amperJavaHomeMode = JavaHomeMode.ForceUnset,
-        )
-        val expectedErrorRegex =
-            Regex("""ERROR: Checksum mismatch for .+ \(downloaded from .+\): expected checksum aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa but got \w+""")
-        assertTrue("Process stderr must match '$expectedErrorRegex'. Actual stderr:\n${result.stderr}") {
-            // cmd.exe breaks lines unpredictably when calling powershell (it depends on its own buffer)
-            result.stderr.replace("\r", "").replace("\n", "").matches(expectedErrorRegex)
-        }
-    }
-
-    private suspend fun assertWrongChecksum(checksumRegex: Regex) {
-        val brokenScriptName = if (OsFamily.current.isWindows) "script.bat" else "script"
-        val brokenScript = tempDir.resolve(brokenScriptName)
-
-        val scriptContentWrongSha = cliScript.readText()
-            .replace(checksumRegex, "\$1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        brokenScript.writeText(scriptContentWrongSha)
-        brokenScript.toFile().setExecutable(true)
-        assertTrue(brokenScript.isExecutable())
-
-        val bootstrapCacheDir = tempDir.resolve("boot strap")
-        assertTrue("Bootstrap cache dir should start empty") {
-            bootstrapCacheDir.notExists() || bootstrapCacheDir.listDirectoryEntries().isEmpty()
-        }
-        val result = runAmper(
-            workingDir = tempDir,
-            args = listOf("--version"),
-            expectedExitCode = 1,
-            assertEmptyStdErr = false,
-            bootstrapCacheDir = bootstrapCacheDir,
-            customAmperScriptPath = brokenScript,
             amperJavaHomeMode = JavaHomeMode.ForceUnset,
         )
         val expectedErrorRegex =

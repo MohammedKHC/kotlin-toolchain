@@ -93,7 +93,6 @@ class ExampleProjectsTest: AmperCliTestBase() {
             projectDir = exampleProject("compose-multiplatform"),
             "show", "tasks",
             configureAndroidHome = true,
-            copyToTempDir = true,
         )
         with(tasksResult) {
             (jvmBaseTasks + jvmTestTasks + iosLibraryTasks + androidTestTasks).forEach {

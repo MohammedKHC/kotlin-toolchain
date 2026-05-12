@@ -193,7 +193,11 @@ class ProjectTemplatesTest : AmperCliTestBase() {
     }
 
     private suspend fun runInitForTemplateFromTestName(testInfo: TestInfo): AmperCliResult =
-        runCli(tempRoot, "init", templateNameFromTestName(testInfo.testMethod.get().name))
+        runCli(
+            tempRoot,
+            "init", templateNameFromTestName(testInfo.testMethod.get().name),
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
+        )
 
     private fun SpansTestCollector.assertXcodeProjectIsValid() {
         // Xcode project should be generated correctly by `init` and thus not updated by the build.

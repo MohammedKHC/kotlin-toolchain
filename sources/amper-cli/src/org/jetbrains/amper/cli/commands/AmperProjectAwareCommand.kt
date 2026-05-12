@@ -5,12 +5,15 @@
 package org.jetbrains.amper.cli.commands
 
 import com.github.ajalt.clikt.parameters.groups.provideDelegate
+import org.jetbrains.amper.buildinfo.AmperBuild
+import org.jetbrains.amper.cli.AmperProjectRoot
 import org.jetbrains.amper.cli.CliContext
 import org.jetbrains.amper.cli.logging.LoggingInitializer
 import org.jetbrains.amper.cli.options.ProjectLayoutOptions
 import org.jetbrains.amper.cli.telemetry.TelemetryEnvironment
 import org.jetbrains.amper.telemetry.spanBuilder
 import org.jetbrains.amper.telemetry.use
+import org.jetbrains.amper.wrapper.AmperWrapperData
 
 /**
  * An [AmperSubcommand] that can only be run in an Amper project.
@@ -33,7 +36,21 @@ internal abstract class AmperProjectAwareCommand(name: String) : AmperSubcommand
             LoggingInitializer.setupFileLogging(cliContext.currentLogsRoot)
         }
 
+        checkWrapperVersionConsistency(cliContext.projectRoot)
+
         run(cliContext)
+    }
+
+    private fun checkWrapperVersionConsistency(projectRoot: AmperProjectRoot) {
+        val projectWrapperVersion = AmperWrapperData.parseFromProjectRoot(projectRoot.path)?.version ?: return
+
+        if (projectWrapperVersion != AmperBuild.mavenVersion) {
+            logger.warn(
+                "Running Amper version (${AmperBuild.mavenVersion}) is different from " +
+                        "the project wrapper version (${projectWrapperVersion}). " +
+                        "NOTE: If you are using the global wrapper, make sure you run it inside the project directory."
+            )
+        }
     }
 
     abstract suspend fun run(cliContext: CliContext)

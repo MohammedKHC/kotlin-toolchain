@@ -13,6 +13,7 @@ import kotlin.io.path.createParentDirectories
 import kotlin.io.path.isExecutable
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -22,7 +23,7 @@ class AmperInitTest : AmperCliTestBase() {
     @Test
     fun `init generates a project from the given template`() = runSlowTest {
         val newRoot = newEmptyProjectDir()
-        runCli(newRoot, "init", "multiplatform-cli")
+        runCli(newRoot, "init", "multiplatform-cli", wrapperMode = WrapperMode.GlobalIntrinsicVersion)
 
         newRoot.assertContainsRelativeFiles(
             "amper",
@@ -53,7 +54,7 @@ class AmperInitTest : AmperCliTestBase() {
         bashWrapper.writeText("w1")
         batWrapper.writeText("w2")
 
-        runCli(newRoot, "init", "multiplatform-cli")
+        runCli(newRoot, "init", "multiplatform-cli", wrapperMode = WrapperMode.GlobalIntrinsicVersion, assertEmptyStdErr = false)
 
         assertTrue(batWrapper.readText().count { it == '\r' } > 10,
             "Windows wrapper must have \\r in line separators: $batWrapper")
@@ -72,7 +73,12 @@ class AmperInitTest : AmperCliTestBase() {
         val existingModuleFile = newRoot.resolve("jvm-cli/module.yaml").also { it.createParentDirectories() }
         existingModuleFile.writeText("some text in module.yaml")
 
-        val r = runCli(newRoot, "init", "multiplatform-cli", expectedExitCode = 1, assertEmptyStdErr = false)
+        val r = runCli(
+            newRoot, "init", "multiplatform-cli",
+            expectedExitCode = 1,
+            assertEmptyStdErr = false,
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
+        )
         val expectedStderr = """
             ERROR: The following files already exist in the output directory and would be overwritten by the generation:
               jvm-cli/module.yaml
@@ -93,7 +99,12 @@ class AmperInitTest : AmperCliTestBase() {
         existingProjectFile.writeText("some text in project.yaml")
         existingModuleFile.writeText("some text in module.yaml")
 
-        val r = runCli(newRoot, "init", "multiplatform-cli", expectedExitCode = 1, assertEmptyStdErr = false)
+        val r = runCli(
+            newRoot, "init", "multiplatform-cli",
+            expectedExitCode = 1,
+            assertEmptyStdErr = false,
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
+        )
         val expectedStderr = """
             ERROR: The following files already exist in the output directory and would be overwritten by the generation:
               jvm-cli/module.yaml

@@ -13,7 +13,11 @@ class AmperBootstrapTest : AmperCliTestBase() {
 
     @Test
     fun `amper can build itself`() = runTestWithMdc(timeout = 30.minutes) {
-        runCli(projectDir = Dirs.amperCheckoutRoot, "build")
+        runCli(
+            projectDir = Dirs.amperCheckoutRoot,
+            "build",
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
+        )
     }
 
     @Test
@@ -26,7 +30,8 @@ class AmperBootstrapTest : AmperCliTestBase() {
             "test",
             "-m",
             "schema",
-            "--include-classes=org.jetbrains.amper.frontend.schema.ParserKtTest"
+            "--include-classes=org.jetbrains.amper.frontend.schema.ParserKtTest",
+            wrapperMode = WrapperMode.GlobalIntrinsicVersion,
         )
     }
 }

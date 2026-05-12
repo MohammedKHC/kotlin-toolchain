@@ -28,7 +28,6 @@ class MavenPluginsTest : AmperCliTestBase() {
         runCli(
             projectDir = testProject("extensibility-maven/surefire-plugin"),
             "show", "tasks",
-            copyToTempDir = true,
         ).assertStdoutContains("maven-surefire-plugin.test")
     }
 
@@ -38,7 +37,6 @@ class MavenPluginsTest : AmperCliTestBase() {
             // Just some project with java source code.
             projectDir = testProject("java-kotlin-mixed"),
             "show", "tasks",
-            copyToTempDir = true,
         ).assertStdoutDoesNotContain("maven")
     }
 
@@ -219,7 +217,6 @@ class MavenPluginsTest : AmperCliTestBase() {
     ) = runCli(
         projectDir = testProject("extensibility-maven/$projectWithMavenPath"),
         "task", ":app:$taskName",
-        copyToTempDir = true,
         expectedExitCode = expectedExitCode,
         assertEmptyStdErr = expectedExitCode == 0,
     )

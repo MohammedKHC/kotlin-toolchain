@@ -654,8 +654,7 @@ class AmperPublishTest : AmperCliTestBase() {
         runCli(
             projectDir = testProject("jvm-publish"),
             "publish", "repoId",
-            copyToTempDir = true,
-            modifyTempProjectBeforeRun = { root ->
+            modifyProjectBeforeRun = { root ->
                 val moduleYaml = root.resolve("module.yaml")
                 moduleYaml.writeText(moduleYaml.readText().replace("REPO_URL", repoUrl).replace("2.2", version))
             },

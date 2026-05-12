@@ -33,7 +33,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/single-local-plugin"),
             "show", "tasks",
-            copyToTempDir = true,
         )
 
         with(r1) {
@@ -59,7 +58,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProjectSourcesDir,
             "task", taskName,
-            copyToTempDir = true,
         )
 
         val buildDir = tempRoot / "build"
@@ -93,7 +91,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/sources"),
             "task", ":app1:consume@consume-sources-plugin",
-            copyToTempDir = true,
         )
 
         val projectDir = r1.projectDir
@@ -163,7 +160,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/single-local-plugin"),
             "task", ":app1:print-generated-sources@build-konfig",
-            copyToTempDir = true,
         )
 
         with(r1) {
@@ -192,7 +188,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/multiple-local-plugins"),
             "show", "tasks",
-            copyToTempDir = true,
         )
 
         repeat(3) {
@@ -214,7 +209,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/multiple-local-plugins"),
             "task", ":app:checkBaseline@build-konfig",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -246,7 +240,6 @@ class PluginsTest : AmperCliTestBase() {
         val r1 = runCli(
             projectDir = testProject("extensibility/multiple-local-plugins"),
             "task", ":app:crash@hello",
-            copyToTempDir = true,
             expectedExitCode = 1,
             assertEmptyStdErr = false,
         )
@@ -270,7 +263,6 @@ class PluginsTest : AmperCliTestBase() {
         val r = runCli(
             projectDir = testProject("extensibility/single-local-plugin"),
             "build", "-m", "app2",
-            copyToTempDir = true,
             expectedExitCode = 1,
             assertEmptyStdErr = false,
         )
@@ -293,7 +285,6 @@ class PluginsTest : AmperCliTestBase() {
         val r = runCli(
             projectDir = testProject("extensibility/multiple-local-plugins"),
             "task", ":app:say@hello",
-            copyToTempDir = true,
         )
         val slash = r.projectDir.fileSystem.separator
 
@@ -344,7 +335,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/invalid-plugins"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -375,7 +365,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/missing-plugins"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -397,7 +386,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/incomplete-plugins"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -433,7 +421,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/invalid-task-graph"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -518,7 +505,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/invalid-references"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -563,7 +549,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/reference-loops"),
             "show", "tasks",
-            copyToTempDir = true,
             assertEmptyStdErr = false,
             expectedExitCode = 1,
         )
@@ -594,7 +579,6 @@ class PluginsTest : AmperCliTestBase() {
         runCli(
             projectDir = testProject("extensibility/consistent-classloader"),
             "task", ":app:test@plugin",
-            copyToTempDir = true,
         ).assertStdoutContains("Everything is in order")
     }
 
@@ -657,7 +641,6 @@ class PluginsTest : AmperCliTestBase() {
         )
     }
 
-    // TODO: Test about missing mandatory property inside the `plugin.yaml`
     @Test
     fun `plugin is diagnosed on sync when registered to the project but not enabled anywhere`() = runSlowTest {
         val projectDir = testProject("extensibility/pure-plugins-project")
@@ -679,7 +662,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "task", ":app:say@hello", ":app:print-generated-sources@build-konfig",
-            copyToTempDir = true,
         )
         result.assertStdoutContains("Hello!")
         result.assertStdoutContains("Generating Build Konfig...")
@@ -690,7 +672,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject("extensibility/cascading-references"),
             "task", ":app:task2@my-plugin",
-            copyToTempDir = true,
         )
         val buildDir = tempRoot / "build"
         result.assertStdoutContains("taskAction1: path=${buildDir / "tasks" / "_app_task1@my-plugin" / "file.txt"}, name=test")
@@ -704,7 +685,6 @@ class PluginsTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = testProject,
             "task", taskName,
-            copyToTempDir = true,
         )
 
         result.assertCustomTaskStdoutEquals(

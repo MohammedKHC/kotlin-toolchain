@@ -42,12 +42,26 @@ tasks:
       subdirectoryName: ${pluginSettings.embedClasspathAsResources.resourceDirName}
       jarListFileName: classpath.txt
 
+  # ********** Home Brew **********
+
+  generateLocalDemoBrewFormula:
+    action: !generateLocalDemoBrewFormula
+      hostWrapperScript: ${project.rootDir}/amper
+      formula: ${taskOutputDir}/amper.rb
+      archive: ${taskOutputDir}/amper.zip
+
+  installLocalDemoBrewFormula:
+    action: !installBrewFormula
+      formula: ${generateLocalDemoBrewFormula.action.formula}
+
 commands:
   - name: uploadAmperDistribution
     performedBy: upload
 
   - name: uploadAmperDistributionLocal
     performedBy: uploadLocal
+
+  - installLocalDemoBrewFormula
 
 generated:
   resources:

@@ -18,7 +18,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "my-plugin:uploadPictures",
-            copyToTempDir = true,
         )
         result.assertStdoutContains("Uploading pictures...")
     }
@@ -29,7 +28,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "uploadPictures",
-            copyToTempDir = true,
             expectedExitCode = 1,
             assertEmptyStdErr = false,
         )
@@ -46,7 +44,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "other-plugin:uploadPictures",
-            copyToTempDir = true,
         )
         result.assertStdoutContains("Uploading other pictures...")
     }
@@ -57,7 +54,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "my-plugin:uploadPictures",
-            copyToTempDir = true,
         )
         // One for app, one for app2
         result.assertStdoutContains("Uploading pictures...")
@@ -72,7 +68,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "-m", "app", "my-plugin:uploadPictures",
-            copyToTempDir = true,
         )
         result.assertStdoutContains("Uploading pictures...")
         val occurrences = result.stdout.split("Uploading pictures...").size - 1
@@ -85,7 +80,6 @@ class DoCommandTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "do", "nonExistent",
-            copyToTempDir = true,
             expectedExitCode = 1,
             assertEmptyStdErr = false,
         )

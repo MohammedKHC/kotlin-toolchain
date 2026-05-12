@@ -62,7 +62,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/interop"),
             "build", "-p", "iosSimulatorArm64",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         result.withTelemetrySpans {
             xcodeProjectGenSpans.assertNone()
@@ -77,7 +76,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/interop"),
             "build", "-p", "iosSimulatorArm64", "-v", "release",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         result.withTelemetrySpans {
             xcodeProjectGenSpans.assertNone()
@@ -92,7 +90,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/outdated-xcode-proj"),
             "build", "-p", "iosSimulatorArm64",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         result.withTelemetrySpans {
             xcodeProjectGenSpans.assertNone()
@@ -107,7 +104,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/compose"),
             "task", ":compose:frameworkIosSimulatorArm64Debug",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         result.readTelemetrySpans().konancSpans.assertZeroExitCode(times = 2)
     }
@@ -118,7 +114,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/compose"),
             "task", ":compose:frameworkIosArm64Debug",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         result.readTelemetrySpans().konancSpans.assertZeroExitCode(times = 2)
     }
@@ -129,7 +124,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject(name = "ios/compose"),
             "build", "-p", "iosSimulatorArm64",
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
         firstBuildResult.readTelemetrySpans().xcodeProjectGenSpans.assertSingle()
 
@@ -150,7 +144,6 @@ class IosProjectsTest : AmperCliTestBase() {
             projectDir = testProject("ios/compose"),
             "build", // build all the platforms
             assertEmptyStdErr = false,
-            copyToTempDir = true,
         )
 
         expect(1) {

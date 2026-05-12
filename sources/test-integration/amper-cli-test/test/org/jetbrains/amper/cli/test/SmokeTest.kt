@@ -21,7 +21,7 @@ class SmokeTest : AmperCliTestBase() {
 
     @Test
     fun `amper help works`() = runSlowTest {
-        runCli(Path("."), "--help")
+        runCli(newEmptyProjectDir(setupWrappers = true), "--help")
     }
 
     @Test

@@ -33,7 +33,7 @@ class AmperUpdateTest : AmperCliTestBase() {
     fun `update command without options creates wrappers with confirmation`() = runSlowTest {
         val projectDir = newEmptyProjectDir()
 
-        val result = runCli(projectDir, "update", stdin = ProcessInput.Text("y\n"))
+        val result = runCli(projectDir, "update", stdin = ProcessInput.Text("y\n"), wrapperMode = WrapperMode.GlobalIntrinsicVersion)
 
         assertTrue(result.stdout.contains("Would you like to create"), "amper should ask for confirmation")
         assertEquals(listOf("amper", "amper.bat"), projectDir.relativeChildren(), "amper scripts should be created")
@@ -43,7 +43,7 @@ class AmperUpdateTest : AmperCliTestBase() {
     fun `update --create command creates wrappers without confirmation`() = runSlowTest {
         val projectDir = newEmptyProjectDir()
 
-        val result = runCli(projectDir, "update", "--create")
+        val result = runCli(projectDir, "update", "--create", wrapperMode = WrapperMode.GlobalIntrinsicVersion)
 
         assertFalse(result.stdout.contains("?"), "amper should not ask for confirmation")
         assertEquals(listOf("amper", "amper.bat"), projectDir.relativeChildren(), "amper scripts should be created")
@@ -51,8 +51,7 @@ class AmperUpdateTest : AmperCliTestBase() {
 
     @Test
     fun `update command without options replaces existing wrappers with latest release`() = runSlowTest {
-        val projectDir = newEmptyProjectDir()
-        LocalAmperPublication.setupWrappersIn(projectDir)
+        val projectDir = newEmptyProjectDir(setupWrappers = true)
 
         val (bashVersion, batVersion, result) = runAmperUpdateAndAwaitWinWrapper(projectDir)
 
@@ -65,8 +64,7 @@ class AmperUpdateTest : AmperCliTestBase() {
 
     @Test
     fun `update --dev command replaces existing wrappers with latest dev version`() = runSlowTest {
-        val projectDir = newEmptyProjectDir()
-        LocalAmperPublication.setupWrappersIn(projectDir)
+        val projectDir = newEmptyProjectDir(setupWrappers = true)
 
         val (bashVersion, batVersion, result) = runAmperUpdateAndAwaitWinWrapper(projectDir, "--dev")
 
@@ -79,8 +77,7 @@ class AmperUpdateTest : AmperCliTestBase() {
 
     @Test
     fun `update --target-version command replaces existing wrappers with specific version`() = runSlowTest {
-        val projectDir = newEmptyProjectDir()
-        LocalAmperPublication.setupWrappersIn(projectDir)
+        val projectDir = newEmptyProjectDir(setupWrappers = true)
 
         val (bashVersion, batVersion, result) = runAmperUpdateAndAwaitWinWrapper(projectDir, "--target-version=0.6.0-dev-2229")
 
@@ -91,8 +88,7 @@ class AmperUpdateTest : AmperCliTestBase() {
 
     @Test
     fun `can downgrade from current to 0_6_0`() = runSlowTest {
-        val projectDir = newEmptyProjectDir()
-        LocalAmperPublication.setupWrappersIn(projectDir)
+        val projectDir = newEmptyProjectDir(setupWrappers = true)
 
         val (bashVersion, batVersion, result) = runAmperUpdateAndAwaitWinWrapper(projectDir, "--target-version=0.6.0")
 
@@ -127,14 +123,14 @@ class AmperUpdateTest : AmperCliTestBase() {
 
     private suspend fun createEmptyProjectWithWrappers(version: String): Path {
         val projectDir = newEmptyProjectDir()
-        runCli(projectDir, "update", "--target-version=$version", "--create")
+        runCli(projectDir, "update", "--target-version=$version", "--create", wrapperMode = WrapperMode.GlobalIntrinsicVersion)
         return projectDir
     }
 
     @Test
     fun `can update from latest dev to current`() = runSlowTest {
         val projectDir = newEmptyProjectDir()
-        runCli(projectDir, "update", "--dev", "--create")
+        runCli(projectDir, "update", "--dev", "--create", wrapperMode = WrapperMode.GlobalIntrinsicVersion)
 
         assertCanUpdateToCurrent(projectDir)
     }
@@ -163,7 +159,6 @@ class AmperUpdateTest : AmperCliTestBase() {
         val result = runCli(
             projectDir = projectDir,
             "update", *options,
-            customAmperScriptPath = projectDir.resolve(scriptNameForCurrentOs),
         )
         assertEquals(listOf("amper", "amper.bat"), projectDir.relativeChildren(), "amper scripts should still be there")
 

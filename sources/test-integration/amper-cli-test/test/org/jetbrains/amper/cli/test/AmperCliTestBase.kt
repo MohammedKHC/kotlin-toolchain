@@ -16,15 +16,16 @@ import org.jetbrains.amper.test.LocalAmperPublication
 import org.jetbrains.amper.test.TempDirExtension
 import org.jetbrains.amper.test.android.AndroidTools
 import org.jetbrains.amper.test.processes.TestReporterProcessOutputListener
+import org.jetbrains.amper.wrapper.AmperWrapperData
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.nio.file.Path
 import java.util.*
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.copyTo
 import kotlin.io.path.copyToRecursively
 import kotlin.io.path.createDirectories
 import kotlin.io.path.div
 import kotlin.io.path.pathString
-import kotlin.io.path.useLines
 
 abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
     @RegisterExtension
@@ -46,22 +47,38 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
     }
 
     /**
-     * Finds the directory of the test project with the given [name].
-     * This function does not create a temporary copy, and the test project should not be modified by tests.
-     * The [runCli] function uses a temporary location for the `build` directory, which will preserve the test project.
+     * Creates a copy of the test project with the given [name], and returns the path to the copy.
      *
-     * The test projects are not expected to contain the Amper wrappers themselves.
-     * The [runCli] function uses locally published wrappers by default without modifying the test project.
+     * The original test projects are not expected to contain the Amper wrappers themselves, but 
+     * the wrappers are generated into the project copy unless [setupWrappers] is set to false.
+     * 
+     * Note: the [runCli] function may use these project-local wrappers directly, or use a global
+     * wrapper that will provision a version based on the local wrappers.
      */
-    protected fun testProject(name: String): Path = Dirs.amperTestProjectsRoot.resolve(name)
+    protected fun testProject(
+        name: String,
+        setupWrappers: Boolean = true,
+    ): Path {
+        return copyProjectToTempDir(Dirs.amperTestProjectsRoot.resolve(name)).also {
+            if (setupWrappers) LocalAmperPublication.setupWrappersIn(it)
+        }
+    }
 
     /**
      * Creates a new temporary empty directory to use as a test project.
      * Files may be created by the test in this directory, as it will automatically be cleaned up after the test.
+     *
+     * @param setupWrappers whether to set up the Amper wrappers in the new directory. `false` by default.
      */
-    protected fun newEmptyProjectDir(): Path = tempRoot.resolve("new").also { it.createDirectories() }
+    protected fun newEmptyProjectDir(
+        setupWrappers: Boolean = false,
+    ): Path {
+        return tempRoot.resolve("new").createDirectories().also {
+            if (setupWrappers) LocalAmperPublication.setupWrappersIn(it)
+        }
+    }
 
-    protected fun copyProjectToTempDir(projectRoot: Path): Path {
+    private fun copyProjectToTempDir(projectRoot: Path): Path {
         val tempProjectDir = tempRoot / UUID.randomUUID().toString() / projectRoot.fileName
         tempProjectDir.createDirectories()
         projectRoot.copyToRecursively(target = tempProjectDir, overwrite = false, followLinks = true)
@@ -73,28 +90,23 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
         vararg args: String,
         expectedExitCode: Int? = 0,
         assertEmptyStdErr: Boolean = true,
-        copyToTempDir: Boolean = false,
-        modifyTempProjectBeforeRun: (tempProjectDir: Path) -> Unit = {},
+        modifyProjectBeforeRun: (projectDir: Path) -> Unit = {},
         stdin: ProcessInput = ProcessInput.Empty,
         amperJvmArgs: List<String> = emptyList(),
-        customAmperScriptPath: Path = tempWrappersDir.resolve(scriptNameForCurrentOs),
         amperJavaHomeMode: JavaHomeMode = JavaHomeMode.ForceUnset,
         configureAndroidHome: Boolean = false,
         environment: Map<String, String> = emptyMap(),
+        wrapperMode: WrapperMode = WrapperMode.Local,
     ): AmperCliResult {
         println("Running Amper CLI with '${args.toList()}' on $projectDir")
 
-        val effectiveProjectDir = if (copyToTempDir) {
-            val tempProjectDir = copyProjectToTempDir(projectDir)
-            modifyTempProjectBeforeRun(tempProjectDir)
-            tempProjectDir
-        } else {
-            projectDir
-        }
+        modifyProjectBeforeRun(projectDir)
 
         val buildOutputRoot = tempRoot.resolve("build")
 
-        val amperVersion = findAmperVersion(customAmperScriptPath)
+        val amperWrapperPath = (if (wrapperMode.isGlobal) tempWrappersDir else projectDir) / scriptNameForCurrentOs
+
+        val amperVersion = findAmperVersion(amperWrapperPath)
         val useNewArgs = amperVersion.knowsAboutNewRootAndBuildArgs()
         val effectiveArgs = buildList {
             if (useNewArgs) {
@@ -107,7 +119,7 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
         }
 
         val result = runAmper(
-            workingDir = effectiveProjectDir,
+            workingDir = projectDir,
             args = effectiveArgs,
             environment = buildMap {
                 if (configureAndroidHome) {
@@ -117,6 +129,9 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
                     put("AMPER_BUILD_DIR", buildOutputRoot.pathString)
                 }
                 put("AMPER_NO_GRADLE_DAEMON", "1")
+                if (wrapperMode == WrapperMode.GlobalIntrinsicVersion) {
+                    put("AMPER_WRAPPER_ALWAYS_USE_INTRINSIC_VERSION", "1")
+                }
                 putAll(environment)
             },
             bootstrapCacheDir = Dirs.userCacheRoot,
@@ -125,11 +140,11 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
             stdin = stdin,
             amperJvmArgs = amperJvmArgs,
             amperJavaHomeMode = amperJavaHomeMode,
-            customAmperScriptPath = customAmperScriptPath,
+            customAmperScriptPath = amperWrapperPath,
         )
 
         testReporter.publishEntry("Amper[${result.pid}] arguments", args.joinToString(" "))
-        testReporter.publishEntry("Amper[${result.pid}] working dir", effectiveProjectDir.pathString)
+        testReporter.publishEntry("Amper[${result.pid}] working dir", projectDir.pathString)
         testReporter.publishEntry("Amper[${result.pid}] exit code", result.exitCode.toString())
         val logsDir = result.logsDir
         if (logsDir != null) {
@@ -150,14 +165,7 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
     }
 
     private fun findAmperVersion(customAmperScriptPath: Path): ComparableVersion {
-        val versionLine = customAmperScriptPath.useLines { lines ->
-            lines.firstOrNull { "amper_version=" in it }
-                ?: error(
-                    "Version line not found in $customAmperScriptPath. First few lines:\n" +
-                            lines.take(20).joinToString("\n")
-                )
-        }
-        return ComparableVersion(versionLine.substringAfter("amper_version=").trim())
+        return ComparableVersion(AmperWrapperData.parse(customAmperScriptPath).version)
     }
 
     protected suspend fun runXcodebuild(
@@ -175,4 +183,30 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
             outputListener = TestReporterProcessOutputListener("xcodebuild", testReporter),
         )
     }
+
+    protected enum class WrapperMode {
+        /**
+         * Call the local wrapper present in the project root.
+         */
+        Local,
+        /**
+         * Call a global wrapper (which is not in the project), and rely on version detection to use
+         * the version of the wrapper that's in the project.
+         * This is the normal behavior of the global wrapper.
+         */
+        Global,
+        /**
+         * Call a global wrapper (which is not in the project) in a special mode that makes it use its
+         * own embedded version instead of detecting the version from the project-local wrapper.
+         *
+         * Note: this is not the normal behavior of the global wrapper, but it's convenient in some tests.
+         */
+        GlobalIntrinsicVersion,
+    }
+
+    private val WrapperMode.isGlobal: Boolean
+        get() = when (this) {
+            WrapperMode.Local -> false
+            else -> true
+        }
 }

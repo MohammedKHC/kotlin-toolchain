@@ -58,7 +58,7 @@ class TypoTest : AmperCliTestBase() {
     }
 
     private fun testTypo(vararg command: String, expectedError: String) = runSlowTest {
-        val result1 = runCli(newEmptyProjectDir(), *command, expectedExitCode = 1, assertEmptyStdErr = false)
+        val result1 = runCli(newEmptyProjectDir(setupWrappers = true), *command, expectedExitCode = 1, assertEmptyStdErr = false)
         result1.assertStderrContains("Error: $expectedError")
     }
 }

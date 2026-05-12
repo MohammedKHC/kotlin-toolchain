@@ -47,7 +47,6 @@ class ComposeResourcesTest : AmperCliTestBase() {
             projectDir = testProject("compose-resources-demo"),
             "build", "--platform=iosSimulatorArm64",
             assertEmptyStdErr = false,  // xcodebuild prints a bunch of warnings (unrelated to resources) for now :(
-            copyToTempDir = true,
         )
     }
 }
