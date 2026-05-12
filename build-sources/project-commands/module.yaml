@@ -38,7 +38,7 @@ plugins:
         # https://www.oracle.com/nl/java/technologies/downloads/
         jdk: 21
         # https://github.com/junit-team/junit-framework/releases
-        junitPlatform: 6.0.1
+        junitPlatform: 6.0.3
         # https://kotlinlang.org/docs/releases.html
         # Also check AGP compatibility: https://developer.android.com/build/kotlin-support
         kotlin: 2.3.21

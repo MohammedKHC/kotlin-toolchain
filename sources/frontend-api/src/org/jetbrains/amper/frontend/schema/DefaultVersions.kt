@@ -22,7 +22,7 @@ object DefaultVersions {
     /*managed_default*/ val compose = "1.10.3"
     /*managed_default*/ val composeHotReload = "1.1.1"
     /*managed_default*/ val jdk = 21
-    /*managed_default*/ val junitPlatform = "6.0.1"
+    /*managed_default*/ val junitPlatform = "6.0.3"
     /*managed_default*/ val kotlin = "2.3.21"
     /*managed_default*/ val kotlinxRpc = "0.10.2"
     /*managed_default*/ val kotlinxSerialization = "1.10.0"

@@ -78,7 +78,7 @@ Fragments:
           }
           freeJvmArgs: <default> [
           ]
-          junitPlatformVersion: <default> 6.0.1
+          junitPlatformVersion: <default> 6.0.3
           systemProperties: <default> {
           }
         }
@@ -259,7 +259,7 @@ Fragments:
           }
           freeJvmArgs: <default> [
           ]
-          junitPlatformVersion: <default> 6.0.1
+          junitPlatformVersion: <default> 6.0.3
           systemProperties: <default> {
           }
         }
