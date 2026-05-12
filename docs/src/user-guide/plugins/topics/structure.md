@@ -1,9 +1,9 @@
 ---
-description: Learn everything about the structure of Amper plugin modules and how to use them in your project.
+description: Learn everything about the structure of Kotlin Toolchain plugin modules and how to use them in your project.
 ---
 # Plugin structure
 
-A plugin is a standard Amper module with the `jvm/amper-plugin` product type. 
+A plugin is a standard Kotlin module with the `jvm/amper-plugin` product type. 
 It has a regular `module.yaml` build file with an additional [`pluginInfo` section](../../../reference/module.md#plugininfo).
 
 In addition, a plugin has a `plugin.yaml` file, where [tasks](tasks.md) are registered and configured.
@@ -32,8 +32,8 @@ The **plugin ID** is used across the project to refer to the plugin, e.g., when 
 
 ## Registering plugins in the project
 
-Amper plugins are module-level plugins – they are enabled per module.
-There is no such concept as a project-wide plugin in Amper.
+Kotlin Toolchain plugins are module-level plugins – they are enabled per module.
+There is no such concept as a project-wide plugin in the Kotlin Toolchain.
 
 To make a plugin available in the project, it must be _registered_ by listing
 the dependency on it in the [`plugins` section](../../../reference/project.md#plugins) of the `project.yaml` file:
@@ -53,7 +53,7 @@ There may be cases where a plugin is developed as part of the project, but not n
 Then such a plugin is present in the `modules` list, but not included in the `plugins` list.
 
 ??? note "Similar to `apply false` in Gradle..."
-    Amper's approach to registering plugins project-wide and enabling them per-module is somewhat similar to the 
+    The Kotlin Toolchain's approach to registering plugins project-wide and enabling them per-module is somewhat similar to the 
     recommended approach in Gradle. There one lists plugins at the project level with the `apply false` clause and
     then enables them where needed.
 

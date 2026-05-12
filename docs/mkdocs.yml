@@ -1,5 +1,5 @@
-site_name: Kotlin
-site_description: "A build tool for the Kotlin and Java languages, with a focus on UX and tooling."
+site_name: The Kotlin Toolchain
+site_description: "A unified entry point into Kotlin, with a focus on UX and tooling."
 site_url: https://kotlin-toolchain.org
 site_author: JetBrains Amper team
 

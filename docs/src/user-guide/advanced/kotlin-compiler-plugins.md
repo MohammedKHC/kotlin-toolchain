@@ -7,7 +7,7 @@ Compiler plugins are a powerful feature of Kotlin that allow extending the langu
 
 ## Built-in compiler plugins
 
-JetBrains provides a handful of first-party compiler plugins, and some of them are supported in Amper as first-class
+JetBrains provides a handful of first-party compiler plugins, and some of them are supported in the Kotlin Toolchain as first-class
 citizens. Check the sections below for more information about each plugin.
 
 ### All-open
@@ -188,10 +188,10 @@ Where:
 
     This is not really meant to be the final way to configure compiler plugins for end users.
 
-    Ideally, compiler plugin authors would write an Amper plugin that wraps their compiler plugin, so they can do this 
+    Ideally, compiler plugin authors would write a Kotlin Toolchain plugin that wraps their compiler plugin, so they can do this 
     configuration for you (and also provide typed options in their plugin settings).
 
-    At the moment, they can't publish plugins because Amper doesn't support plugin publication yet, so this low-level
+    At the moment, they can't publish plugins because the Kotlin Toolchain doesn't support plugin publication yet, so this low-level
     API is the only way you, as an end user, can configure compiler plugins.
 
 ### Examples

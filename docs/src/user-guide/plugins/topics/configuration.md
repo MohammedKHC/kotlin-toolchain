@@ -1,34 +1,34 @@
 ---
-description: A guide to Amper's plugin configuration system.
+description: A guide to the Kotlin Toolchain's plugin configuration system.
 ---
 # Configuration
 
 This section provides details on how to configure tasks and plugin settings, how the schema works, default values and more.
 
 !!! question "YAML?"
-    Amper currently uses "Amper-flavored" YAML as the configuration language.
+    The Kotlin Toolchain currently uses "Kotlin Toolchain-flavored" YAML as the configuration language.
     YAML is flexible, and it allowed us to move fast with prototyping solutions, plugins included.
     However, we are aware of YAML's shortcomings and are exploring the possibility of replacing YAML with a custom 
     language tailored for our needs in the future.  
 
 ## Configurable types
 
-**Configurable types** are types that Amper allows in plugin and task configurations.
+**Configurable types** are types that the Kotlin Toolchain allows in plugin and task configurations.
 Their values are set in YAML configurations, and used in Kotlin _task actions_.
 
 The following table lists the configurable types and their Kotlin and YAML representations:
 
-| Amper type               | Kotlin type                         | YAML structure                         |
-|--------------------------|-------------------------------------|----------------------------------------|
-| `string`                 | `kotlin.String`                     |scalar                                  |
-| `boolean (true | false)` | `kotlin.Boolean`                    |scalar                                  |
-| `integer`                | `kotlin.Int`                        |scalar                                  |
-| `path`                   | `java.nio.file.Path`                |scalar                                  |
-| `enum E`                 | `enum class E`                      |scalar                                  |
-| `sequence [T]`           | `kotlin.collections.List<T>`        |sequence                                |
-| `mapping {string : T}`   | `kotlin.collections.Map<String, T>` |mapping/sequence of pairs               |
-| `object T`               | `@Configurable interface T`         |mapping + [others](#shorthand-notation) |
-| `T | null`               | `T?`                                |"null" scalar                           |
+| Configurable type             | Kotlin type                         | YAML structure                          |
+|-------------------------------|-------------------------------------|-----------------------------------------|
+| `string`                      | `kotlin.String`                     | scalar                                  |
+| `boolean` (`true` \| `false`) | `kotlin.Boolean`                    | scalar                                  |
+| `integer`                     | `kotlin.Int`                        | scalar                                  |
+| `path`                        | `java.nio.file.Path`                | scalar                                  |
+| `enum E`                      | `enum class E`                      | scalar                                  |
+| `sequence [T]`                | `kotlin.collections.List<T>`        | sequence                                |
+| `mapping {string : T}`        | `kotlin.collections.Map<String, T>` | mapping/sequence of pairs               |
+| `object T`                    | `@Configurable interface T`         | mapping + [others](#shorthand-notation) |
+| `T` \| `null`                 | `T?`                                | "null" scalar                           |
 
 Task action parameters and properties in `@Configurable` interfaces are only allowed to be of _configurable_ types. 
 
@@ -132,15 +132,15 @@ Task parameters use the regular default value syntax:
 ) { /*...*/ }
 ```
 
-| Amper type                     | Supported explicit default values                    |
-|--------------------------------|------------------------------------------------------|
-| `string`, `boolean`, `integer` | Kotlin constant expression of the appropriate type   |
-| `enum E`                       | enum constant references, e.g., `E.Constant`         |
-| `path`                         | not supported yet                                    |
-| `sequence [T]`                 | `emptyList()`                                        |
-| `mapping {string : T}`         | `emptyMap()`                                         |
-| `T | null`                     | `null` (not required - implicit default)             |
-| `object T`                     | not supported (instantiated implicitly, see the note)|
+| Configurable type              | Supported explicit default values                     |
+|--------------------------------|-------------------------------------------------------|
+| `string`, `boolean`, `integer` | Kotlin constant expression of the appropriate type    |
+| `enum E`                       | enum constant references, e.g., `E.Constant`          |
+| `path`                         | not supported yet                                     |
+| `sequence [T]`                 | `emptyList()`                                         |
+| `mapping {string : T}`         | `emptyMap()`                                          |
+| `T` \| `null`                  | `null` (not required - implicit default)              |
+| `object T`                     | not supported (instantiated implicitly, see the note) |
 
 !!! note "Defaults for properties of object types"
     Properties of an object type can't have an explicit default value.
@@ -170,7 +170,7 @@ Task parameters use the regular default value syntax:
     they are **not yet ready** to be used by plugin authors in their own Kotlin code.
 
 You may read the following sections at your leisure if you seek to better understand
-how dependency notation, task actions or "short forms" work in Amper.
+how dependency notation, task actions or "short forms" work in the Kotlin Toolchain.
 
 ### Shorthand notation
 
@@ -200,7 +200,7 @@ For example, [plugin settings](#plugin-settings) have an implicit synthetic `ena
 
 On the Kotlin side, they are modeled as a `@Configurable` `sealed` interface.
 When a variant type is expected, there is a need to express which exact variant is being provided in the configuration.
-This ability to express the exact type is not yet designed in Amper and generally looks unintuitive in YAML.
+This ability to express the exact type is not yet designed in the Kotlin Toolchain and generally looks unintuitive in YAML.
 
 An example of variant type is the built‑in `Dependency` type, which can be a local module dependency (`Dependency.Local`)
 or an external Maven dependency (`Dependency.Maven`). Each of these subtypes has a `@DependencyNotation`-annotated property.

@@ -1,22 +1,22 @@
 ---
 description: |
-  Learn by doing with this step-by-step Amper tutorial. Create a Hello World project from scratch, and 
+  Learn by doing with this step-by-step tutorial. Create a Hello World project from scratch, and 
   make it more and more interesting until you turn it into a complete Compose multiplatform application.
 ---
 # Tutorial
 
-This tutorial gives a short introduction to Amper and shows how to create and configure a new project, step-by-step.
+This tutorial gives a short introduction to the Kotlin Toolchain and shows how to create and configure a new project, step-by-step.
 If you are looking for a detailed comprehensive documentation, check the [User guide](../user-guide/index.md) instead.
 
 !!! tip "Before you start"
 
-    Amper is designed with IDE support in mind, and much of the UX comes from the IDE.
-    While the [Amper CLI](../cli/index.md) works well with any text editor, we recommend using 
-    :jetbrains-intellij-idea: IntelliJ IDEA[^1] to get the most out of Amper.
+    The Kotlin Toolchain is designed with IDE support in mind, and much of the UX comes from the IDE.
+    While the [Kotlin CLI](../cli/index.md) works well with any text editor, we recommend using 
+    :jetbrains-intellij-idea: IntelliJ IDEA[^1] to get the most out of Kotlin.
 
     That said, it is not required for this tutorial – there are no IDE-specific steps.
 
-[^1]: Since Amper is moving fast, it's best to use the latest 
+[^1]: Since the Kotlin Toolchain is moving fast, it's best to use the latest 
       [IntelliJ IDEA EAP](https://www.jetbrains.com/idea/nextversion/) version.
       The best way to get the most recent IDE versions is by using the 
       [:jetbrains-toolbox-app: Toolbox App](https://www.jetbrains.com/lp/toolbox/).
@@ -49,9 +49,9 @@ fun main() {
 ```
 </div>
 
-You also need to add the Amper shell scripts to your root project folder.
+You also need to add the Kotlin CLI wrapper scripts to your root project folder.
 
-* If you're in IntelliJ IDEA, you can simply use the quick fix in `module.yaml` to "Configure standalone Amper".
+* If you're in IntelliJ IDEA, you can simply use the quick fix in `module.yaml` to "Configure the Kotlin Toolchain".
 * If not, follow the [CLI installation instructions](./../cli/index.md#installation) to download them.
 
 Your project should now look like this:
@@ -97,7 +97,7 @@ You can now build your application using `./amper build`, or run it using `./amp
 
     - [Project layout](../user-guide/basics.md#project-layout)
     - [Module file anatomy](../user-guide/basics.md#module-file-anatomy)
-    - [Using Amper from the command line](../cli/index.md)
+    - [Using the Kotlin CLI](../cli/index.md)
 
 ## Step 2. Add dependencies
 
@@ -125,7 +125,7 @@ fun main() {
 
 ## Step 3. Add tests
 
-Now let’s add some tests. Amper configures the testing framework automatically,
+Now let’s add some tests. The Kotlin Toolchain configures the testing framework automatically,
 we only need to add some test code into the `test/` folder:
 
 <div class="grid" markdown>
@@ -172,7 +172,7 @@ test-dependencies:
 
 ## Step 4. Configure Java and Kotlin
 
-Another typical task is configuring compiler settings, such as language level etc. Here is how we do it in Amper:
+Another typical task is configuring compiler settings, such as language level etc. Here is how to do it:
 
 ```YAML title="module.yaml" hl_lines="9-13"
 product: jvm/app
@@ -518,7 +518,7 @@ Now you can build and run both apps using the corresponding IntelliJ IDEA run co
 
     After the first build, the Xcode project will appear beside the `module.yaml` in the `ios-app` module. 
     It can be checked into the VCS and customized (e.g. _Team_ (`DEVELOPMENT_TEAM`) setting).
-    See the [iOS application](../user-guide/product-types/ios-app.md) section to learn more about the Xcode ↔ Amper 
+    See the [iOS application](../user-guide/product-types/ios-app.md) section to learn more about the Xcode ↔ the Kotlin Toolchain 
     interoperability.
 
 !!! example "Example: [Compose Multiplatform]({{ examples_base_url }}/compose-multiplatform)"

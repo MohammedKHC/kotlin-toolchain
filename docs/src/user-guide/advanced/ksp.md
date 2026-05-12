@@ -1,13 +1,13 @@
 ---
 description: |
   Kotlin Symbol Processing (KSP) is a tool that allows feeding Kotlin source code to processors, which can in turn use
-  this information to generate code, classes, or resources, for instance. Amper provides built-in support for KSP.
+  this information to generate code, classes, or resources, for instance. The Kotlin Toolchain provides built-in support for KSP.
 ---
 # Kotlin Symbol Processing (KSP)
 
 [Kotlin Symbol Processing](https://kotlinlang.org/docs/ksp-overview.html) is a tool that allows feeding Kotlin source
 code to _processors_, which can in turn use this information to generate code, classes, or resources, for instance.
-Amper provides built-in support for KSP.
+The Kotlin Toolchain provides built-in support for KSP.
 
 Some popular libraries also include a KSP processor to enhance their capabilities, such as
 [Room](https://developer.android.com/jetpack/androidx/releases/room) or
@@ -15,7 +15,7 @@ Some popular libraries also include a KSP processor to enhance their capabilitie
 
 !!! info
 
-    Amper works with KSP2, so any processors used must be compatible with KSP2.
+    The Kotlin Toolchain works with KSP2, so any processors used must be compatible with KSP2.
     We’re expecting most processors to make this upgrade soon, as KSP1 is no longer part of KSP releases.
     However, at the moment, you might still see some gaps in support, such as issues with native targets.
 
@@ -56,7 +56,7 @@ settings@android:
 
 ## Customizing the KSP version
 
-Amper only supports KSP2 (the standalone tool), not the deprecated KSP1 implementation based compiler plugin.
+The Kotlin Toolchain only supports KSP2 (the standalone tool), not the deprecated KSP1 implementation based compiler plugin.
 
 That said, you can use any version of KSP2 as follows:
 
@@ -90,7 +90,7 @@ Consult the documentation of the processor you want to use for more information 
 
 ## Using your own local KSP processor
 
-You can implement your own processor in an Amper module as a regular JVM library, and then use it to process code from
+You can implement your own processor in a Kotlin module as a regular JVM library, and then use it to process code from
 other modules in your project.
 
 Usually, 3 modules are involved:

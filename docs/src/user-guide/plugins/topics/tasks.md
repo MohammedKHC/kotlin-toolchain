@@ -1,6 +1,6 @@
 ---
 description: |
-  Learn how to implement and register custom tasks in Amper plugins, and how they are executed.
+  Learn how to implement and register custom tasks in Kotlin Toolchain plugins, and how they are executed.
 ---
 # Tasks
 
@@ -52,7 +52,7 @@ All non‑`Path`‑referencing parameters are considered **inputs** and do not r
 Tasks are executed inside an isolated JVM environment, and no guarantees are made about the state of static globals from
 one task action invocation to the other. 
 
-At the moment tasks are effectively executed inside the Amper JVM using an isolated plugin classloader
+At the moment tasks are effectively executed inside the Kotlin Toolchain JVM using an isolated plugin classloader
 that contains only the plugin's runtime classpath. 
 This concrete implementation is very much likely to change in the future, so it is advised not to rely on it.
 
@@ -60,17 +60,17 @@ This concrete implementation is very much likely to change in the future, so it 
 
 There is no currently available runtime API exposed for tasks, besides the configuration system.
 So plugin authors are free to use whatever libraries they need to implement things.
-In the future some runtime APIs that Amper can provide and support will be added.
+In the future some runtime APIs that the Kotlin Toolchain can provide and support will be added.
 
 #### Logging
 
-Use `System.out/err`, Amper will associate the output with the task name in its build log.
+Use `System.out/err`, the Kotlin Toolchain will associate the output with the task name in its build log.
 Structured logging support is coming soon.
 
 ## Execution avoidance
 
-Amper uses a built‑in execution‑avoidance mechanism for task actions by default.
-When not disabled, Amper decides whether to rerun an action based on:
+The Kotlin Toolchain uses a built‑in execution‑avoidance mechanism for task actions by default.
+When not disabled, the Kotlin Toolchain decides whether to rerun an action based on:
 
 - the action execution classpath changes (if the action code is recompiled, tasks using the action need to be rerun)
 - effective values of the action arguments that are non‑paths, including property values of configurable interfaces, recursively 
@@ -96,7 +96,7 @@ This behavior is controlled per action by the `executionAvoidance` parameter of 
 
 Dependencies between user‑registered tasks are inferred automatically from matching `@Input` and `@Output` paths in their actions:
 
-- If task A declares an `@Output` path and task B declares an `@Input` path that _matches_ it, Amper adds a dependency from B to A.
+- If task A declares an `@Output` path and task B declares an `@Input` path that _matches_ it, the Kotlin Toolchain adds a dependency from B to A.
 - Paths are considered _matching_ when they are either equal or one is an ancestor or descendant of the other.
   For example:
 
@@ -181,7 +181,7 @@ The internal name of a task should not ideally be exposed and used externally. W
 
 ## Contributing back to the build
 
-There are a bunch of things the Amper build can consume that can be produced by a custom task.
+There are a bunch of things the Kotlin Toolchain build can consume that can be produced by a custom task.
 In order to contribute some typed files back to the build, we need the following:
 
 1. To have a necessary path marked as an `@Output` in the task action
@@ -229,7 +229,7 @@ generated:
     - defFile: ${tasks.provideNativeLibs.action.generatedDefFile}
       fragment: native
 ```
-would make Amper treat the generated sources as if they were put into the `test@ios` directory.
+would make the Kotlin Toolchain treat the generated sources as if they were put into the `test@ios` directory.
 
 ## Consuming things from the build
 
@@ -282,7 +282,7 @@ like other custom tasks or KSP, and include their results in `sourceDirectories`
 
 ### Requesting classpath/ad-hoc dependency resolution
 
-Amper models a request to get a resolved classpath as the built‑in `org.jetbrains.amper.plugins.Classpath` configurable.
+The Kotlin Toolchain models a request to get a resolved classpath as the built‑in `org.jetbrains.amper.plugins.Classpath` configurable.
 It also must always be an `@Input`.
 There are a bunch of convenience reference‑only properties like `module.runtimeClasspath` or `module.compileClasspath`,
 but one can also construct a `Classpath` spec to request an ad hoc dependency resolution.
@@ -345,7 +345,7 @@ it probably doesn't ever need to be invoked explicitly by hand. It is invoked au
 to ensure that generated contents are up to date.
 
 If the task needs to serve as an entry point to the build, then, currently,
-it needs to be run manually via the Amper CLI using the task's [internal name](#internal-name):
+it needs to be run manually via the Kotlin CLI using the task's [internal name](#internal-name):
 
 ```shell
 $ ./amper task :moduleName:taskName@pluginId
@@ -357,4 +357,4 @@ We are working on providing a proper UX for calling plugin tasks.
 
 To see more practical examples of how to write tasks,
 you are welcome to check out the [quick start guide](../quick-start.md) and our
-plugin samples in the `build-sources` directory of the Amper project.
+plugin samples in the `build-sources` directory of the Kotlin project.

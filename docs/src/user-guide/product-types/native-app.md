@@ -1,5 +1,5 @@
 ---
-description: Learn how to build Kotlin/Native applications for the Linux, macOS, and Windows platforms using Amper.
+description: Learn how to build Kotlin/Native applications for the Linux, macOS, and Windows platforms using the Kotlin Toolchain.
 ---
 # :fontawesome-solid-microchip: Kotlin/Native application
 

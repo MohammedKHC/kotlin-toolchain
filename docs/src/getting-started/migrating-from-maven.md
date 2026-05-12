@@ -1,14 +1,14 @@
 ---
 description: |
-  Migrate your Maven project to Amper: run the semi-automated converter, understand the concept mapping, and learn
+  Migrate your Maven project to the Kotlin Toolchain: run the semi-automated converter, understand the concept mapping, and learn
   what to do after the conversion.
 ---
 
 # Migrating from Maven
 
-This section describes how to convert an existing Maven project to Amper.
+This section describes how to convert an existing Maven project to the Kotlin Toolchain.
 
-Amper provides a semi-automated tool to do the bulk of the conversion for you.
+The Kotlin Toolchain provides a semi-automated tool to do the bulk of the conversion for you.
 It works on a best-effort basis, so some projects require some additional tweaks
 after the converter runs.
 
@@ -20,7 +20,7 @@ cd /path/to/your/maven/project
 
 ```
 
-Download the [Amper wrapper script](../cli/provisioning.md/#whats-the-wrapper-script).
+Download the [Kotlin wrapper script](../cli/provisioning.md/#whats-the-wrapper-script).
 
 --8<-- "includes/cli-install.md"
 
@@ -33,7 +33,7 @@ and then run:
 The path to your `pom.xml` can be provided explicitly via `--pom` argument. The `pom.xml` file is a starting point.
 If it's a part of the reactor, all related modules are converted.
 
-During the conversion, the tool puts Amper files into corresponding maven modules's folders. If `project.yaml` or one of
+During the conversion, the tool puts the Kotlin Toolchain files into corresponding Maven modules's folders. If `project.yaml` or one of
 the corresponding `module.yaml` files already exists, by default converter fails. To adjust this behavior,
 `--overwrite-existing` flag can be used.
 
@@ -63,10 +63,10 @@ for details.
 
 The converter handles Maven plugins in two ways:
 
-**Handled natively** — these plugins cover functionality that Amper provides out of the box.
-For some of them, the converter extracts the relevant configuration into Amper settings:
+**Handled natively** — these plugins cover functionality that the Kotlin Toolchain provides out of the box.
+For some of them, the converter extracts the relevant configuration into the Kotlin Toolchain settings:
 
-| Maven plugin               | Amper settings                                                                                                                     |
+| Maven plugin               | The Kotlin Toolchain settings                                                                                                      |
 |----------------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | `maven-compiler-plugin`    | `settings.jvm.release`, `settings.java.freeCompilerArgs`, `settings.java.annotationProcessing`, `settings.jvm.storeParameterNames` |
 | `kotlin-maven-plugin`      | `settings.kotlin.*` (version, compiler plugins, args), `settings.jvm.release`                                                      |
@@ -74,7 +74,7 @@ For some of them, the converter extracts the relevant configuration into Amper s
 | `maven-surefire-plugin`    | `test-settings.jvm.freeJvmArgs`, `test-settings.jvm.extraEnvironment`, `test-settings.jvm.systemProperties`                        |
 
 Others (`maven-jar-plugin`, `maven-clean-plugin`, `maven-install-plugin`, `maven-source-plugin`, etc.)
-don't require any conversion because Amper handles their functionality out of the box.
+don't require any conversion because the Kotlin Toolchain handles their functionality out of the box.
 
 **Unknown plugins** — all other plugins are downloaded, their descriptors are parsed, and each goal is added to a
 `mavenPlugins` section with `enabled: false`. You can enable them selectively after the conversion.
@@ -96,16 +96,16 @@ mavenPlugins:
     enabled: false
 ```
 
-The `mavenPlugins` section allows you to run third-party Maven plugins directly in your Amper project.
+The `mavenPlugins` section allows you to run third-party Maven plugins directly in your Kotlin project.
 However, not all plugins are guaranteed to work, so by default they are disabled. You can selectively enable
 plugins you need by setting `enabled: true` in their configuration after the conversion.
 Please refer to the [Maven plugins](../user-guide/advanced/maven-plugins.md) section for more details.
 
 ## Dependency mapping
 
-Maven dependency scopes map to Amper as follows:
+Maven dependency scopes map to the Kotlin Toolchain as follows:
 
-| Maven scope         | Amper equivalent                         | Config section      |
+| Maven scope         | The Kotlin Toolchain equivalent          | Config section      |
 |---------------------|------------------------------------------|---------------------|
 | `compile` (default) | `compile` + `runtime` + `exported: true` | `dependencies`      |
 | `provided`          | `scope: compile-only`                    | `dependencies`      |
@@ -187,8 +187,8 @@ After the converter finishes, consider the following steps:
 5. **Optional: create a library catalog.** Extract repeated dependency versions into a `libs.versions.toml` file.
    See [Library catalogs](../user-guide/dependencies.md#library-catalogs).
 
-6. **Optional: switch to the standard Amper layout.** The converter sets `layout: maven-like` to avoid moving files.
-   If you want to adopt the [standard Amper layout](../user-guide/basics.md#project-layout) later, move files from
+6. **Optional: switch to the standard Kotlin Toolchain layout.** The converter sets `layout: maven-like` to avoid moving files.
+   If you want to adopt the [standard Kotlin Toolchain layout](../user-guide/basics.md#project-layout) later, move files from
    `src/main/kotlin/` to `src/` and from `src/test/kotlin/` to `test/`, then remove the `layout: maven-like` line.
    See [Maven-like layout](../user-guide/advanced/maven-like-layout.md).
 
@@ -196,7 +196,7 @@ After the converter finishes, consider the following steps:
 
 The following Maven features are not handled by the converter and require manual migration:
 
-- **Profiles** — Amper does not have an equivalent of Maven profiles. Build configuration can only vary
+- **Profiles** — The Kotlin Toolchain does not have an equivalent of Maven profiles. Build configuration can only vary
   [by platform](../user-guide/multiplatform.md).
 - **Extensions**
 - **Dependency exclusions**
