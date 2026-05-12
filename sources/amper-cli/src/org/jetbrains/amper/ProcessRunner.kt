@@ -23,7 +23,7 @@ import kotlin.io.path.pathString
 
 /**
  * Ordinary operations like running processes and copying files require
- * a comprehensive support in a build system to make it observable
+ * comprehensive support in a build system to make it observable
  */
 class ProcessRunner(
     private val telemetryDir: Path,
@@ -37,7 +37,7 @@ class ProcessRunner(
      *
      * If a [span] is provided, extra attributes are added to it about the process result (exit code, stdout, stderr).
      *
-     * If this function is cancelled before the process has terminated, it kills the process (first normally then
+     * If this function is canceled before the process has terminated, it kills the process (first normally, then
      * forcibly), and cleans the stream readers. If the process is not killable and hangs, this function will also hang
      * instead of returning (otherwise the zombie process could leak).
      *
