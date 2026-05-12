@@ -55,10 +55,10 @@ class PublishingSettings : SchemaNode() {
 
 class PomSettings : SchemaNode() {
 
-    @SchemaDoc("A user-readable name for this module. Defaults to the Amper module name.")
+    @SchemaDoc("A user-readable name for this module. Defaults to the Kotlin module name.")
     val name by nullableValue<String>()
 
-    @SchemaDoc("A description for this module. Defaults to the Amper module description.")
+    @SchemaDoc("A description for this module. Defaults to the Kotlin module description.")
     val description by nullableValue<String>()
 
     @SchemaDoc(

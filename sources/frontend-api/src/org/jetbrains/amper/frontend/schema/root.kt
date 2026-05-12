@@ -134,7 +134,7 @@ enum class AmperLayout(
     @SchemaDoc("Maven like layout. [Read more]($userGuideUrl/advanced/maven-like-layout)")
     MAVEN_LIKE("maven-like"),
 
-    @SchemaDoc("The [default Amper file layout]($userGuideUrl/basics/#project-layout) is used")
+    @SchemaDoc("The [default Kotlin project file layout]($userGuideUrl/basics/#project-layout) is used")
     AMPER("amper"),;
 
     companion object : EnumMap<AmperLayout, String>(AmperLayout::values, AmperLayout::schemaValue)

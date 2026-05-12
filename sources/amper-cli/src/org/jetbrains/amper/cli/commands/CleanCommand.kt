@@ -25,7 +25,7 @@ internal class CleanCommand : AmperSubcommand(name = "clean") {
         val projectContext = findProjectContext(
             explicitProjectDir = commonOptions.explicitProjectRoot ?: layoutOptions.explicitProjectDir,
             explicitBuildDir = commonOptions.explicitBuildOutputRoot ?: layoutOptions.explicitBuildDir,
-        ) ?: userReadableError("No Amper project found, nothing to clean")
+        ) ?: userReadableError("No Kotlin project found, nothing to clean")
 
         if (projectContext.projectBuildDir.exists()) {
             terminal.println("Deleting project build output and caches…")

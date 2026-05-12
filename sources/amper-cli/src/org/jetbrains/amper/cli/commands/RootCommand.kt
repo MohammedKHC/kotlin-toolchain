@@ -63,7 +63,7 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
             CleanSharedCachesCommand(),
             DoCustomCommand(),
             SuspendingCompletionCommand(
-                help = "Generate a tab-completion script for the Amper command for the given shell (bash, zsh, or fish)",
+                help = "Generate a tab-completion script for the Kotlin CLI for the given shell (bash, zsh, or fish)",
             ),
             InitCommand(),
             PackageCommand(),
@@ -84,9 +84,9 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
         }
     }
 
-    private val root by option(help = "Amper project root")
+    private val root by option(help = "Kotlin project root")
         .path(mustExist = true, canBeFile = false, canBeDir = true)
-        .deprecated("WARN: `--root` is deprecated. Use `--project-dir` after the Amper command instead")
+        .deprecated("WARN: `--root` is deprecated. Use `--project-dir` after the Kotlin CLI subcommand instead")
 
     private val consoleLogLevel by option(
         "--log-level",
@@ -103,7 +103,7 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
 
     private val sharedCacheDir by option(
         "--shared-cache-dir",
-        help = "Path to the cache directory shared between all Amper projects",
+        help = "Path to the cache directory shared between all Kotlin projects",
     )
         .path(canBeFile = false)
         .convert { AmperUserCacheRoot(it.toAbsolutePath()) }
@@ -113,7 +113,7 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
 
     private val sharedCachesRoot by option(
         "--shared-caches-root",
-        help = "Path to the cache directory shared between all Amper projects",
+        help = "Path to the cache directory shared between all Kotlin projects",
     )
         .path(canBeFile = false)
         .convert { AmperUserCacheRoot(it.toAbsolutePath()) }
@@ -124,7 +124,7 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
         "--build-output",
         help = "Root directory for build outputs. By default, this is the `build` directory under the project root."
     ).path(mustExist = false, canBeFile = false, canBeDir = true)
-        .deprecated("WARN: `--build-output` is deprecated. Use `--build-dir` after the Amper command instead")
+        .deprecated("WARN: `--build-output` is deprecated. Use `--build-dir` after the Kotlin CLI subcommand instead")
 
     private val debuggingOptions by DebuggingOptions()
 
@@ -221,7 +221,7 @@ internal class RootCommand : SuspendingCliktCommand(name = "amper") {
 private class DebuggingOptions : OptionGroup(name = "Debugging options") {
     val profilerEnabled by option(
         "--profile",
-        help = "Profile Amper with the [Async Profiler](https://github.com/async-profiler/async-profiler). " +
+        help = "Profile the Kotlin CLI with the [Async Profiler](https://github.com/async-profiler/async-profiler). " +
                 "The path to the snapshot file is determined by `--profiler-snapshot-path`."
     ).flag(default = false)
 

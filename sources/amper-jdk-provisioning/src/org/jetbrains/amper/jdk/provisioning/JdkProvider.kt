@@ -88,11 +88,11 @@ class JdkProvider(
             is UnusableJavaHomeResult.UnsetOrEmpty -> {
                 // Useful when the user makes a mistake when setting JAVA_HOME (doesn't source their profile or export
                 // their variable), and want to understand what's going on.
-                jdkProviderLogger.debug("JAVA_HOME is not set (or empty). Amper will provision a JDK instead.")
+                jdkProviderLogger.debug("JAVA_HOME is not set (or empty). The Kotlin Toolchain will provision a JDK instead.")
             }
             is UnusableJavaHomeResult.Mismatch -> {
                 jdkProviderLogger.debug("`JAVA_HOME` was found but doesn't match the JDK selection criteria: " +
-                        "${unusableJavaHomeResult.reason}. Amper will provision a suitable JDK instead.")
+                        "${unusableJavaHomeResult.reason}. The Kotlin Toolchain will provision a suitable JDK instead.")
             }
             is UnusableJavaHomeResult.Invalid -> Unit // already reported via messages (once and for all)
         }

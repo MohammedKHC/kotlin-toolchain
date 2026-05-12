@@ -105,7 +105,7 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
         assertEquals(
             expected = requestedFiles,
             actual = listOf(LocalAmperPublication.distTgz),
-            message = "The Amper script run should request the Amper distribution (and only this)",
+            message = "The Kotlin wrapper script run should request the Kotlin Toolchain distribution (and only this)",
         )
     }
 
@@ -211,7 +211,7 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
             bootstrapCacheDir = tempDir.resolve("boot strap"),
         )
         val expectedVersionString = Regex(
-            Regex.escape("JetBrains Amper version $expectedAmperVersion ") + """\([A-Fa-f0-9]+, \d{4}-\d{2}-\d{2}\)"""
+            Regex.escape("Kotlin Toolchain version $expectedAmperVersion ") + """\([A-Fa-f0-9]+, \d{4}-\d{2}-\d{2}\)"""
         )
 
         assertTrue("Process output must contain '${expectedVersionString.pattern}'. Output:\n${result.stdout}") {
@@ -222,7 +222,7 @@ class AmperShellScriptsTest : AmperCliWithWrapperTestBase() {
         assertEquals(
             1,
             nDownloadingLines,
-            "Process output must have 'Downloading ' line only once (for Amper itself), got $nDownloadingLines. Output:\n${result.stdout}"
+            "Process output must have 'Downloading ' line only once (for Kotlin CLI itself), got $nDownloadingLines. Output:\n${result.stdout}"
         )
 
         // TODO Somehow assert that exactly this JRE is used by amper bootstrap

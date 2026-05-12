@@ -34,7 +34,7 @@ class TaskFromPluginDescription(
     val pluginId: PluginData.Id,
 
     /**
-     * Amper module that the [plugin][pluginId] is enabled in, resulting into this task registration.
+     * Kotlin module that the [plugin][pluginId] is enabled in, resulting into this task registration.
      */
     val enabledIn: AmperModule,
 

@@ -10,7 +10,7 @@ import io.ktor.client.plugins.compression.*
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-private const val AmperUserAgent = "JetBrains Amper"
+private const val AmperUserAgent = "Kotlin Toolchain"
 
 /**
  * A shared [HttpClient] instance used in various places for basic HTTP.

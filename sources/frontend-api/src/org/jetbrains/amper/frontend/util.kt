@@ -37,4 +37,4 @@ interface Context {
     val leaves: Set<Context>
 }
 
-internal const val userGuideUrl: String = "${AmperBuild.documentationUrl}/user-guide"
+const val userGuideUrl: String = "${AmperBuild.documentationUrl}/user-guide"

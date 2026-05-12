@@ -79,7 +79,7 @@ class GlobalWrapperTest : AmperCliTestBase() {
             "--version",
             wrapperMode = WrapperMode.GlobalIntrinsicVersion,
         )
-        result.assertStdoutContains("JetBrains Amper version ${AmperBuild.mavenVersion}")
+        result.assertStdoutContains("Kotlin Toolchain version ${AmperBuild.mavenVersion}")
         result.assertStdoutDoesNotContain(hostWrapperInfo.version)
     }
 
@@ -129,7 +129,7 @@ class GlobalWrapperTest : AmperCliTestBase() {
         result.assertStderrContains("WARNING: Found wrapper script '${activeScriptPath.absolutePathString()}'," +
                 " but no project.yaml or module.yaml near it. Skipping.")
 
-        result.assertStdoutContains("JetBrains Amper version ${AmperBuild.mavenVersion}")
+        result.assertStdoutContains("Kotlin Toolchain version ${AmperBuild.mavenVersion}")
         result.assertStdoutDoesNotContain(hostWrapperInfo.version)
     }
 

@@ -1,4 +1,4 @@
-This software includes code from Amper project configuration tool
+This software includes code from the Kotlin Toolchain
 Copyright (C) JetBrains s.r.o.
 https://www.jetbrains.com
 

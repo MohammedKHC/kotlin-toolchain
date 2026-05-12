@@ -223,7 +223,7 @@ class JvmTestTask(
 
     private suspend fun extractJUnitListenersClasspath(): List<Path> {
         val classpathList = javaClass.getResource("/junit-listeners/classpath.txt")?.readText()
-            ?: error("JUnit listeners classpath is not in the Amper distribution")
+            ?: error("JUnit listeners classpath is not in the Kotlin Toolchain distribution")
         val result = incrementalCache.execute(
             key = "extract-junit-listeners-classpath",
             inputValues = mapOf("junit-listeners-classpath" to classpathList),

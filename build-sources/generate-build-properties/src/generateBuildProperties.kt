@@ -81,7 +81,7 @@ private fun generateBuildInfoFile(
             PropertySpec.builder("mavenVersion", String::class)
                 .addModifiers(KModifier.CONST)
                 .initializer("%S", version)
-                .addKdoc("The current version of Amper as seen in Maven dependencies.")
+                .addKdoc("The current version of the Kotlin Toolchain as seen in Maven dependencies.")
                 .build()
         )
         .addProperty(
@@ -110,7 +110,7 @@ private fun generateBuildInfoFile(
                 .initializer("%S", docUrl)
                 .addKdoc(
                     """
-                    URL to the Amper documentation for this version.
+                    URL to the Kotlin Toolchain documentation for this version.
 
                     Note: For dev versions, this always points to the latest dev documentation
                     even if a corresponding stable version has been released.

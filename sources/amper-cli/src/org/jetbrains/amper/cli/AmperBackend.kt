@@ -479,7 +479,7 @@ class AmperBackend(
         documentationUrl: String,
     ): Nothing {
         userReadableError(
-            "Module '${module.userReadableName}' of type '${module.type.value}' cannot be run directly by Amper at the moment.\n" +
+            "Module '${module.userReadableName}' of type '${module.type.value}' cannot be run directly by the Kotlin Toolchain at the moment.\n" +
                     "See the documentation for more info:\n$documentationUrl",
         )
     }

@@ -415,7 +415,7 @@ private fun composeMaterial3VersionForCMPVersion(composeVersion: TraceableVersio
         value = latestMaterial3Version,
         trace = TransformedValueTrace(
             description = "$UNKNOWN_COMPOSE_MATERIAL3_VERSION_DESCRIPTION_PREFIX " +
-                    "for Compose ${composeVersion.value} at the time Amper ${AmperBuild.mavenVersion} was released",
+                    "for Compose ${composeVersion.value} at the time the Kotlin Toolchain ${AmperBuild.mavenVersion} was released",
             sourceValue = composeVersion,
         ),
     )

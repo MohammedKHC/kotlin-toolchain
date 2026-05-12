@@ -68,7 +68,7 @@ internal class JaegerToolCommand : AmperSubcommand(name = "jaeger") {
 
     override fun help(context: Context): String = "Download and run Jaeger server https://www.jaegertracing.io"
 
-    override fun helpEpilog(context: Context): String = "Use `--` to separate Jaeger's arguments from Amper options"
+    override fun helpEpilog(context: Context): String = "Use `--` to separate Jaeger's arguments from the Kotlin CLI options"
 
     override suspend fun run() {
         val userCacheRoot = commonOptions.sharedCachesRoot

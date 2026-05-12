@@ -59,7 +59,7 @@ abstract class AmperIntegrationTestBase {
         val problemReporter = CollectingProblemReporter()
         val projectContext = with(problemReporter) {
             AmperProjectContext.create(rootDir = projectRoot, buildDir = buildDir)
-                ?: error("No Amper project found at $projectRoot")
+                ?: error("No Kotlin project found at $projectRoot")
         }
         if (problemReporter.problems.isNotEmpty()) {
             fail("Error in the test project's project.yaml:\n${problemReporter.problems.joinToString("\n")}")

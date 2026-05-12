@@ -136,7 +136,7 @@ class JvmHotRunTask(
             ),
             selectionMode = module.jdkSettings.selectionMode,
         ).orElse { errorMessage ->
-            userReadableError("Compose Hot Reload requires a JetBrains Runtime (JBR) to run, but Amper could not " +
+            userReadableError("Compose Hot Reload requires a JetBrains Runtime (JBR) to run, but the Kotlin Toolchain could not " +
                     "provision one that matches the configured JDK version: $errorMessage")
         }
     }

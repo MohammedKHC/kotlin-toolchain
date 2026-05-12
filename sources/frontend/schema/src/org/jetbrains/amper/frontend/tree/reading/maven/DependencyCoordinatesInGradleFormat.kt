@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.amper.core.UsedInIdePlugin
 import org.jetbrains.amper.frontend.SchemaBundle
 import org.jetbrains.amper.frontend.tree.TreeDiagnosticId
+import org.jetbrains.amper.frontend.userGuideUrl
 import org.jetbrains.amper.problems.reporting.DiagnosticId
 import org.jetbrains.annotations.Nls
 
@@ -21,5 +22,9 @@ class DependencyCoordinatesInGradleFormat(
 ) : MavenCoordinatesParsingProblem() {
 
     override val diagnosticId: DiagnosticId = TreeDiagnosticId.CoordinatesInGradleFormat
-    override val message: @Nls String = SchemaBundle.message("dependency.coordinates.in.gradle.format", coordinates)
+    override val message: @Nls String = SchemaBundle.message(
+        "dependency.coordinates.in.gradle.format",
+        coordinates,
+        "$userGuideUrl/dependencies/#transitivity-and-scope",
+    )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.cli.commands.tools
@@ -22,18 +22,18 @@ import kotlin.io.path.exists
 
 internal class ConvertProjectCommand : AmperSubcommand(name = "convert-project") {
 
-    override fun help(context: Context): String = "Convert an existing Maven project to an Amper project."
+    override fun help(context: Context): String = "Convert an existing Maven project to use the Kotlin Toolchain."
 
     val pathToPomXml by option("--pom", help = "The path to the pom.xml of the project to convert.")
         .path(mustExist = true, canBeFile = true, canBeDir = false)
         .default(Path(System.getProperty("user.dir")) / "pom.xml")
 
-    val overwriteExisting: Boolean by option("--overwrite-existing", help = "Overwrite existing Amper files")
+    val overwriteExisting: Boolean by option("--overwrite-existing", help = "Overwrite existing Kotlin project files")
         .flag(default = false)
 
     val enableCompatibilityPlugins: Boolean by option(
         "--enable-compatibility-plugins",
-        help = "Enables compatibility plugins (which are not natively supported by Amper and are instead delegated " +
+        help = "Enables compatibility plugins (which are not natively supported by the Kotlin Toolchain and are instead delegated " +
                 "to a Maven compatibility layer). By default, they are generated with \"enabled: false\" so that " +
                 "they can be reviewed and selectively enabled only when they are actually needed, avoiding potential " +
                 "issues from untested plugin configurations."
@@ -45,7 +45,7 @@ internal class ConvertProjectCommand : AmperSubcommand(name = "convert-project")
             if (!pathToPomXml.exists()) {
                 userReadableError("pom.xml file not found at: $pathToPomXml")
             }
-            spanBuilder("Convert Maven Project to Amper Project").use {
+            spanBuilder("Convert Maven Project to use the Kotlin Toolchain").use {
                 MavenProjectConvertor.convert(
                     pathToPomXml,
                     overwriteExisting,

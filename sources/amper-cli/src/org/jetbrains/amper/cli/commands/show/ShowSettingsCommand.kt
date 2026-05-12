@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.cli.commands.show
@@ -33,7 +33,7 @@ internal class ShowSettingsCommand : AmperModelAwareCommand(name = "settings") {
         allModulesOptionHelp = "Show settings for all modules.",
     )
 
-    override fun help(context: Context): String = "Print the effective Amper settings of each module"
+    override fun help(context: Context): String = "Print the effective settings of each module"
 
     override suspend fun run(cliContext: CliContext, model: Model) {
         val isMultimodule = model.modules.size

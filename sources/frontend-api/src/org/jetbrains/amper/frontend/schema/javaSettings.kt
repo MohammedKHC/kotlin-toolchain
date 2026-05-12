@@ -94,7 +94,7 @@ class JvmSettings : SchemaNode() {
 
     @PlatformAgnostic
     @SchemaDoc("Specifies how runtime classpath is constructed for the application. " +
-            "The default is `jars`, which means all the dependencies including local dependencies on Amper modules will " +
+            "The default is `jars`, which means all the dependencies including local dependencies on Kotlin modules will " +
             "be built as jars. The `classes` mode will use classes for local modules as part of the runtime classpath.")
     val runtimeClasspathMode by value(default = DependencyMode.JARS)
 }
@@ -119,7 +119,7 @@ class JdkSettings : SchemaNode() {
 
     @PlatformAgnostic
     @Misnomers("javaHome", "provisioning")
-    @SchemaDoc("Defines whether to use JAVA_HOME or provision a JDK. By default, Amper will use JAVA_HOME if it's " +
+    @SchemaDoc("Defines whether to use JAVA_HOME or provision a JDK. By default, the Kotlin Toolchain will use JAVA_HOME if it's " +
             "set to a JDK that matches the criteria, or provision a matching JDK from the network otherwise.")
     val selectionMode by value(default = JdkSelectionMode.auto)
 
@@ -134,16 +134,16 @@ enum class JdkSelectionMode(
     override val schemaValue: String,
 ) : SchemaEnum {
     @SchemaDoc("This is the default. If the JAVA_HOME environment variable is set and points to a JDK that matches " +
-            "the criteria, Amper uses that JDK. In any other case, Amper finds a suitable JDK matching the criteria " +
-            "via the Foojay Discovery API, and downloads it (or use a cached version if it's already in the Amper " +
+            "the criteria, the Kotlin Toolchain uses that JDK. In any other case, Kotlin Toolchain finds a suitable JDK matching the criteria " +
+            "via the Foojay Discovery API, and downloads it (or use a cached version if it's already in the Kotlin Toolchain " +
             "cache).")
     auto("auto"),
     @SchemaDoc("Always rely on the provisioning mechanism, and ignore the JAVA_HOME environment variable. " +
-            "In this mode, Amper finds a suitable JDK matching the criteria via the Foojay Discovery API, and " +
-            "downloads it (or use a cached version if it's already in the Amper cache).")
+            "In this mode, the Kotlin Toolchain finds a suitable JDK matching the criteria via the Foojay Discovery API, and " +
+            "downloads it (or use a cached version if it's already in the Kotlin Toolchain cache).")
     alwaysProvision("alwaysProvision"),
-    @SchemaDoc("If the JAVA_HOME environment variable is set and points to a JDK that matches the criteria, Amper " +
-            "uses that JDK. Otherwise, Amper fails the build. This mode effectively disables JDK provisioning, while " +
+    @SchemaDoc("If the JAVA_HOME environment variable is set and points to a JDK that matches the criteria, the Kotlin Toolchain " +
+            "uses that JDK. Otherwise, the Kotlin Toolchain fails the build. This mode effectively disables JDK provisioning, while " +
             "still ensuring that the criteria are respected.")
     javaHome("javaHome"),
 }

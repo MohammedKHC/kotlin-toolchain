@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.cli.commands.tools
@@ -109,7 +109,7 @@ internal class XCodeIntegrationCommand : AmperProjectAwareCommand(name = "xcode-
                 "arm64:$IPHONE_SDK_NAME" -> Platform.IOS_ARM64
                 "arm64:$SIMULATOR_SDK_NAME" -> Platform.IOS_SIMULATOR_ARM64
                 "x86_64:$SIMULATOR_SDK_NAME" -> Platform.IOS_X64
-                else -> userReadableError("Amper currently doesn't support building the following configuration: " +
+                else -> userReadableError("The Kotlin Toolchain currently doesn't support building the following configuration: " +
                         "arch=$value, sdk=$sdk")
             }
         }

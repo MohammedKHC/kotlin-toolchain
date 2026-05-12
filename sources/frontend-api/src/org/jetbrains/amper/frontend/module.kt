@@ -52,7 +52,7 @@ data class ModuleTasksPart(
 enum class Layout {
     /**
      * Maven-like mode. Main and test sources are located inside src/ and sources are split by type (language, purpose,
-     * etc.). The Gradle `java` plugin also uses this layout. It helps to simplify the transition between Amper and 
+     * etc.). The Gradle `java` plugin also uses this layout. It helps to simplify the transition between Kotlin and
      * Maven/Gradle builds.
      *
      * Example:
@@ -72,7 +72,7 @@ enum class Layout {
     /**
      * Mode, when `src` and `src@jvm` like platform
      * specific directories layout are used.
-     * Non-Amper source sets have no directories at all.
+     * Non-Kotlin source sets have no directories at all.
      */
     AMPER,
 }

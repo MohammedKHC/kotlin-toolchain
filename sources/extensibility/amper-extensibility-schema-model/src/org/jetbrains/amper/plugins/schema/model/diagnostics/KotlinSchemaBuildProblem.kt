@@ -21,10 +21,7 @@ import java.util.*
 sealed class KotlinSchemaBuildProblem : BuildProblem, DiagnosticId {
     override val level: Level get() = Level.Error
     override val type: BuildProblemType get() = BuildProblemType.Generic
-    override val message: @Nls String get() = buildString {
-        append(SchemaMessagePrefix).append(' ')
-        append(MessageFormat(SchemaProcessorBundle.getString(messageKey)).format(args))
-    }
+    override val message: @Nls String get() = MessageFormat(SchemaProcessorBundle.getString(messageKey)).format(args)
     protected abstract val messageKey: String
     protected open val args: Array<out Any?> get() = emptyArray()
 
@@ -239,9 +236,3 @@ sealed class KotlinSchemaBuildProblem : BuildProblem, DiagnosticId {
 }
 
 private val SchemaProcessorBundle: ResourceBundle = ResourceBundle.getBundle("messages.SchemaProcessorBundle")
-
-/**
- * Message prefix that shows that the diagnostic on the Kotlin source is from Amper Schema Parser,
- * not from Kotlin compiler.
- */
-val SchemaMessagePrefix: String = SchemaProcessorBundle.getString("0.schema.message.prefix")

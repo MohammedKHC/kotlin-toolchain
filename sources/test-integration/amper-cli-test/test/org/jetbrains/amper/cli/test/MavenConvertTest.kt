@@ -440,7 +440,7 @@ class MavenConvertTest : AmperCliTestBase() {
 
             dependencies:
               - org.apache.commons:commons-lang3:3.20.0: exported
-              # WARNING: Amper does not support external POM dependencies with scopes different than import, manual configuration may be required.
+              # WARNING: The Kotlin Toolchain does not support external POM dependencies with scopes different than import, manual configuration may be required.
               # Reference: $pomPath:18:21
               # <dependency>
               #   <groupId>org.apache.hadoop</groupId>
@@ -499,7 +499,7 @@ class MavenConvertTest : AmperCliTestBase() {
                   systemProperties:
                     my.test.prop: prop-value
                     another.prop: another-prop-value
-                  # WARNING: The following configuration is not supported in Amper:
+                  # WARNING: The following configuration is not supported in the Kotlin Toolchain:
                   # <includes>
                   #   <include>**/*Test.java</include>
                   # </includes>

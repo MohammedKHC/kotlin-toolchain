@@ -7,7 +7,7 @@ package org.jetbrains.amper.plugins
 import java.nio.file.Path
 
 /**
- * Amper dependency sealed interface.
+ * Dependency sealed interface.
  */
 @Configurable
 sealed interface Dependency {

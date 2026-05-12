@@ -49,9 +49,9 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
     /**
      * Creates a copy of the test project with the given [name], and returns the path to the copy.
      *
-     * The original test projects are not expected to contain the Amper wrappers themselves, but 
+     * The original test projects are not expected to contain the Amper wrappers themselves, but
      * the wrappers are generated into the project copy unless [setupWrappers] is set to false.
-     * 
+     *
      * Note: the [runCli] function may use these project-local wrappers directly, or use a global
      * wrapper that will provision a version based on the local wrappers.
      */
@@ -98,7 +98,7 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
         environment: Map<String, String> = emptyMap(),
         wrapperMode: WrapperMode = WrapperMode.Local,
     ): AmperCliResult {
-        println("Running Amper CLI with '${args.toList()}' on $projectDir")
+        println("Running Kotlin CLI with '${args.toList()}' on $projectDir")
 
         modifyProjectBeforeRun(projectDir)
 
@@ -143,9 +143,9 @@ abstract class AmperCliTestBase : AmperCliWithWrapperTestBase() {
             customAmperScriptPath = amperWrapperPath,
         )
 
-        testReporter.publishEntry("Amper[${result.pid}] arguments", args.joinToString(" "))
-        testReporter.publishEntry("Amper[${result.pid}] working dir", projectDir.pathString)
-        testReporter.publishEntry("Amper[${result.pid}] exit code", result.exitCode.toString())
+        testReporter.publishEntry("Kotlin CLI[${result.pid}] arguments", args.joinToString(" "))
+        testReporter.publishEntry("Kotlin CLI[${result.pid}] working dir", projectDir.pathString)
+        testReporter.publishEntry("Kotlin CLI[${result.pid}] exit code", result.exitCode.toString())
         val logsDir = result.logsDir
         if (logsDir != null) {
             testReporter.publishDirectory(logsDir)

@@ -254,7 +254,7 @@ class AmperProjectStructureTest {
 
     @Test
     fun `mavenLocal repository resolved flag is false`() {
-        assertTrue("mavenLocal repository must not be resolved by Amper") {
+        assertTrue("mavenLocal repository must not be used for resolution") {
             readAmperProjectModel()
                 .modules
                 // plugins declare mavenLocal when the version is SNAPSHOT to resolve amper-extensibility-api.

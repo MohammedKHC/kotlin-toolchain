@@ -38,7 +38,7 @@ internal object Profiler {
         val name = getLibFilename()
         val resourceName = "binaries/${getPlatformId()}/$name"
         val resourceStream = javaClass.classLoader.getResourceAsStream(resourceName)
-            ?: error("Resource '$resourceName' is not found in Amper classpath")
+            ?: error("Resource '$resourceName' is not found in the Kotlin Toolchain classpath")
 
         val libBytes = resourceStream.use { stream -> stream.readAllBytes() }
         val libSha256 = libBytes.sha256String()

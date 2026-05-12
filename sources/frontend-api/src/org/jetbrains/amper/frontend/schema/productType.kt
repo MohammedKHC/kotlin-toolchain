@@ -71,7 +71,7 @@ enum class ProductType(
         defaultPlatforms = null,
     ),
 
-    @SchemaDoc("An Amper plugin")
+    @SchemaDoc("A Kotlin Toolchain plugin")
     JVM_AMPER_PLUGIN(
         "jvm/amper-plugin",
         supportedPlatforms = setOf(Platform.JVM),

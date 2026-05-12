@@ -41,8 +41,8 @@ internal abstract class AmperSubcommand(name: String) : SuspendingCliktCommand(n
             explicitProjectDir = explicitProjectDir,
             explicitBuildDir = explicitBuildDir,
         ) ?: userReadableError(
-            "No Amper project found in the current directory or above. " +
-                    "Make sure you have a project file or a module file at the root of your Amper project, " +
+            "No Kotlin project found in the current directory or above. " +
+                    "Make sure you have a project file or a module file at the root of your Kotlin project, " +
                     "or specify `--project-dir` explicitly to run tasks for a project located elsewhere."
         )
 

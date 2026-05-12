@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.test
@@ -26,11 +26,11 @@ object LocalAmperPublication {
      * Checks that the Amper distribution and scripts were correctly published to maven local.
      */
     internal fun checkPublicationIntegrity() {
-        val explanation = "This test requires the locally-published Amper CLI distribution and wrappers.\n" +
+        val explanation = "This test requires the locally-published Kotlin CLI distribution and wrappers.\n" +
                 "Make sure you have setup this test task to depend on the publication tasks to ensure that."
-        check(distTgz.exists()) { "Amper distribution is missing in maven local: $distTgz not found.\n$explanation" }
-        check(wrapperBat.exists()) { "Amper wrapper.bat is missing in maven local: $wrapperBat not found.\n$explanation" }
-        check(wrapperSh.exists()) { "Amper wrapper (sh) is missing in maven local: $wrapperSh not found.\n$explanation" }
+        check(distTgz.exists()) { "Kotlin Toolchain distribution is missing in maven local: $distTgz not found.\n$explanation" }
+        check(wrapperBat.exists()) { "Kotlin wrapper (bat) is missing in maven local: $wrapperBat not found.\n$explanation" }
+        check(wrapperSh.exists()) { "Kotlin wrapper (sh) is missing in maven local: $wrapperSh not found.\n$explanation" }
 
         assertTrue(wrapperBat.readText().count { it == '\r' } > 10,
             "Windows wrapper must have \\r in line separators: $wrapperBat")

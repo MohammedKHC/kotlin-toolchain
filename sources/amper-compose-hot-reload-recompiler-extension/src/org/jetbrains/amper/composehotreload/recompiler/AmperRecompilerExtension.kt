@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 @file:OptIn(InternalHotReloadApi::class, DelicateHotReloadApi::class)
@@ -68,7 +68,7 @@ class AmperRecompiler() : Recompiler, AutoCloseable {
 
     private val amperCommand = if (OsFamily.current.isWindows) "amper.bat" else "./amper"
 
-    override val name: String = "Amper Recompiler"
+    override val name: String = "Kotlin Toolchain Recompiler"
 
     init {
         start()
@@ -124,8 +124,8 @@ class AmperRecompiler() : Recompiler, AutoCloseable {
             }
 
             override fun onStderrLine(line: String, pid: Long) {
-                logger.error("Amper server error: $line")
-                completableDeferred.completeExceptionally(Throwable("Amper server error: $line"))
+                logger.error("Kotlin Toolchain server error: $line")
+                completableDeferred.completeExceptionally(Throwable("Kotlin Toolchain server error: $line"))
             }
         }
         coroutineScope.launch {
@@ -136,8 +136,8 @@ class AmperRecompiler() : Recompiler, AutoCloseable {
                 outputListener = streamingOutputListener
             )
             if (exitCode != 0) {
-                logger.error("Amper server exited with code $exitCode")
-                completableDeferred.completeExceptionally(Throwable("Amper server exited with code $exitCode"))
+                logger.error("Kotlin Toolchain server exited with code $exitCode")
+                completableDeferred.completeExceptionally(Throwable("Kotlin Toolchain server exited with code $exitCode"))
             }
         }
         runBlocking {

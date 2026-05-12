@@ -40,7 +40,7 @@ internal class InitCommand : AmperSubcommand(name = "init") {
         .choice(AmperProjectTemplates.availableTemplates.associateBy { it.id })
         .optional()
 
-    override fun help(context: Context): String = "Initialize a new Amper project based on a template"
+    override fun help(context: Context): String = "Initialize a new Kotlin project based on a template"
 
     override suspend fun run() {
         val selectedTemplate = template ?: promptForTemplate()
@@ -56,7 +56,7 @@ internal class InitCommand : AmperSubcommand(name = "init") {
             val buildCommand = if (OsFamily.current.isWindows) "amper.bat build" else "./amper build"
             terminal.println(
                 "Now you may build your project with ${terminal.theme.info(buildCommand)} or open this folder in an " +
-                        "IDE with the Amper plugin"
+                        "IDE with the Kotlin Toolchain plugin"
             )
         }
     }
@@ -80,7 +80,7 @@ internal class InitCommand : AmperSubcommand(name = "init") {
     private fun generateWrapperScripts(targetRootDir: Path): Boolean {
         val distributionPath = System.getenv("AMPER_DISTRIBUTION_DIR")
         if (distributionPath.isNullOrEmpty()) {
-            logger.warn("Amper was not run from amper wrapper, skipping generating wrappers for $targetRootDir")
+            logger.warn("Kotlin CLI was not run from kotlin wrapper, skipping generating wrappers for $targetRootDir")
             return false
         }
         // Written by `download_and_extract` wrapper routine.

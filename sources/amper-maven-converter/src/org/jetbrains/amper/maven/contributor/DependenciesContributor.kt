@@ -193,7 +193,7 @@ private fun ProjectTreeBuilder.ModuleTreeBuilder.handleExternalPomDependency(
             path = listOf("dependencies"),
             beforeKeyComment = null,
             afterValueComment = buildString {
-                appendLine("WARNING: Amper does not support external POM dependencies with scopes different than import, manual configuration may be required.")
+                appendLine("WARNING: The Kotlin Toolchain does not support external POM dependencies with scopes different than import, manual configuration may be required.")
                 append(createPomDependencyReferenceComment(dependency))
             },
         )

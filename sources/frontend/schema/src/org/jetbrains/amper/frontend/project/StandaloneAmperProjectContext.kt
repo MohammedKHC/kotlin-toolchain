@@ -327,7 +327,7 @@ private fun preSearchProjectRoot(start: VirtualFile): RootSearchResult? = spanBu
 context(_: ProblemReporter, frontendPathResolver: FrontendPathResolver)
 private fun parseAmperProject(projectRootDir: VirtualFile): Project? {
     val projectFile = projectRootDir.findChildMatchingAnyOf(amperProjectFileNames) ?: return null
-    return spanBuilder("Parse Amper project file")
+    return spanBuilder("Parse Kotlin project file")
         .setAttribute("project-file", projectFile.path)
         .useWithoutCoroutines { readProject(frontendPathResolver, projectFile) }
 }

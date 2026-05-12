@@ -415,7 +415,7 @@ ARG2: <${argumentsWithSpecialChars[2]}>"""
             assertEmptyStdErr = false,
         )
 
-        result.assertStderrContains("Module 'js-app' of type 'js/app' cannot be run directly by Amper at the moment")
+        result.assertStderrContains("Module 'js-app' of type 'js/app' cannot be run directly by the Kotlin Toolchain at the moment")
     }
 
     @Test
@@ -429,7 +429,7 @@ ARG2: <${argumentsWithSpecialChars[2]}>"""
             assertEmptyStdErr = false,
         )
 
-        result.assertStderrContains("Module 'wasm-js-app' of type 'wasm-js/app' cannot be run directly by Amper at the moment")
+        result.assertStderrContains("Module 'wasm-js-app' of type 'wasm-js/app' cannot be run directly by the Kotlin Toolchain at the moment")
     }
 
     @Test
@@ -443,7 +443,7 @@ ARG2: <${argumentsWithSpecialChars[2]}>"""
             assertEmptyStdErr = false,
         )
 
-        result.assertStderrContains("Module 'wasm-wasi-app' of type 'wasm-wasi/app' cannot be run directly by Amper at the moment")
+        result.assertStderrContains("Module 'wasm-wasi-app' of type 'wasm-wasi/app' cannot be run directly by the Kotlin Toolchain at the moment")
     }
 
     @Disabled("Our regular tests don't support running on iOS simulators at the moment. " +

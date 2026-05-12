@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.test
@@ -23,7 +23,7 @@ object Dirs {
 
         generateSequence(start) { it.parent }
             .find { (it / ".github").exists() && (it / "CONTRIBUTING.md").exists() }
-            ?: error("Unable to find Amper checkout root upwards from '$start'")
+            ?: error("Unable to find Kotlin Toolchain checkout root upwards from '$start'")
     }
 
     /**

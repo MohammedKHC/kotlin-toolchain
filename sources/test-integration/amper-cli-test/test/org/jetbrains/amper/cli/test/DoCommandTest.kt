@@ -105,7 +105,7 @@ class DoCommandTest : AmperCliTestBase() {
                    ├─ ${pluginYaml}:7:11
                    ╰─ ${pluginYaml}:8:5
             """.trimIndent(),
-            "failed to read Amper model, refer to the errors above",
+            "failed to read Kotlin project model, refer to the errors above",
         )
     }
 }

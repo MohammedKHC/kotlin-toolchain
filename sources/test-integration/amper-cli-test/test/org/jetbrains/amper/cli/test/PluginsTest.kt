@@ -351,7 +351,7 @@ class PluginsTest : AmperCliTestBase() {
                 "${projectDir / "not-a-plugin" / "module.yaml"}:1:10: Unexpected product type for plugin. Expected `jvm/amper-plugin`, got `jvm/app`",
                 "${projectDir / "plugin-empty-id" / "module.yaml"}:5:18: Plugin settings class `com.example.Settings` is not found",
                 "${projectDir / "invalid-settings" / "module.yaml"}:4:18: Plugin settings class `com.example.Foo` must be an interface annotated with the `@Configurable` annotation",
-                "failed to read Amper model, refer to the errors above",
+                "failed to read Kotlin project model, refer to the errors above",
             )
             assertLogContains(
                 "Processing local plugin schema for [plugin-empty-id, plugin-no-plugin-block, hello, invalid-settings]...",
@@ -411,7 +411,7 @@ class PluginsTest : AmperCliTestBase() {
                 "${projectDir / "plugin-deprecated-api" / "plugin.yaml"}:5:5: `markOutputsAs` per-task property is deprecated and no longer has any effect. " +
                         "Use the top-level `generated:` block instead and put your generated output in the corresponding category, e.g., `sources`, `resources`, etc. " +
                         "The actual output path can be referenced from there using the `\${tasks.<your-task-name>.action.<parameter-name>}` syntax.",
-                "failed to read Amper model, refer to the errors above",
+                "failed to read Kotlin project model, refer to the errors above",
             )
         }
     }
@@ -496,7 +496,7 @@ class PluginsTest : AmperCliTestBase() {
                ├─ $pluginYamlForInvalidInputs:43:7
                ╰─ $pluginYamlForInvalidInputs:39:15
             """.trimIndent(),
-            "failed to read Amper model, refer to the errors above",
+            "failed to read Kotlin project model, refer to the errors above",
         )
     }
 
@@ -539,7 +539,7 @@ class PluginsTest : AmperCliTestBase() {
                 "${pluginYaml}:29:7: Unknown property `unknownProperty9` (inferred type `path`) in `someAction`",
                 "${pluginYaml}:30:7: Unknown property `unknownProperty10` (inferred type `path`) in `someAction`",
                 "${pluginYaml}:31:7: Unknown property `unknownProperty11` (inferred type `string`) in `someAction`",
-                "failed to read Amper model, refer to the errors above",
+                "failed to read Kotlin project model, refer to the errors above",
             )
         }
     }
@@ -569,7 +569,7 @@ class PluginsTest : AmperCliTestBase() {
                    ╰─ $pluginYaml:12:11
                 """.trimIndent(),
                 "${pluginYaml}:15:11: Accessing properties/keys on the nullable type `Nested | null` is not allowed.",
-                "failed to read Amper model, refer to the errors above",
+                "failed to read Kotlin project model, refer to the errors above",
             )
         }
     }
@@ -637,7 +637,7 @@ class PluginsTest : AmperCliTestBase() {
             "${pluginYaml}:6:19: Referencing `processors` is not allowed",
             "${pluginYaml}:5:24: Referencing `publishing` is not allowed",
             "${pluginYaml}:4:21: Referencing `settings` is not allowed",
-            "failed to read Amper model, refer to the errors above",
+            "failed to read Kotlin project model, refer to the errors above",
         )
     }
 
@@ -652,7 +652,7 @@ class PluginsTest : AmperCliTestBase() {
             expectedExitCode = 1,
         ).assertErrors(
             "${pluginYaml}:3:13: No value for required task action parameters: `booleanProp`, `intProp`, `enumProp`.",
-            "failed to read Amper model, refer to the errors above",
+            "failed to read Kotlin project model, refer to the errors above",
         )
     }
 
@@ -727,8 +727,8 @@ class PluginsTest : AmperCliTestBase() {
         )
         val pluginKt = r1.projectDir / "unregistered-plugin" / "src" / "plugin.kt"
         r2.assertErrors(
-            "$pluginKt:12:5: [Amper] Illegal overload for `org.example.myAction`: `@TaskAction` functions can't be overloaded",
-            "$pluginKt:9:5: [Amper] Illegal overload for `org.example.myAction`: `@TaskAction` functions can't be overloaded",
+            "$pluginKt:12:5: Illegal overload for `org.example.myAction`: `@TaskAction` functions can't be overloaded",
+            "$pluginKt:9:5: Illegal overload for `org.example.myAction`: `@TaskAction` functions can't be overloaded",
             "Task ':unregistered-plugin:buildAmperPluginInfo' failed: Plugin Kotlin schema processing failed, see the errors above.",
         )
         r2.assertStderrContains("Task ':unregistered-plugin:buildAmperPluginInfo' failed: Plugin Kotlin schema processing failed, see the errors above.")

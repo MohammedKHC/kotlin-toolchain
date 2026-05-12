@@ -31,7 +31,7 @@ import kotlin.io.path.pathString
  * by starting at the current directory
  */
 internal suspend fun findProjectContext(explicitProjectDir: Path?, explicitBuildDir: Path?): AmperProjectContext? =
-    spanBuilder("Find Amper project context").use {
+    spanBuilder("Find Kotlin project context").use {
         with(CliProblemReporter) {
             val context = if (explicitProjectDir != null) {
                 AmperProjectContext.create(
@@ -39,8 +39,8 @@ internal suspend fun findProjectContext(explicitProjectDir: Path?, explicitBuild
                     buildDir = explicitBuildDir?.absolute(),
                 )
                     ?: userReadableError(
-                        "The given path '$explicitProjectDir' is not a valid Amper project root directory. " +
-                                "Make sure you have a project file or a module file at the root of your Amper project."
+                        "The given path '$explicitProjectDir' is not a valid Kotlin project root directory. " +
+                                "Make sure you have a project file or a module file at the root of your Kotlin project."
                     )
             } else {
                 AmperProjectContext.find(
@@ -49,7 +49,7 @@ internal suspend fun findProjectContext(explicitProjectDir: Path?, explicitBuild
                 )
             }
             if (wereProblemsReported()) {
-                userReadableError("Aborting because there were errors in the Amper project file, please see above.")
+                userReadableError("Aborting because there were errors in the Kotlin project file, please see above.")
             }
             context
         }
@@ -74,7 +74,7 @@ internal suspend fun CliContext.preparePluginsAndReadModel(): Model {
         )
     }
 
-    val model = spanBuilder("Read model from Amper files").use {
+    val model = spanBuilder("Read model from Kotlin project files").use {
         with(CliProblemReporter) {
             projectContext.readProjectModel(
                 pluginData = pluginData,
@@ -85,7 +85,7 @@ internal suspend fun CliContext.preparePluginsAndReadModel(): Model {
 
     // In CLI, we immediately stop the build if we had any error, because the model could be incorrect otherwise
     if (CliProblemReporter.wereProblemsReported()) {
-        userReadableError("failed to read Amper model, refer to the errors above")
+        userReadableError("failed to read Kotlin project model, refer to the errors above")
     }
 
     checkUniqueModuleNames(model.modules)

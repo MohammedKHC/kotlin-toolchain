@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.tasks.ios
@@ -114,18 +114,18 @@ class ManageXCodeProjectTask(
             }?.let { amperPhase -> target to amperPhase }
         }.singleOrNull() ?: run {
             // TODO: Provide a way for the user to "fix" the corrupted project?
-            userReadableError("XCodeProject '$projectDir' must contain a single target with the Amper integration")
+            userReadableError("XCodeProject '$projectDir' must contain a single target with the Kotlin Toolchain integration")
         }
 
         if (!isAmperPhaseValid(buildPhase = amperPhase)) {
-            logger.warn("Amper Phase is invalid, updating")
+            logger.warn("Kotlin Toolchain Phase is invalid, updating")
             managedAmperPhaseAttributes().forEach { (key, value) ->
                 amperPhase[key] = value
             }
             pbxProjectFile.save()
             span.setAttribute(UpdatedAttribute, true)
         } else {
-            logger.info("Amper Phase is valid")
+            logger.info("Kotlin Toolchain Phase is valid")
             span.setAttribute(UpdatedAttribute, false)
         }
 
@@ -340,7 +340,7 @@ class ManageXCodeProjectTask(
             "shellPath" to "/bin/sh",
             "shellScript" to """
                 |# $AMPER_PHASE_MAGIC
-                |# This script is managed by Amper, do not edit manually!
+                |# This script is managed by the Kotlin Toolchain, do not edit manually!
                 |"${'$'}{$AMPER_WRAPPER_PATH_CONF}" tool xcode-integration
                 |
             """.trimMargin(),

@@ -105,6 +105,6 @@ private val AmperJre = Jdk(
     homeDir = Path(System.getProperty("java.home")!!),
     version = System.getProperty("java.version")!!,
     distribution = null,
-    source = "Amper runtime",
+    source = "The Kotlin Toolchain runtime",
 )
 

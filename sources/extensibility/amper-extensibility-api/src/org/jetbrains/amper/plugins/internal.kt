@@ -18,7 +18,7 @@ internal annotation class PathValueOnly
 
 /**
  * Means that this value cannot be configured in YAML,
- * but rather is resolved and provided by Amper itself by the moment the task action runs.
+ * but rather is resolved and provided by the Kotlin Toolchain itself by the moment the task action runs.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.BINARY)

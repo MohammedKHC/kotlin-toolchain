@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.dependency.resolution
@@ -1000,7 +1000,7 @@ open class DependencyFileImpl(
                             // and give them a way to contact client authors if they ould like to report misuse or any other issue.
                             // It is explicitly required by Maven Central, see
                             // https://central.sonatype.org/faq/429-tooling-provider/#identify-your-tool-in-the-user-agent
-                            .header("User-Agent", "JetBrains Amper DR / ${resolveLibraryMajorAndMinorVersion()} (+mailto:alexey.barsov@jetbrains.com)")
+                            .header("User-Agent", "Kotlin Toolchain DR / ${resolveLibraryMajorAndMinorVersion()} (+mailto:alexey.barsov@jetbrains.com)")
                             .withBasicAuth(repository)
                             .timeout(Duration.ofMinutes(2))
                             .GET()

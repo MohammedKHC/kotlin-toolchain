@@ -116,17 +116,17 @@ abstract class AmperCliWithWrapperTestBase {
         customAmperScriptPath: Path? = null,
         stdin: ProcessInput = ProcessInput.Empty,
     ): AmperCliResult {
-        check(workingDir.exists()) { "Cannot run Amper: the specified working directory $workingDir does not exist." }
-        check(workingDir.isDirectory()) { "Cannot run Amper: the specified working directory $workingDir is not a directory." }
+        check(workingDir.exists()) { "Cannot run Kotlin CLI: the specified working directory $workingDir does not exist." }
+        check(workingDir.isDirectory()) { "Cannot run Kotlin CLI: the specified working directory $workingDir is not a directory." }
 
         val isWindows = OsFamily.current.isWindows
         val amperScript = customAmperScriptPath ?: workingDir.resolve(if (isWindows) "amper.bat" else "amper")
         check(amperScript.exists()) {
-            "Amper script not found at $amperScript\n" +
+            "Kotlin wrapper script not found at $amperScript\n" +
                     "You can use LocalAmperPublication.setupWrappersIn(dir) to copy wrappers into the test project dir."
         }
-        check(amperScript.isExecutable()) { "Cannot run Amper script because it is not executable: $amperScript" }
-        check(amperScript.isRegularFile()) { "Cannot run Amper script because it is not a file: $amperScript" }
+        check(amperScript.isExecutable()) { "Cannot run Kotlin wrapper script because it is not executable: $amperScript" }
+        check(amperScript.isRegularFile()) { "Cannot run Kotlin wrapper script because it is not a file: $amperScript" }
 
         val isDebuggingTest = ManagementFactory.getRuntimeMXBean().inputArguments.any { it.startsWith("-agentlib:") }
         val extraJvmArgs = buildList {
@@ -191,7 +191,7 @@ abstract class AmperCliWithWrapperTestBase {
                     expected = expectedExitCode,
                     actual = result.exitCode,
                     message = """
-                        Exit code must be $expectedExitCode, but got ${result.exitCode} for Amper call (PID ${result.pid}):
+                        Exit code must be $expectedExitCode, but got ${result.exitCode} for the Kotlin Toolchain call (PID ${result.pid}):
                         $amperScript ${args.joinToString(" ")}
                         Output:
                         ${result.relevantOutput(expectedExitCode).prependIndent("                    ")}
@@ -202,9 +202,9 @@ abstract class AmperCliWithWrapperTestBase {
                 assertTrue(
                     actual = result.stderr.isBlank(),
                     message = """
-                        Process stderr must be empty for Amper call (PID ${result.pid}):
+                        Process stderr must be empty for the Kotlin Toolchain call (PID ${result.pid}):
                         $amperScript ${args.joinToString(" ")}
-                        Amper STDERR:
+                        Kotlin Toolchain STDERR:
                         ${result.stderr.prependIndent("                    ")}
                     """.trimMargin(),
                 )

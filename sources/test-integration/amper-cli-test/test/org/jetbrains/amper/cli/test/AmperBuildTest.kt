@@ -164,7 +164,7 @@ class AmperBuildTest : AmperCliTestBase() {
             // produce IDEA-viewable diff
             println(expectedActualComparisonText)
 
-            fail("Amper error doesn't match expected dependency resolution errors:\n$expectedActualComparisonText")
+            fail("Kotlin Toolchain error doesn't match expected dependency resolution errors:\n$expectedActualComparisonText")
         }
     }
 

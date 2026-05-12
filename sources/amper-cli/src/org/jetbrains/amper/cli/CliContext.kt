@@ -114,7 +114,7 @@ class CliContext(
          */
         val wrapperScriptPath: Path by lazy {
             System.getenv("AMPER_WRAPPER_PATH")?.takeIf { it.isNotBlank() }?.let(::Path)
-                ?: error("Missing `AMPER_WRAPPER_PATH` env var. Is your Amper distribution intact?")
+                ?: error("Missing `AMPER_WRAPPER_PATH` env var. Is your Kotlin Toolchain distribution intact?")
         }
     }
 }

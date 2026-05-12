@@ -22,13 +22,13 @@ sealed interface AmperUserCacheInitializationFailure : AmperUserCacheInitializat
 
     class InvalidPath(val rawBasePath: String, val source: String) : AmperUserCacheInitializationFailure {
         override val defaultMessage: String
-            get() = "Amper cache path failed to resolve because $source contained an invalid path: \"$rawBasePath\". Configure it as a valid absolute path instead."
+            get() = "Kotlin Toolchain cache path failed to resolve because $source contained an invalid path: \"$rawBasePath\". Configure it as a valid absolute path instead."
     }
 
     class NonAbsolutePath(val path: Path, val source: String) : AmperUserCacheInitializationFailure {
         override val defaultMessage: String
-            get() = "Amper cache path is set via the $source to a non-absolute path: \"${path.pathString}\". " +
-                    "This could affect where the cache is located based on the current directory Amper is run from. Configure it as an absolute path instead."
+            get() = "Kotlin Toolchain cache path is set via the $source to a non-absolute path: \"${path.pathString}\". " +
+                    "This could affect where the cache is located based on the current directory Kotlin Toolchain is run from. Configure it as an absolute path instead."
     }
 }
 

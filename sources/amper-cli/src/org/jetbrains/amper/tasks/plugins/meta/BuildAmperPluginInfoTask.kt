@@ -72,7 +72,7 @@ class BuildAmperPluginInfoTask(
             userReadableError("`plugin.yaml` processing failed, see the errors above.")
         }
 
-        logger.info("Amper plugin passed validation - OK")
+        logger.info("Kotlin Toolchain plugin passed validation - OK")
 
         // TODO: Actually save something
 

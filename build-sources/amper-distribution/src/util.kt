@@ -28,7 +28,7 @@ private val downloadHttpClient: HttpClient by lazy {
         expectSuccess = true
 
         install(UserAgent) {
-            agent = "JetBrains Amper"
+            agent = "Kotlin Toolchain"
         }
 
         install(HttpRequestRetry) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.cli.commands
@@ -73,7 +73,7 @@ internal class ServerCommand : AmperModelAwareCommand(name = "server") {
         ).default(Level.INFO)
 
     override fun help(context: Context): String =
-        "Start a server that accepts tasks from Amper and runs them. The server runs on port $defaultPort by default."
+        "Start a server that accepts tasks and runs them. The server runs on port $defaultPort by default."
 
     @OptIn(ExperimentalUuidApi::class)
     override suspend fun run(cliContext: CliContext, model: Model) {

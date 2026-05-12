@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.cli.commands
@@ -70,7 +70,7 @@ internal class RunCommand : AmperModelAwareCommand(name = "run") {
 
     override fun help(context: Context): String = "Run your application"
 
-    override fun helpEpilog(context: Context): String = "Use `--` to separate the application's arguments from Amper options"
+    override fun helpEpilog(context: Context): String = "Use `--` to separate the application's arguments from the Kotlin CLI options"
 
     override suspend fun run(cliContext: CliContext, model: Model) {
         withBackend(
