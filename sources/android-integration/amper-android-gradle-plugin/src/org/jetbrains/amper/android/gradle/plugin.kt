@@ -98,7 +98,15 @@ class AmperAndroidIntegrationProjectPlugin @Inject constructor(private val probl
         val buildDir = rootProjectBuildDir / project.path.replace(":", "_")
         project.layout.buildDirectory.set(buildDir.toFile())
         project.repositories.google()
-        project.repositories.mavenCentral()
+        if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
+            project.repositories.maven { repo ->
+                repo.name = "Maven Central (cache-redirector)"
+                repo.setUrl("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/")
+            }
+        } else {
+            project.repositories.mavenCentral()
+        }
+
         val module = project.gradle.projectPathToModule[project.path] ?: return
 
         project.plugins.apply("com.android.application")
