@@ -27,7 +27,7 @@ fun downloadBinary(
         add(name)
     }.joinToString("/")
 
-    val url = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/$path/$version/$name-$version-" +
+    val url = "${mavenCentralOrProxyUrl()}/$path/$version/$name-$version-" +
             "${systemInfo.os.string}-${systemInfo.arch.string}.exe"
     try {
         URI(url).toURL().openStream().buffered(64 * 1024).use { input ->
@@ -46,3 +46,10 @@ fun downloadBinary(
     }
 
 }
+
+private fun mavenCentralOrProxyUrl(): String =
+    if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
+        "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
+    } else {
+        "https://repo1.maven.org/maven2"
+    }

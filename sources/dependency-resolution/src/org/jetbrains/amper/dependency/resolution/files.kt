@@ -37,6 +37,7 @@ import org.jetbrains.amper.dependency.resolution.files.deleteIfExistsWithLogging
 import org.jetbrains.amper.dependency.resolution.files.produceResultWithDoubleLock
 import org.jetbrains.amper.dependency.resolution.files.produceResultWithTempFile
 import org.jetbrains.amper.dependency.resolution.files.readTextWithRetry
+import org.jetbrains.amper.dependency.resolution.maven.mavenCentralOrProxy
 import org.jetbrains.amper.dependency.resolution.metadata.json.module.File
 import org.jetbrains.amper.dependency.resolution.metadata.xml.parseMetadata
 import org.jetbrains.amper.dependency.resolution.telemetry.debugSpanBuilder
@@ -1086,12 +1087,11 @@ open class DependencyFileImpl(
     }
 
     private fun MavenRepository.actualUrlForDownloading(): String {
-        if (url.trimEnd('/') == MavenCentral.url
-            && System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true
-        ) {
-            return REDIRECTOR_MAVEN_CENTRAL
+        return if (url.trimEnd('/') == MavenCentral.url) {
+            mavenCentralOrProxy().url
+        } else {
+            url
         }
-        return url
     }
 
     private fun Builder.withBasicAuth(repository: MavenRepository): Builder = also {
@@ -1184,8 +1184,6 @@ open class DependencyFileImpl(
         object HttpHeaders {
             const val CONTENT_LENGTH: String = "Content-Length"
         }
-
-        private val REDIRECTOR_MAVEN_CENTRAL = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
 
         /**
          * Sometimes files with checksums have additional information, e.g., a path to a file.
