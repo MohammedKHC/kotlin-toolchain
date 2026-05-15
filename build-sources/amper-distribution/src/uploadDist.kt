@@ -54,11 +54,13 @@ context(tempDirectory: Path)
 private fun Distribution.artifacts(artifactId: String): List<Artifact> {
     val wrapperArtifacts = wrappersDir.listDirectoryEntries()
         .map { kotlinToolchainArtifact(artifactId, classifier = "wrapper", file = it) }
+    val installerArtifacts = installersDir.listDirectoryEntries()
+        .map { kotlinToolchainArtifact(artifactId, classifier = "installer", file = it) }
     val tarGzDistArtifact = kotlinToolchainArtifact(artifactId, classifier = "dist", file = cliTgz)
     // we also generate a POM file to please maven and ensure maven-metadata.xml is properly updated
     val pomArtifact = kotlinToolchainArtifact(artifactId, classifier = null, file =
         createSimplePom(artifactId, AmperBuild.mavenVersion))
-    return wrapperArtifacts + tarGzDistArtifact + pomArtifact
+    return wrapperArtifacts + installerArtifacts + tarGzDistArtifact + pomArtifact
 }
 
 context(tempDirectory: Path)

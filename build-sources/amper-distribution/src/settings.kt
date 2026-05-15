@@ -46,4 +46,5 @@ enum class Repository {
 interface Distribution {
     val cliTgz: Path
     val wrappersDir: Path
+    val installersDir: Path
 }

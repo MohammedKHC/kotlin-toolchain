@@ -12,6 +12,7 @@ tasks:
       distribution:
         cliTgz: ${taskOutputDir}/cli.tgz
         wrappersDir: ${taskOutputDir}/wrappers
+        installersDir: ${taskOutputDir}/installers
       cliRuntimeClasspath: ${module.runtimeClasspath}
       extraClasspaths: ${pluginSettings.extraClasspaths}
       extraFilteredClasspaths: ${pluginSettings.extraFilteredClasspaths}

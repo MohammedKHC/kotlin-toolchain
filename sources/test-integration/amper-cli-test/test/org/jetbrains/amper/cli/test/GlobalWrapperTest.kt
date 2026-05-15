@@ -25,7 +25,6 @@ import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectory
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.div
-import kotlin.io.path.name
 import kotlin.io.path.writeText
 
 class GlobalWrapperTest : AmperCliTestBase() {
@@ -115,14 +114,12 @@ class GlobalWrapperTest : AmperCliTestBase() {
         tempDir.resolve("project.yaml").writeText("")
 
         val nested = tempDir / "project"
-        val scriptPaths = AmperWrappers.generate(
+        val (wrapperSh, wrapperBat) = AmperWrappers.generate(
             targetDir = nested.createDirectory(),
             amperVersion = hostWrapperInfo.version,
             amperDistTgzSha256 = hostWrapperInfo.sha256,
         )
-        val activeScriptPath = scriptPaths.first {
-            it.name == if (OsFamily.current == OsFamily.Windows) "kotlin.bat" else "kotlin"
-        }
+        val activeScriptPath = if (OsFamily.current == OsFamily.Windows) wrapperBat else wrapperSh
 
         val result = runCli(
             projectDir = nested,
@@ -131,7 +128,7 @@ class GlobalWrapperTest : AmperCliTestBase() {
             assertEmptyStdErr = false,
         )
 
-        result.assertStderrContains("WARNING: Found wrapper script '${activeScriptPath.absolutePathString()}'," +
+        result.assertStderrContains("WARNING: Found wrapper script '${activeScriptPath!!.absolutePathString()}'," +
                 " but no project.yaml or module.yaml near it. Skipping.")
 
         result.assertStdoutContains("Kotlin Toolchain version ${AmperBuild.mavenVersion}")

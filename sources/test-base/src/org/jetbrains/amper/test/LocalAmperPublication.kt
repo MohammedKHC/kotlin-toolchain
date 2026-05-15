@@ -22,6 +22,9 @@ object LocalAmperPublication {
     val wrapperBat: Path = rootPublicationDir.resolve("kotlin-cli-${AmperBuild.mavenVersion}-wrapper.bat")
     val wrapperSh: Path = rootPublicationDir.resolve("kotlin-cli-${AmperBuild.mavenVersion}-wrapper")
 
+    val installerPs1: Path = rootPublicationDir.resolve("kotlin-cli-${AmperBuild.mavenVersion}-installer.ps1")
+    val installerSh: Path = rootPublicationDir.resolve("kotlin-cli-${AmperBuild.mavenVersion}-installer.sh")
+
     /**
      * Checks that the Amper distribution and scripts were correctly published to maven local.
      */

@@ -58,10 +58,16 @@ fun buildDist(
         stagingDir.deleteRecursively()
     }
 
-    AmperWrappers.generate(
+    val wrappers = AmperWrappers.generate(
         targetDir = distribution.wrappersDir.createDirectories(),
         amperVersion = AmperBuild.mavenVersion,
         amperDistTgzSha256 = cliTgz.readBytes().sha256String(),
+    )
+
+    AmperWrappers.generateInstallers(
+        targetDir = distribution.installersDir.createDirectories(),
+        amperVersion = AmperBuild.mavenVersion,
+        wrappers = wrappers,
     )
 }
 

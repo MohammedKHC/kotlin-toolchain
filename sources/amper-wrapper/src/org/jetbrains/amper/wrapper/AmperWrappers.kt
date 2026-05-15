@@ -4,10 +4,13 @@
 
 package org.jetbrains.amper.wrapper
 
+import org.jetbrains.amper.stdlib.hashing.sha256String
+import org.jetbrains.amper.wrapper.AmperWrappers.generate
 import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermission
 import kotlin.io.path.createDirectory
 import kotlin.io.path.getPosixFilePermissions
+import kotlin.io.path.readBytes
 import kotlin.io.path.setPosixFilePermissions
 import kotlin.io.path.writeText
 
@@ -41,28 +44,29 @@ object AmperWrappers {
         amperDistTgzSha256: String,
         includePosix: Boolean = true,
         includeWindows: Boolean = true,
-    ): List<Path> {
+    ): GeneratedWrappers {
         require(includePosix || includeWindows) { "Nothing to generate" }
 
-        return listOfNotNull(
-            AmperScript(
-                fileName = "kotlin",
-                templateName = "wrapper.template.sh",
-                executable = true,
-            ).takeIf { includePosix },
-            AmperScript(
-                fileName = "kotlin.bat",
-                templateName = "wrapper.template.bat",
-            ).takeIf { includeWindows },
-        ).map {
-            it.generate(
-                targetDir = targetDir,
-                macroSubstitutions = mapOf(
-                    "KOTLIN_TOOLCHAIN_VERSION" to amperVersion,
-                    "KOTLIN_TOOLCHAIN_DIST_TGZ_SHA256" to amperDistTgzSha256,
-                )
-            )
-        }
+        val macros = mapOf(
+            "KOTLIN_TOOLCHAIN_VERSION" to amperVersion,
+            "KOTLIN_TOOLCHAIN_DIST_TGZ_SHA256" to amperDistTgzSha256,
+        )
+
+        return GeneratedWrappers(
+            wrapperSh = if (includePosix) {
+                AmperScript(
+                    fileName = "kotlin",
+                    templateName = "wrapper.template.sh",
+                    executable = true,
+                ).generate(targetDir, macros)
+            } else null,
+            wrapperBat = if (includeWindows) {
+                AmperScript(
+                    fileName = "kotlin.bat",
+                    templateName = "wrapper.template.bat",
+                ).generate(targetDir, macros)
+            } else null,
+        )
     }
 
     /**
@@ -80,6 +84,51 @@ object AmperWrappers {
             executable = true,
         ).generate(targetDir, emptyMap())
     }
+
+    /**
+     * Generates installer scripts in the specified [targetDir].
+     * Installer is generated for each present wrapper in [wrappers].
+     *
+     * @param amperVersion the version to bake into the installer
+     * @param wrappers wrappers generated beforehand using [generate].
+     */
+    fun generateInstallers(
+        targetDir: Path,
+        amperVersion: String,
+        wrappers: GeneratedWrappers,
+    ) {
+        val commonMacros = mapOf(
+            "KOTLIN_TOOLCHAIN_VERSION" to amperVersion,
+        )
+        if (wrappers.wrapperSh != null) {
+            AmperScript(
+                fileName = "installer.sh",
+                templateName = "installer.template.sh",
+                executable = true,
+            ).generate(
+                targetDir = targetDir,
+                macroSubstitutions = commonMacros + mapOf(
+                    "KOTLIN_CLI_WRAPPER_SHA256" to wrappers.wrapperSh.readBytes().sha256String(),
+                ),
+            )
+        }
+        if (wrappers.wrapperBat != null) {
+            AmperScript(
+                fileName = "installer.ps1",
+                templateName = "installer.template.ps1",
+            ).generate(
+                targetDir = targetDir,
+                macroSubstitutions = commonMacros + mapOf(
+                    "KOTLIN_CLI_WRAPPER_SHA256" to wrappers.wrapperBat.readBytes().sha256String(),
+                ),
+            )
+        }
+    }
+
+    data class GeneratedWrappers(
+        val wrapperSh: Path?,
+        val wrapperBat: Path?,
+    )
 
     private fun AmperScript.generate(
         targetDir: Path,

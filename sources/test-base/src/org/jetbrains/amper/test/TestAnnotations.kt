@@ -20,6 +20,11 @@ annotation class LinuxOnly
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
+@EnabledOnOs(OS.MAC, OS.LINUX)
+annotation class MacOrLinuxOnly
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
 @EnabledOnOs(OS.WINDOWS)
 annotation class WindowsOnly
 
