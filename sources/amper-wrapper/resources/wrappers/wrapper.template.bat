@@ -46,6 +46,29 @@ if exist "%flag_file%" (
     if "%current_flag%" == "%sha%" exit /b
 )
 
+setlocal enableDelayedExpansion
+set NL=^
+
+
+@rem two empty lines required above for the NL character
+
+@rem We have to build the welcome banner here as an env var because we
+@rem can't pass a multiline string through the single line powershell
+set welcome_banner=!NL! ^
+Welcome to !NL! ^
+ !NL! ^
+@@@        @@@@                               @@@    @@@ !NL! ^
+@@@      @@@@                       @@@       @@@    @@@ !NL! ^
+@@@    #@@@^"                       ,@@@       @@@ !NL! ^
+@@@  ,@@@%%         ,@@@@@@@,     @@@@@@@@@@   @@@    @@@    @@@  ,@@@@@, !NL! ^
+@@@ @@@@         @@@@@%%^"%%@@@@@   @@@@@@@@@@   @@@    @@@    @@@@@@%%%%@@@@@ !NL! ^
+@@@@@@%%         @@@%%       %%@@@     @@@       @@@    @@@    @@@@      %%@@%% !NL! ^
+@@@ @@@@=      #@@@         @@@#    @@@       @@@    @@@    @@@        @@@ !NL! ^
+@@@   @@@@     #@@@         @@@#    @@@       @@@    @@@    @@@        @@@ !NL! ^
+@@@    *@@@%%    @@@@       @@@@     @@@       @@@    @@@    @@@        @@@ !NL! ^
+@@@      %%@@@=   %%@@@@*,*@@@@%%      @@@@###   @@@    @@@    @@@        @@@ !NL! ^
+@@@        @@@@    ^"@@@@@@@^"         %%@@@@@   @@@    @@@    @@@        @@@ !NL!
+
 @rem This multiline string is actually passed as a single line to powershell, meaning #-comments are not possible.
 @rem So here are a few comments about the code below:
 @rem  - we need to support both .zip and .tar.gz archives (for the Kotlin Toolchain distribution and the JRE)
@@ -68,9 +91,9 @@ if (-not $createdNew) { ^
 try { ^
     if ((Get-Content '%flag_file%' -ErrorAction Ignore) -ne '%sha%') { ^
         if (('%show_banner_on_cache_miss%' -eq 'true') -and [string]::IsNullOrEmpty('%KOTLIN_CLI_NO_WELCOME_BANNER%')) { ^
-            Write-Host '*** Welcome to Kotlin CLI v.%kotlin_cli_version%! ***'; ^
+            Write-Host \"$env:welcome_banner\"; ^
             Write-Host ''; ^
-            Write-Host 'This is the first run of this version, so we need to download the actual Kotlin Toolchain distribution.'; ^
+            Write-Host 'This is the first run of the Kotlin CLI v%kotlin_cli_version%, so we need to download the Kotlin Toolchain.'; ^
             Write-Host 'Please give us a few seconds now, subsequent runs will be faster.'; ^
             Write-Host ''; ^
         } ^

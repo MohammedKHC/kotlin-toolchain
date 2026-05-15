@@ -60,15 +60,21 @@ download_and_extract() {
 
   if [ "$show_banner_on_cache_miss" = "true" ] && [ -z "${KOTLIN_CLI_NO_WELCOME_BANNER:-}" ]; then
       echo
-      echo '        _____  Welcome to                                  '
-      echo '       /:::::|  ____   ___     ____      ____    __  ___   '
-      echo '      /::/|::| |::::\_|:::\   |:::::\   /::::\  |::|/:::|  '
-      echo '     /::/ |::| |::|\:::|\::\  |::|\::\ /:/__\:\ |:::/      '
-      echo '    /::/__|::| |::| |::| |::| |::| |::|:::::::/ |::|       '
-      echo '   /:::::::::| |::| |::| |::| |::|/::/ \::\__   |::|       '
-      echo '  /::/    |::| |::| |::| |::| |:::::/   \::::|  |::|       '
-      echo '                              |::|                         '
-      echo "                              |::|  v.$kotlin_cli_version       "
+      cat <<EOF
+Welcome to
+
+@@@        @@@@                               @@@    @@@
+@@@      @@@@                       @@@       @@@    @@@
+@@@    #@@@"                       ,@@@       @@@
+@@@  ,@@@%         ,@@@@@@@,     @@@@@@@@@@   @@@    @@@    @@@  ,@@@@@,
+@@@ @@@@         @@@@@%"%@@@@@   @@@@@@@@@@   @@@    @@@    @@@@@@%%@@@@@
+@@@@@@%         @@@%       %@@@     @@@       @@@    @@@    @@@@      %@@%
+@@@ @@@@=      #@@@         @@@#    @@@       @@@    @@@    @@@        @@@
+@@@   @@@@     #@@@         @@@#    @@@       @@@    @@@    @@@        @@@
+@@@    *@@@%    @@@@       @@@@     @@@       @@@    @@@    @@@        @@@
+@@@      %@@@=   %@@@@*,*@@@@%      @@@@###   @@@    @@@    @@@        @@@
+@@@        @@@@    "@@@@@@@"         %@@@@@   @@@    @@@    @@@        @@@
+EOF
       echo
       echo "This is the first run of the Kotlin CLI v$kotlin_cli_version, so we need to download the Kotlin Toolchain."
       echo "Please give us a few seconds, subsequent runs will be faster."
