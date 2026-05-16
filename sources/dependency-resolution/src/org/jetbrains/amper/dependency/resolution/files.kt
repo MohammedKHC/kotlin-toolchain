@@ -18,6 +18,7 @@ import kotlinx.serialization.Transient
 import org.jetbrains.amper.concurrency.FileMutexGroup
 import org.jetbrains.amper.concurrency.withRetry
 import org.jetbrains.amper.dependency.resolution.MavenRepository.Companion.MavenCentral
+import org.jetbrains.amper.dependency.resolution.buildinfo.DependencyResolutionBuild
 import org.jetbrains.amper.dependency.resolution.diagnostics.CollectingDiagnosticReporter
 import org.jetbrains.amper.dependency.resolution.diagnostics.DependencyResolutionDiagnostics.ContentLengthMismatch
 import org.jetbrains.amper.dependency.resolution.diagnostics.DependencyResolutionDiagnostics.HashesMismatch
@@ -1000,7 +1001,7 @@ open class DependencyFileImpl(
                             // and give them a way to contact client authors if they ould like to report misuse or any other issue.
                             // It is explicitly required by Maven Central, see
                             // https://central.sonatype.org/faq/429-tooling-provider/#identify-your-tool-in-the-user-agent
-                            .header("User-Agent", "Kotlin Toolchain DR / ${resolveLibraryMajorAndMinorVersion()} (+mailto:alexey.barsov@jetbrains.com)")
+                            .header("User-Agent", "KotlinToolchain/${DependencyResolutionBuild.majorAndMinorVersion} (mailto:alexey.barsov@jetbrains.com)")
                             .withBasicAuth(repository)
                             .timeout(Duration.ofMinutes(2))
                             .GET()
@@ -1226,27 +1227,6 @@ open class DependencyFileImpl(
             val result = checkHash(actualHash, expectedHash)
             return result == VerificationResult.PASSED
         }
-
-        /**
-         * Resolve a major version from the library file name taken from the runtime classpath.
-         * I.e., "dependency-resolution-0.11.0-dev-3924.jar" -> "0.11"
-          */
-        private fun resolveLibraryMajorAndMinorVersion(): String {
-            val fileName = getJarFileForClass(this::class.java) ?: return ""
-            return fileName.removePrefix("dependency-resolution-").extractMajorAndMinorVersion()
-        }
-
-        private fun getJarFileForClass(clazz: Class<*>): String? {
-            return clazz.protectionDomain
-                ?.codeSource
-                ?.location
-                ?.toURI()
-                ?.toPath()
-                ?.fileName?.toString()
-        }
-
-        private fun String.extractMajorAndMinorVersion(): String =
-            split("-")[0].split(".").take(2).joinToString(".")
     }
 }
 
