@@ -18,7 +18,7 @@ interface Versions {
     /**
      * The version of Amper used to build Amper.
      */
-    val bootstrapAmperVersion: String
+    val bootstrapVersion: String
 
     /**
      * This is the version of the Zulu JRE that Amper wrappers use to run the Amper dist.

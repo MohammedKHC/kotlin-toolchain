@@ -86,9 +86,9 @@ class VersionUpdater(val amperRootDir: Path) {
 
     private fun updateKotlinCliWrappers(versions: Versions) {
         val shellWrapperText =
-            fetchContent("$amperMavenRepoUrl/org/jetbrains/kotlin/kotlin-cli/${versions.bootstrapAmperVersion}/kotlin-cli-${versions.bootstrapAmperVersion}-wrapper")
+            fetchContent("$amperMavenRepoUrl/org/jetbrains/kotlin/kotlin-cli/${versions.bootstrapVersion}/kotlin-cli-${versions.bootstrapVersion}-wrapper")
         val batchWrapperText =
-            fetchContent("$amperMavenRepoUrl/org/jetbrains/kotlin/kotlin-cli/${versions.bootstrapAmperVersion}/kotlin-cli-${versions.bootstrapAmperVersion}-wrapper.bat")
+            fetchContent("$amperMavenRepoUrl/org/jetbrains/kotlin/kotlin-cli/${versions.bootstrapVersion}/kotlin-cli-${versions.bootstrapVersion}-wrapper.bat")
 
         amperRootDir.forEachWrapperFile { path ->
             when (path.name) {
