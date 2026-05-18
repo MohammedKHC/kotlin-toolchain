@@ -8,11 +8,12 @@ import org.jetbrains.amper.core.AmperUserCacheRoot
 import org.jetbrains.amper.core.UsedInIdePlugin
 import org.jetbrains.amper.core.extract.ExtractOptions
 import org.jetbrains.amper.core.extract.extractFileToCacheLocation
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import org.jetbrains.amper.system.info.Arch
 import org.jetbrains.amper.system.info.OsFamily
 import java.nio.file.Path
 
-private val MAVEN_CENTRAL_REPOSITORY_URL = mavenCentralOrProxyUrl()
+private val MAVEN_CENTRAL_REPOSITORY_URL = MavenCentralDefaultConfiguration.url
 private const val KOTLIN_BOOTSTRAP_REPOSITORY_URL = "https://packages.jetbrains.team/maven/p/kt/bootstrap"
 
 const val KOTLIN_GROUP_ID = "org.jetbrains.kotlin"
@@ -86,10 +87,3 @@ private suspend fun downloadAndExtractFromMaven(
     val downloadedArchive = Downloader.downloadFileToCacheLocation(artifactUri.toString(), userCacheRoot)
     return extractFileToCacheLocation(downloadedArchive, userCacheRoot, *extractOptions)
 }
-
-private fun mavenCentralOrProxyUrl(): String =
-    if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
-        "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
-    } else {
-        "https://repo1.maven.org/maven2"
-    }

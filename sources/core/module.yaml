@@ -12,6 +12,7 @@ dependencies:
   - ../libraries/stdlib-extended
   - ../libraries/system-info
   - ../libraries/telemetry
+  - ../libraries/maven-central-configuration
   - $libs.kotlinx.coroutines.core
   - $libs.apacheCommons.compress
   - $libs.slf4j.api

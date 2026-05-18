@@ -24,6 +24,7 @@ import org.eclipse.aether.deployment.DeployRequest
 import org.eclipse.aether.installation.InstallRequest
 import org.eclipse.aether.internal.impl.Maven2RepositoryLayoutFactory
 import org.eclipse.aether.repository.RemoteRepository
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
@@ -107,12 +108,12 @@ fun MavenRepositorySystem.createMavenExecutionRequest(localRepositoryPath: Path)
 
 private fun createDefaultMavenExecutionRequest(): DefaultMavenExecutionRequest {
     val request = DefaultMavenExecutionRequest()
-    if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
+    if (!MavenCentralDefaultConfiguration.isDirectUrl) {
         request.addMirror(
             Mirror().also {
                 it.id = "central-mirror"
                 it.name = "Maven Central Mirror"
-                it.url = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/"
+                it.url = MavenCentralDefaultConfiguration.url
                 it.mirrorOf = "central"
             }
         )

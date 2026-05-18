@@ -41,10 +41,6 @@ data class RepositoriesModulePart(
         val password: String? = null,
     ) {
         val isMavenLocal = url == SpecialMavenLocalUrl
-        val isMavenCentral = url.trimEnd('/') in setOf(
-            "https://repo.maven.apache.org/maven2",
-            "https://repo1.maven.org/maven2"
-        )
     }
 }
 

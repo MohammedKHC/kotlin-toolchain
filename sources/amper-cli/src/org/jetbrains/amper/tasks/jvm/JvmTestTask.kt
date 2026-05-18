@@ -12,8 +12,8 @@ import org.jetbrains.amper.cli.AmperProjectTempRoot
 import org.jetbrains.amper.cli.userReadableError
 import org.jetbrains.amper.core.AmperUserCacheRoot
 import org.jetbrains.amper.core.downloader.Downloader
+import org.jetbrains.amper.core.downloader.Downloader.getUriForMavenArtifact
 import org.jetbrains.amper.core.extract.cleanDirectory
-import org.jetbrains.amper.dependency.resolution.maven.mavenCentralOrProxy
 import org.jetbrains.amper.engine.TaskGraphExecutionContext
 import org.jetbrains.amper.engine.TestTask
 import org.jetbrains.amper.frontend.AmperModule
@@ -39,6 +39,7 @@ import org.jetbrains.amper.test.FilterMode
 import org.jetbrains.amper.test.TestFilter
 import org.jetbrains.amper.test.wildcardsToRegex
 import org.jetbrains.amper.util.BuildType
+import org.jetbrains.amper.util.mavenCentralOrProxy
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
@@ -80,7 +81,7 @@ class JvmTestTask(
     override suspend fun run(dependenciesResult: List<TaskResult>, executionContext: TaskGraphExecutionContext): TaskResult {
         val jvmTestSettings = module.leafFragments.single { it.platform == platform && it.isTest }.settings.jvm.test
         // https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.1/junit-platform-console-standalone-1.10.1.jar
-        val junitConsoleUrl = Downloader.getUriForMavenArtifact(
+        val junitConsoleUrl = getUriForMavenArtifact(
             mavenRepository = mavenCentralOrProxy().url,
             groupId = "org.junit.platform",
             artifactId = "junit-platform-console-standalone",

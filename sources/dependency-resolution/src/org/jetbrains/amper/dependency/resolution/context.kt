@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.amper.dependency.resolution.telemetry.debugSpanBuilder
 import org.jetbrains.amper.dependency.resolution.telemetry.infoSpanBuilder
 import org.jetbrains.amper.incrementalcache.IncrementalCache
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
@@ -318,7 +319,7 @@ data class MavenRepository(
     override fun toString()= url
 
     companion object {
-        val MavenCentral = MavenRepository("https://repo1.maven.org/maven2")
+        val MavenCentral = MavenRepository(MavenCentralDefaultConfiguration.url)
     }
 }
 

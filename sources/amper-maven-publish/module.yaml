@@ -6,6 +6,7 @@ apply:
   - ../common.module-template.yaml
 
 dependencies:
+  - ../libraries/maven-central-configuration
   - ../dependency-resolution: exported
   - ../frontend-api: exported
   - ../frontend/dr

@@ -12,6 +12,7 @@ dependencies:
   - ../../frontend-api
   - ../../frontend/schema
   - ../../libraries/stdlib-extended
+  - ../../libraries/maven-central-configuration
   - $libs.android.gradle.plugin
   - $libs.google.services.gradle.plugin: runtime-only
   - $libs.gradle.api: compile-only

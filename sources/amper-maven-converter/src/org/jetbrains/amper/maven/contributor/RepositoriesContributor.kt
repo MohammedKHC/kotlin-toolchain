@@ -9,6 +9,7 @@ import org.jetbrains.amper.frontend.tree.add
 import org.jetbrains.amper.frontend.tree.invoke
 import org.jetbrains.amper.frontend.types.generated.*
 import org.jetbrains.amper.maven.ProjectTreeBuilder
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 
 internal fun ProjectTreeBuilder.contributeRepositories(jarProjects: Set<MavenProject>) {
     for (project in jarProjects) {
@@ -34,7 +35,7 @@ internal fun ProjectTreeBuilder.contributeRepositories(jarProjects: Set<MavenPro
                     // inherited from all parent POMs, so parent repos are already covered here.
                     project.remoteProjectRepositories.forEach { repo ->
                         if (repo.id == "central") return@forEach
-                        if (repo.id == "central-mirror" && repo.url == "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/") return@forEach
+                        if (repo.id == "central-mirror" && repo.url == MavenCentralDefaultConfiguration.url) return@forEach
                         add {
                             id(repo.id)
                             url(repo.url)

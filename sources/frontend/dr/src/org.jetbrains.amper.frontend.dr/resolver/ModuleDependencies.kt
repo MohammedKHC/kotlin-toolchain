@@ -50,6 +50,7 @@ import org.jetbrains.amper.frontend.schema.Repository.Companion.SpecialMavenLoca
 import org.jetbrains.amper.incrementalcache.IncrementalCache
 import org.jetbrains.amper.incrementalcache.ResultWithSerializable
 import org.jetbrains.amper.incrementalcache.execute
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import org.jetbrains.amper.telemetry.use
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
@@ -288,7 +289,7 @@ class ModuleDependencies private constructor(
     companion object {
 
         private val defaultRepositories = listOf(
-            "https://repo1.maven.org/maven2",
+            MavenCentralDefaultConfiguration.url,
             "https://maven.google.com/",
         )
 

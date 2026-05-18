@@ -15,6 +15,7 @@ import org.jetbrains.amper.frontend.diagnostics.FrontendDiagnosticId
 import org.jetbrains.amper.frontend.reportBundleError
 import org.jetbrains.amper.frontend.schema.Module
 import org.jetbrains.amper.frontend.types.generated.*
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import org.jetbrains.amper.problems.reporting.BuildProblemType
 import org.jetbrains.amper.problems.reporting.ProblemReporter
 import org.jetbrains.amper.stdlib.properties.readProperties
@@ -26,7 +27,7 @@ import kotlin.io.path.exists
 private val defaultMavenRepositories = listOf(
     RepositoriesModulePart.Repository(
         id = "mavenCentral",
-        url = "https://repo1.maven.org/maven2",
+        url = MavenCentralDefaultConfiguration.url,
         publish = false,
         resolve = true,
     ),

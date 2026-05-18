@@ -18,6 +18,7 @@ import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
 import org.codehaus.plexus.PlexusConstants
 import org.codehaus.plexus.classworlds.ClassWorld
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import java.io.File
 import java.nio.file.Path
 import java.util.*
@@ -82,12 +83,12 @@ internal object MavenModelReader {
 
 fun createDefaultMavenExecutionRequest(): DefaultMavenExecutionRequest {
     val request = DefaultMavenExecutionRequest()
-    if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
+    if (!MavenCentralDefaultConfiguration.isDirectUrl) {
         request.addMirror(
             Mirror().also {
                 it.id = "central-mirror"
                 it.name = "Maven Central Mirror"
-                it.url = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/"
+                it.url = MavenCentralDefaultConfiguration.url
                 it.mirrorOf = "central"
             }
         )

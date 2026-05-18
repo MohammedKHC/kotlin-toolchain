@@ -8,3 +8,4 @@ pluginInfo:
 
 dependencies:
   - $libs.jna
+  - ../../sources/libraries/maven-central-configuration

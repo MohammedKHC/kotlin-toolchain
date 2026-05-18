@@ -12,9 +12,9 @@ import org.jetbrains.amper.dependency.resolution.MavenRepository
 import org.jetbrains.amper.dependency.resolution.Repository
 import org.jetbrains.amper.dependency.resolution.ResolutionPlatform
 import org.jetbrains.amper.dependency.resolution.ResolutionScope
-import org.jetbrains.amper.dependency.resolution.maven.mavenCentralOrProxy
 import org.jetbrains.amper.frontend.dr.resolver.toIncrementalCacheResult
 import org.jetbrains.amper.incrementalcache.IncrementalCache
+import org.jetbrains.amper.util.mavenCentralOrProxy
 import java.nio.file.Path
 import kotlin.io.path.name
 

@@ -19,6 +19,7 @@ dependencies:
   - ../../dependency-resolution: exported
   - ../../libraries/telemetry
   - ../../libraries/incremental-cache
+  - ../../libraries/maven-central-configuration
   - $libs.slf4j.api
   - $libs.intellij.platform.util
 

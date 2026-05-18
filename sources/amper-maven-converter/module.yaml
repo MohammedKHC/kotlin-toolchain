@@ -14,6 +14,7 @@ dependencies:
   - ../frontend/dr
   - ../frontend/schema
   - ../libraries/incremental-cache
+  - ../libraries/maven-central-configuration
   - ../libraries/maven-plugin-xml-parser
   - ../libraries/stdlib-extended
   - $libs.maven.compat: runtime-only

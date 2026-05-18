@@ -31,6 +31,7 @@ import org.jetbrains.amper.frontend.schema.keyPassword
 import org.jetbrains.amper.frontend.schema.storeFile
 import org.jetbrains.amper.frontend.schema.storePassword
 import org.jetbrains.amper.frontend.singleSourceRoot
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import org.jetbrains.amper.problems.reporting.NoopProblemReporter
 import org.jetbrains.amper.stdlib.properties.readProperties
 import java.io.File
@@ -98,10 +99,10 @@ class AmperAndroidIntegrationProjectPlugin @Inject constructor(private val probl
         val buildDir = rootProjectBuildDir / project.path.replace(":", "_")
         project.layout.buildDirectory.set(buildDir.toFile())
         project.repositories.google()
-        if (System.getenv("AMPER_OVERRIDE_MAVEN_CENTRAL_URL_TO_CACHE_REDIRECTOR")?.toBooleanStrictOrNull() == true) {
+        if (!MavenCentralDefaultConfiguration.isDirectUrl) {
             project.repositories.maven { repo ->
-                repo.name = "Maven Central (cache-redirector)"
-                repo.setUrl("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/")
+                repo.name = "Maven Central (proxy)"
+                repo.setUrl(MavenCentralDefaultConfiguration.url)
             }
         } else {
             project.repositories.mavenCentral()

@@ -15,6 +15,7 @@ apply:
 dependencies:
   - ../libraries/concurrency
   - ../libraries/nio-filechannels
+  - ../libraries/maven-central-configuration
   - ../libraries/system-info
   - ../libraries/telemetry: exported
   - ../libraries/incremental-cache: exported

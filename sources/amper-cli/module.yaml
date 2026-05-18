@@ -28,6 +28,7 @@ dependencies:
   - ../libraries/compose-resources
   - ../libraries/concurrency
   - ../libraries/incremental-cache
+  - ../libraries/maven-central-configuration
   - ../libraries/serialization-extended
   - ../libraries/stdlib-extended
   - ../libraries/system-info

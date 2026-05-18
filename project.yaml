@@ -55,6 +55,7 @@ modules:
   - sources/libraries/concurrency
   - sources/libraries/incremental-cache
   - sources/libraries/jetbrains-jdk-list
+  - sources/libraries/maven-central-configuration
   - sources/libraries/maven-central-portal-publisher-client
   - sources/libraries/maven-plugin-xml-parser
   - sources/libraries/nio-filechannels

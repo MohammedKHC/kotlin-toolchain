@@ -17,7 +17,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.jetbrains.amper.concurrency.FileMutexGroup
 import org.jetbrains.amper.concurrency.withRetry
-import org.jetbrains.amper.dependency.resolution.MavenRepository.Companion.MavenCentral
 import org.jetbrains.amper.dependency.resolution.buildinfo.DependencyResolutionBuild
 import org.jetbrains.amper.dependency.resolution.diagnostics.CollectingDiagnosticReporter
 import org.jetbrains.amper.dependency.resolution.diagnostics.DependencyResolutionDiagnostics.ContentLengthMismatch
@@ -38,7 +37,6 @@ import org.jetbrains.amper.dependency.resolution.files.deleteIfExistsWithLogging
 import org.jetbrains.amper.dependency.resolution.files.produceResultWithDoubleLock
 import org.jetbrains.amper.dependency.resolution.files.produceResultWithTempFile
 import org.jetbrains.amper.dependency.resolution.files.readTextWithRetry
-import org.jetbrains.amper.dependency.resolution.maven.mavenCentralOrProxy
 import org.jetbrains.amper.dependency.resolution.metadata.json.module.File
 import org.jetbrains.amper.dependency.resolution.metadata.xml.parseMetadata
 import org.jetbrains.amper.dependency.resolution.telemetry.debugSpanBuilder
@@ -80,7 +78,6 @@ import kotlin.io.path.isDirectory
 import kotlin.io.path.moveTo
 import kotlin.io.path.name
 import kotlin.io.path.readText
-import kotlin.io.path.toPath
 import kotlin.io.path.writeText
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
@@ -972,7 +969,7 @@ open class DependencyFileImpl(
         val client = cache.computeIfAbsent(httpClientKey) { HttpClientProvider.getHttpClient() }
 
         val name = getNamePart(repository, nameWithoutExtension, extension, progress, cache, spanBuilderSource, diagnosticsReporter)
-        val url = repository.actualUrlForDownloading().trimEnd('/') +
+        val url = repository.url.trimEnd('/') +
                 "/${dependency.group.replace('.', '/')}" +
                 "/${dependency.module}" +
                 "/${dependency.version.orUnspecified()}" +
@@ -1088,14 +1085,6 @@ open class DependencyFileImpl(
         }
 
         return false
-    }
-
-    private fun MavenRepository.actualUrlForDownloading(): String {
-        return if (url.trimEnd('/') == MavenCentral.url) {
-            mavenCentralOrProxy().url
-        } else {
-            url
-        }
     }
 
     private fun Builder.withBasicAuth(repository: MavenRepository): Builder = also {
