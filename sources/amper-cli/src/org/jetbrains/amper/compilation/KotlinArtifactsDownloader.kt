@@ -14,7 +14,6 @@ import org.jetbrains.amper.dependency.resolution.ResolutionPlatform
 import org.jetbrains.amper.dependency.resolution.ResolutionScope
 import org.jetbrains.amper.frontend.dr.resolver.toIncrementalCacheResult
 import org.jetbrains.amper.incrementalcache.IncrementalCache
-import org.jetbrains.amper.util.mavenCentralOrProxy
 import java.nio.file.Path
 import kotlin.io.path.name
 
@@ -77,7 +76,7 @@ internal class KotlinArtifactsDownloader(
         artifactId: String,
         version: String,
         repositories: List<Repository> = listOf(
-            mavenCentralOrProxy(),
+            MavenRepository.MavenCentral,
             KotlinBootstrap,
         ),
     ): List<Path> =
