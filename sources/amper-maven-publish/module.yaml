@@ -6,10 +6,10 @@ apply:
   - ../common.module-template.yaml
 
 dependencies:
-  - ../libraries/maven-central-configuration
   - ../dependency-resolution: exported
   - ../frontend-api: exported
   - ../frontend/dr
+  - ../libraries/maven-central-configuration
   - $libs.maven.core: exported
   - $libs.maven.resolver.connectorBasic: runtime-only
   - $libs.maven.resolver.transportHttp: runtime-only

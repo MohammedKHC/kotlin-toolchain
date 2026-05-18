@@ -21,6 +21,7 @@ dependencies:
   - ../frontend-api: exported
   - ../frontend/dr: exported
   - ../frontend/schema: exported
+  - ../libraries/maven-central-configuration: exported
   - ../libraries/maven-plugin-xml-parser: exported
   - ../libraries/system-info: exported
   - ../libraries/telemetry: exported
