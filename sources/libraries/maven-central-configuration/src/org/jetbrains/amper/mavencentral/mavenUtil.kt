@@ -17,7 +17,7 @@ object MavenCentralDefaultConfiguration {
     val url: String
         get() = System.getenv("KOTLIN_DEFAULT_MAVEN_CENTRAL_URL")
             ?.takeIf { it.isNotBlank() }
-            ?: "https://cache-redirector.jetbrains.com/kotlin/repo1.maven.org/maven2"
+            ?: "https://repo1.maven.org/maven2"
 
     val isDirectUrl: Boolean get() = url.trimEnd('/') in directUrls
 
