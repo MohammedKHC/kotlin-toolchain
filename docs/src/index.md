@@ -1,171 +1,173 @@
 ---
 hide:
   - navigation
+  - toc
 ---
 
-# The Kotlin Toolchain
+<div class="hero" markdown>
 
-The Kotlin Toolchain is a unified entry point into Kotlin with a focus on user experience and IDE support.
-It includes build tooling functionality as one of its core components.
+<h1>The Kotlin Toolchain</h1>
 
-It can build plain JVM console applications, Android and iOS mobile applications, server-side application like Spring
-or Ktor, multiplatform projects that share business logic and/or UI, and more.
+<p class="tagline">
+A unified entry point into Kotlin. 
+Build JVM, Android, iOS, multiplatform, and server-side
+applications with a simple declarative configuration.
+</p>
 
-[Get started](getting-started/index.md){ .md-button .md-button--primary }
-[:material-book-open-page-variant: Learn](user-guide/index.md){ .md-button }
+<div class="install-grid" markdown>
 
-## Philosophy
+<div class="install-card" markdown>
 
-The Kotlin Toolchain should be invisible when you're working on your code – nobody likes dealing with the build tool.
-Ideally, you shouldn't have to leave your source files to adjust the build configuration.
+### :octicons-terminal-16: Command Line
 
-When you _do_ edit the build configuration by hand, we want the experience to be as smooth and enjoyable as possible.
+<div class="method-label">Via SDKMAN!</div>
 
-We believe that this can be achieved by:
-
-- providing a declarative configuration DSL – to simplify not only the initial setup but also improve maintainability 
-  and let IDEs assist with automatic configuration reliably;
-- bundling a curated set of toolchains – to support the majority of the scenarios without the need to find compatible
-  plugins;
-- carefully choosing the extensibility points – to keep the overall mental model and UX of the configuration consistent
-  and to avoid unexpected third-party code execution.
-
-In essence, we aim to achieve a similar well-thought-out and well-tested experience as with 
-[:intellij-jetbrains: JetBrains IDEs](https://www.jetbrains.com/ides/).
-
-## Project status [![JetBrains incubator project](https://jb.gg/badges/incubator.svg)](https://github.com/JetBrains#jetbrains-on-github)
-
-The Kotlin Toolchain is still in the experimental phase, but we encourage you to try it out and 
-[give us feedback](#issues-and-feedback).
-
-We’re currently looking at various aspects, including extensibility, publication, and Maven integration.
-
-## Supported features
-
-* [x] Creating and running JVM, Android, iOS, Linux, Windows, and macOS applications
-* [x] Creating Kotlin Multiplatform libraries
-* [x] Running tests
-* [x] Mixing Kotlin, Java, and Swift code
-* [x] Code assistance for [module files](user-guide/basics.md#module-file-anatomy) in IntelliJ IDEA
-* [x] [Multi-module](user-guide/basics.md#project-layout) projects
-* [x] [Compose Multiplatform](user-guide/builtin-tech/compose-multiplatform.md), with
-  [multiplatform resources](user-guide/builtin-tech/compose-multiplatform.md#using-multiplatform-resources) and
-  [Compose Hot Reload](user-guide/builtin-tech/compose-multiplatform.md#compose-hot-reload-experimental)
-* [x] Integration with [Gradle version catalogs](user-guide/dependencies.md#library-catalogs)
-* [x] Extensibility (Preview)
-
-Future directions:
-
-* [ ] Packaging, publication, distribution
-* [ ] Maven migration
-* [ ] More features for extensibility
-* [ ] Platform-specific test types, including android instrumented tests.
-* [ ] Native dependencies support, such as CocoaPods, Swift Package Manager
-* [ ] Build variants support
-
-## Issues and feedback
-
-The Kotlin Toolchain uses [:jetbrains-youtrack: YouTrack](https://youtrack.jetbrains.com/issues/AMPER) for issue tracking,
-[create a new issue](https://youtrack.jetbrains.com/newIssue?project=AMPER) there to report problems or submit ideas.
-
-You can also join the [:material-slack: Slack channel](https://kotlinlang.slack.com/archives/C062WG3A7T8) for discussions.
-
-## Examples
-
-### Basics
-
-Here is a very basic JVM "Hello, World!" project:
-
-<img src="images/ij-jvm-structure.png" width="50%" alt="">
-
-
-The `main.kt` and `MyTest.kt` files are just regular Kotlin files with nothing special in them.
-The interesting part is `module.yaml`, which is the Kotlin module configuration file.
-For the above project structure, it would simply be:
-
-```yaml
-# Produce a JVM application 
-product: jvm/app
+```shell
+sdk install kotlintoolchain
 ```
 
-That's it. The Kotlin and Java toolchains, test framework, and other necessary functionality are configured and available straight out of the box.
-You can build it, run it, write and run tests, and more.
-For more detailed information, check out the [full example]({{ examples_base_url }}/jvm).
+<div class="method-label">Or via installer script</div>
 
-![](images/ij-jvm-result.png)
+=== ":material-apple: macOS / :material-linux: Linux"
 
-### Multiplatform
+    ```shell
+    curl -fsSL https://kotl.in/need-to-decide-cli.sh | sh
+    ```
 
-Now, let's look at a Compose Multiplatform project with Android, iOS, and desktop JVM apps, with the following project structure in Fleet:
+=== ":material-microsoft-windows: Windows"
 
-<img src="images/fleet-kmp-structure.png" width="50%" alt="">
+    ```powershell
+    powershell -ExecutionPolicy ByPass -c "irm 'https://kotl.in/need-to-decide-cli.ps1' | iex"
+    ```
 
-Notice how the `src/` folder contains Kotlin and Swift code together. It could, of course, also be Kotlin and Java.
-Another aspect to highlight is the shared module with the common code in the `src` folder and the platform-specific code
-folders `src@ios` and `src@android` (learn more about [project layout](user-guide/basics.md#project-layout)).
+<div class="card-footer" markdown>
+[:octicons-arrow-right-16: CLI documentation](cli/index.md)
+</div>
 
-Here is how `ios-app/module.yaml` file looks:
-```yaml
-# Produce an iOS application
-product: ios/app
+</div>
 
-# Depend on the shared library module: 
-dependencies:
-  - ../shared
+<div class="install-card" markdown>
 
-settings:
-  # Enable the Compose Multiplatform framework
-  compose: enabled
-```
+### :intellij-jetbrains: IntelliJ IDEA
 
-This is pretty straightforward: it defines an iOS application with a dependency on a shared module and enables the Compose Multiplatform framework.
-A more interesting example would be `shared/module.yaml`:
+Install the [Kotlin Toolchain plugin](https://plugins.jetbrains.com/plugin/XXXXX-kotlin-toolchain) in IntelliJ IDEA 2026.1+.
 
-```yaml
-# Produce a shared library for the JVM, Android, and iOS platforms:
-product:
-  type: kmp/lib
-  platforms: [jvm, android, iosArm64, iosSimulatorArm64, iosX64]
+**File → New → Project → Kotlin**
 
-# Shared Compose dependencies:
-dependencies:
-  - $compose.foundation: exported
-  - $compose.material3: exported
+<img src="images/ij-new-kotlin-project-light.png#only-light" width="100%" alt="New Kotlin project in IntelliJ IDEA">
+<img src="images/ij-new-kotlin-project-dark.png#only-dark" width="100%" alt="New Kotlin project in IntelliJ IDEA">
 
-# Android-only dependencies  
-dependencies@android:
-  # Android-specific integration with Compose
-  - androidx.activity:activity-compose:1.7.2: exported
-  - androidx.appcompat:appcompat:1.6.1: exported
+</div>
 
-settings:
-  # Enable Kotlin serialization
-  kotlin:
-    serialization: json
-  
-  # Enable the Compose Multiplatform framework
-  compose: enabled
-```
+</div>
 
-A couple of things are worth mentioning.
-Note the platform-specific `dependencies@android` section with the `@<platform>` qualifier.
-[The platform qualifier](user-guide/multiplatform.md#platform-qualifier) can be used both in the manifest and also in 
-the file layout. The qualifier organizes the code, dependencies, and settings for a certain platform.
+<div class="nav-buttons" markdown>
 
-![](images/fleet-kmp-result.png)
+[Get started](getting-started/index.md){ .md-button }
+[:material-book-open-page-variant: User Guide](user-guide/index.md){ .md-button }
+[:material-github: Examples]({{ examples_base_url }}){ .md-button }
 
-Naturally, these examples show only a limited set of the Kotlin Toolchain features.
-To get more insight into design and functionality, look at the [user guide](user-guide/index.md),
-the [tutorial](getting-started/tutorial.md), and [example projects](#more-examples).
+</div>
+</div>
 
-### More examples
+<div class="example-section" markdown>
 
-Check our these example projects:
+## Minimal Configuration
 
-* [JVM "Hello, World!"]({{ config.repo_url }}/tree/{{git.short_tag or "HEAD"}}/examples/jvm)
-* [Compose Multiplatform]({{ examples_base_url }}/compose-multiplatform)
-* Compose on [iOS]({{ examples_base_url }}/compose-ios), [Android]({{ examples_base_url }}/compose-android),
-  and [desktop]({{ examples_base_url }}/compose-desktop)
-* Kotlin Multiplatform app template with [shared Compose UI](https://github.com/Kotlin/KMP-App-Template/tree/amper)
-  and with [native Android and iOS UI](https://github.com/Kotlin/KMP-App-Template-Native/tree/amper)
-* And other [examples]({{ examples_base_url }}/README.md)
+=== "JVM Application"
+
+    ```yaml title="module.yaml"
+    product: jvm/app
+    ```
+
+    That's it. Toolchains, test framework, and everything you need — configured automatically.
+
+=== "Compose Multiplatform"
+
+    === ":material-apple: iOS"
+
+        ```yaml title="ios-app/module.yaml"
+        product: ios/app
+
+        dependencies:
+          - ../shared
+
+        settings:
+          compose: enabled
+        ```
+
+    === ":material-android: Android"
+
+        ```yaml title="android-app/module.yaml"
+        product: android/app
+
+        dependencies:
+          - ../shared
+
+        settings:
+          compose: enabled
+        ```
+
+    === ":material-laptop: Desktop"
+
+        ```yaml title="desktop-app/module.yaml"
+        product: jvm/app
+
+        dependencies:
+          - ../shared
+
+        settings:
+          compose: enabled
+        ```
+
+    ```yaml title="shared/module.yaml"
+    # Produce a shared library for the JVM, Android, and iOS platforms:
+    product:
+      type: kmp/lib
+      platforms: [jvm, android, iosArm64, iosSimulatorArm64, iosX64]
+
+    # Shared Compose dependencies:
+    dependencies:
+      - $compose.foundation: exported
+      - $compose.material3: exported
+
+    # Android-only dependencies
+    dependencies@android:
+      # Android-specific integration with Compose
+      - androidx.activity:activity-compose:1.7.2: exported
+      - androidx.appcompat:appcompat:1.6.1: exported
+
+    settings:
+      # Enable Kotlin serialization
+      kotlin:
+        serialization: json
+
+      # Enable the Compose Multiplatform framework
+      compose: enabled
+    ```
+
+    Shared UI across Android, iOS, and desktop with a single codebase.
+
+[:octicons-arrow-right-16: See more examples]({{ examples_base_url }}){ .md-button }
+
+</div>
+
+<div class="status-section" markdown>
+
+The Kotlin Toolchain is [Alpha](https://kotlinlang.org/docs/components-stability.html#stability-levels-explained). We'd love your feedback!
+
+[:jetbrains-youtrack: Report an issue](https://youtrack.jetbrains.com/newIssue?project=AMPER){ .md-button }
+[:material-slack: Join Slack](https://kotlinlang.slack.com/archives/C062WG3A7T8){ .md-button }
+
+</div>
+
+<div class="platforms-section" markdown>
+
+:material-android: Android
+· :material-apple: iOS
+· :material-laptop: Desktop
+· :material-server: Server
+· :jetbrains-kotlin-multiplatform: Multiplatform
+· :jetbrains-compose-multiplatform: Compose
+
+</div>
