@@ -21,7 +21,7 @@ class UploadDistTest {
             val distribution = object : Distribution {
                 override val cliTgz: Path = tempDir / "cli.tgz"
                 override val wrappersDir: Path = tempDir / "wrappers"
-                override val installersDir: Path = tempDir / "installers"
+                override val installersDir: Path = (tempDir / "installers").also { it.createDirectories() }
             }
             distribution.cliTgz.writeText("fake distribution")
             distribution.wrappersDir.createDirectories()
