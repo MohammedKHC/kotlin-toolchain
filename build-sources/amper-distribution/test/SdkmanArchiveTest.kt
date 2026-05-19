@@ -35,6 +35,7 @@ class SdkmanArchiveTest {
                 distribution = object : Distribution {
                     override val cliTgz: Path = cliTgz
                     override val wrappersDir: Path = tempDir / "wrappers"
+                    override val installersDir: Path = tempDir / "installers"
                 },
                 licenseFile = licenseFile,
             )
