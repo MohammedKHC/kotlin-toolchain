@@ -19,11 +19,13 @@ tasks:
   uploadLocal:
     action: !uploadDist
       distribution: ${tasks.build.action.distribution}
+      sdkmanArchive: ${taskOutputDir}/kotlin.zip
       repository: maven-local
 
   upload:
     action: !uploadDist
       distribution: ${tasks.build.action.distribution}
+      sdkmanArchive: ${taskOutputDir}/kotlin.zip
       repository: jetbrains-team-amper-maven
 
   embedClasspathAsResources:

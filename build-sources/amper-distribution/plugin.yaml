@@ -26,14 +26,22 @@ tasks:
       extraFilteredClasspaths: ${pluginSettings.extraFilteredClasspaths}
       thirdPartyStagingDir: ${provisionThirdPartyComponents.action.stagingDir}
 
+  buildSdkmanArchive:
+    action: !buildSdkmanArchive
+      archive: ${taskOutputDir}/kotlin-cli-sdkman.zip
+      distribution: ${tasks.build.action.distribution}
+      licenseFile: ${project.rootDir}/LICENSE.txt
+
   uploadLocal:
     action: !uploadDist
       distribution: ${tasks.build.action.distribution}
+      sdkmanArchive: ${tasks.buildSdkmanArchive.action.archive}
       repository: maven-local
 
   upload:
     action: !uploadDist
       distribution: ${tasks.build.action.distribution}
+      sdkmanArchive: ${tasks.buildSdkmanArchive.action.archive}
       repository: jetbrains-team-amper-maven
 
   embedClasspathAsResources:
@@ -61,6 +69,8 @@ commands:
 
   - name: uploadAmperDistributionLocal
     performedBy: uploadLocal
+
+  - buildSdkmanArchive
 
   - installLocalDemoBrewFormula
 

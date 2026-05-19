@@ -24,12 +24,13 @@ import kotlin.io.path.listDirectoryEntries
 @TaskAction
 fun uploadDist(
     @Input distribution: Distribution,
+    @Input sdkmanArchive: Path,
     repository: Repository,
 ) {
     val tempDirectory = createTempDirectory() // TODO: Expose such facility via Amper
     try {
         val artifacts = context(tempDirectory) {
-            distribution.artifacts("kotlin-cli")
+            distArtifacts(distribution, sdkmanArchive)
         }
 
         val localMavenRepoPath = LocalM2RepositoryFinder.findPath()
@@ -51,6 +52,10 @@ fun uploadDist(
 }
 
 context(tempDirectory: Path)
+fun distArtifacts(distribution: Distribution, sdkmanArchive: Path): List<Artifact> =
+    distribution.artifacts(KotlinCliArtifactId) + sdkmanArtifacts(KotlinCliSdkmanArtifactId, sdkmanArchive)
+
+context(tempDirectory: Path)
 private fun Distribution.artifacts(artifactId: String): List<Artifact> {
     val wrapperArtifacts = wrappersDir.listDirectoryEntries()
         .map { kotlinToolchainArtifact(artifactId, classifier = "wrapper", file = it) }
@@ -61,6 +66,13 @@ private fun Distribution.artifacts(artifactId: String): List<Artifact> {
     val pomArtifact = kotlinToolchainArtifact(artifactId, classifier = null, file =
         createSimplePom(artifactId, AmperBuild.mavenVersion))
     return wrapperArtifacts + installerArtifacts + tarGzDistArtifact + pomArtifact
+}
+
+context(tempDirectory: Path)
+private fun sdkmanArtifacts(artifactId: String, sdkmanArchive: Path): List<Artifact> {
+    val sdkmanArchiveArtifact = kotlinToolchainArtifact(artifactId, classifier = null, file = sdkmanArchive)
+    val pomArtifact = kotlinToolchainArtifact(artifactId, classifier = null, file = createSimplePom(artifactId, AmperBuild.mavenVersion))
+    return listOf(sdkmanArchiveArtifact, pomArtifact)
 }
 
 context(tempDirectory: Path)
@@ -83,6 +95,8 @@ private fun kotlinToolchainArtifact(artifactId: String, classifier: String?, fil
 ).setFile(file.toFile())
 
 private const val KotlinGroupId = "org.jetbrains.kotlin"
+private const val KotlinCliArtifactId = "kotlin-cli"
+private const val KotlinCliSdkmanArtifactId = "kotlin-cli-sdkman"
 
 private val JetBrainsTeamAmperRepository by lazy {
     val username = System.getenv("JETBRAINS_TEAM_AMPER_USERNAME")
