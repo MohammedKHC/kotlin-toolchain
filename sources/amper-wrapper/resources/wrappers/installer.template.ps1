@@ -154,6 +154,7 @@ function Add-ToUserPath {
     [Environment]::SetEnvironmentVariable('PATH', $newUserPath, 'User')
 
     # Also add to the current session PATH
+    # But that may not work for the end-user, if they launched the installer via the full `powershell .. -c ..` command.
     $env:PATH = "$TargetDir;$env:PATH"
 
     Write-Host "Added $TargetDir to user PATH"
@@ -170,7 +171,8 @@ function Main {
 
     $wrapperUrl = "$RepoBaseUrl/kotlin-cli/$KotlinCliVersion/kotlin-cli-$KotlinCliVersion-wrapper.bat"
 
-    $installDir = "$HOME\.local\bin"
+    # Normalize the installation directory
+    $installDir = [IO.Path]::GetFullPath((Join-Path $HOME '.local\bin'))
 
     if (Test-ExistingInInstallDir $installDir) {
         Write-Host "Existing installation found in $installDir, it will be overwritten."
@@ -194,7 +196,7 @@ function Main {
 
     Add-ToUserPath $installDir
     Write-Host "Installed Kotlin CLI to $targetPath"
-    Write-Host 'To get started you can run: kotlin --help'
+    Write-Host 'To get started you can run: kotlin --help (you may need to restart you shell first)'
 }
 
 Main
