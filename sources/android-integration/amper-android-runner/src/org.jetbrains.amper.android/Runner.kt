@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+ * Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package org.jetbrains.amper.android
@@ -14,6 +14,7 @@ import org.gradle.tooling.events.ProgressEvent
 import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.model.GradleProject
 import org.jetbrains.amper.buildinfo.AmperBuild
+import org.jetbrains.amper.mavencentral.MavenCentralDefaultConfiguration
 import java.io.BufferedOutputStream
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption.APPEND
@@ -113,6 +114,11 @@ private fun Path.createSettingsGradle(buildRequest: AndroidBuildRequest): Path {
     settingsGradleFile.createNewFile()
 
     val fromSources = AmperBuild.isSNAPSHOT
+    val mavenCentralRepo = if (MavenCentralDefaultConfiguration.isDirectUrl) {
+        "mavenCentral()"
+    } else {
+        "maven(\"${MavenCentralDefaultConfiguration.url}\")"
+    }
 
     settingsGradleFile.writeText(
         """
@@ -127,7 +133,7 @@ buildscript {
     
     repositories {
         ${if (fromSources) "mavenLocal()" else ""}
-        mavenCentral()
+        $mavenCentralRepo
         google()
         gradlePluginPortal()
         maven("https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases")
