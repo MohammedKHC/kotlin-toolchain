@@ -195,6 +195,18 @@ class BuildGraphTest : BaseDRTest() {
     }
 
     /**
+     * This test checks that a classifier is taken into account and the appropriate artifact is resolved
+     */
+    @Test
+    fun `io_netty netty-transport-native-epoll 4_2_13_Final linux-x86_64`(testInfo: TestInfo) = runDrTest {
+        val root = doTestByFile(
+            testInfo,
+            dependency = listOf("io.netty:netty-transport-native-epoll:4.2.13.Final:linux-x86_64")
+        )
+        downloadAndAssertFiles(testInfo, root)
+    }
+
+    /**
      * This test checks that wrong artifact checksum declared in the Gradle module metadata won't cause DR error if
      * valid checksum is published as a separate file in an external repository.
      *

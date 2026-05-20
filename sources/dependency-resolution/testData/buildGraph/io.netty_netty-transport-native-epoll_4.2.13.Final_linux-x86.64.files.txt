@@ -1,0 +1,7 @@
+netty-buffer-4.2.13.Final.jar
+netty-common-4.2.13.Final.jar
+netty-resolver-4.2.13.Final.jar
+netty-transport-4.2.13.Final.jar
+netty-transport-classes-epoll-4.2.13.Final.jar
+netty-transport-native-epoll-4.2.13.Final-linux-x86_64.jar
+netty-transport-native-unix-common-4.2.13.Final.jar
