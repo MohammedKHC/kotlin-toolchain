@@ -1,6 +1,7 @@
 tasks:
   generate:
     action: !generateBuildProperties
+      dotGitDirectory: ${project.rootDir}/.git
       taskOutputDirectory: ${taskOutputDir}
       version: ${module.settings.publishing.version}
       classSimpleName: ${pluginSettings.classSimpleName}

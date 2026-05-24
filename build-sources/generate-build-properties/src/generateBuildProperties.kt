@@ -10,10 +10,10 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import org.eclipse.jgit.api.Git
 import org.jetbrains.amper.plugins.ExecutionAvoidance
+import org.jetbrains.amper.plugins.Input
 import org.jetbrains.amper.plugins.Output
 import org.jetbrains.amper.plugins.TaskAction
 import java.nio.file.Path
-import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.readBytes
@@ -21,6 +21,7 @@ import kotlin.io.path.writeBytes
 
 @TaskAction(ExecutionAvoidance.Disabled)
 fun generateBuildProperties(
+    @Input dotGitDirectory: Path, // it won't track the whole directory because we disabled execution avoidance
     @Output taskOutputDirectory: Path,
     version: String?,
     classSimpleName: String,
@@ -32,24 +33,16 @@ fun generateBuildProperties(
     }
     val taskOutputDirectory = taskOutputDirectory.createDirectories()
 
-    // TODO: Obtain project root from Amper (AMPER-5085) instead of searching for it
-    val currentDir = Path(System.getProperty("user.dir"))
-    val projectRoot = generateSequence(currentDir) { it.parent }
-        .firstOrNull { it.resolve("project.yaml").exists() }
-        ?: error("Project root not found: no project.yaml when looking up the parent tree from $currentDir")
-
-    val gitRoot = projectRoot.resolve(".git")
-
     // .git is usually a directory, but can be a file in the case when `git worktree add` was used so exists check
     // is sufficient.
-    check(gitRoot.exists()) {
-        "Git root doesn't exist: $gitRoot"
+    check(dotGitDirectory.exists()) {
+        "Git root doesn't exist: $dotGitDirectory"
     }
 
     // We run without global Git config to avoid issues with people who use config parameters that are not
     // supported by JGit. For example, the 'patience' diff algorithm isn't supported.
     val (commitHash, commitShortHash, commitDate) = runWithoutGlobalGitConfig {
-        Git.open(projectRoot.toFile()).use { git ->
+        Git.open(dotGitDirectory.toFile()).use { git ->
             val repo = git.repository
             val head = repo.refDatabase.getReflogReader("HEAD").lastEntry
             val shortHash = repo.newObjectReader().use { it.abbreviate(head.newId).name() }
