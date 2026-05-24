@@ -6,6 +6,7 @@ package org.jetbrains.amper.tasks.custom
 
 import com.github.ajalt.mordant.terminal.Terminal
 import org.jetbrains.amper.cli.AmperBuildOutputRoot
+import org.jetbrains.amper.cli.telemetry.setAmperModule
 import org.jetbrains.amper.cli.userReadableError
 import org.jetbrains.amper.engine.TaskGraphExecutionContext
 import org.jetbrains.amper.frontend.AmperModule
@@ -27,6 +28,8 @@ import org.jetbrains.amper.tasks.artifacts.api.ArtifactTask
 import org.jetbrains.amper.tasks.jvm.JvmClassesJarTask
 import org.jetbrains.amper.tasks.jvm.JvmMergedClassesTask
 import org.jetbrains.amper.tasks.jvm.JvmRuntimeClasspathTask
+import org.jetbrains.amper.telemetry.spanBuilder
+import org.jetbrains.amper.telemetry.use
 import org.jetbrains.amper.util.StandardStreamsCapture
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
@@ -153,7 +156,7 @@ class TaskFromPlugin(
         return EmptyTaskResult
     }
 
-    private fun doExecuteTaskAction(
+    private suspend fun doExecuteTaskAction(
         taskRuntimeClasspath: List<Path>,
     ) {
         // TODO: Cache the classloader per plugin?
@@ -171,26 +174,33 @@ class TaskFromPlugin(
             valueTransform = { (_, kv) -> marshaller.marshallValue(kv.value) },
         )
 
-        val currentThread = Thread.currentThread()
-        val oldClassloader = currentThread.contextClassLoader
-        try {
-            currentThread.contextClassLoader = classLoader
-            StandardStreamsCapture.capturing(
-                onStderrLine = { logger.error(it) },
-                onStdoutLine = { logger.info(it) },
-            ) {
-                actionMethod.callBy(argumentsMap)
-            }
-        } catch (e: InvocationTargetException) {
-            val targetException = e.targetException
-            context(classLoader) {
-                elideSystemStackTracePart(targetException)
-            }
+        spanBuilder("Run task '${description.name}' from plugin '${description.pluginId.value}'")
+            .setAmperModule(module)
+            .setAttribute("taskName", description.name)
+            .setAttribute("pluginId", description.pluginId.value)
+            .setAttribute("action", description.actionFunctionJvmName)
+            .use {
+                val currentThread = Thread.currentThread()
+                val oldClassloader = currentThread.contextClassLoader
+                try {
+                    currentThread.contextClassLoader = classLoader
+                    StandardStreamsCapture.capturing(
+                        onStderrLine = { logger.error(it) },
+                        onStdoutLine = { logger.info(it) },
+                    ) {
+                        actionMethod.callBy(argumentsMap)
+                    }
+                } catch (e: InvocationTargetException) {
+                    val targetException = e.targetException
+                    context(classLoader) {
+                        elideSystemStackTracePart(targetException)
+                    }
 
-            userReadableError(targetException.stackTraceToString())
-        } finally {
-            currentThread.contextClassLoader = oldClassloader
-        }
+                    userReadableError(targetException.stackTraceToString())
+                } finally {
+                    currentThread.contextClassLoader = oldClassloader
+                }
+            }
     }
 
     private val logger = LoggerFactory.getLogger(javaClass)
