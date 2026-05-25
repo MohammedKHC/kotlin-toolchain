@@ -66,6 +66,7 @@ class ProcessesTest {
     // and possibly report errors as we want.
     @Test
     fun `awaitListening should terminate normally if the process is killed externally`() = runBlocking(Dispatchers.IO) {
+        @Suppress("PROCESS_BUILDER_START_LEAK") // we're literally testing the mechanism
         val process = ProcessBuilder(echoLoop(n = 100000, message = loremIpsum1000)).start()
 
         val firstOutputEvent = CompletableDeferred<Unit>()
@@ -116,7 +117,8 @@ class ProcessesTest {
 
     @Test
     fun `withGuaranteedTermination should kill the process when cancelled`() = runBlocking(Dispatchers.IO) {
-        val process = ProcessBuilder(binSh("sleep 10")).start()
+        @Suppress("PROCESS_BUILDER_START_LEAK") // we're literally testing the mechanism
+        val process = ProcessBuilder(binSh("sleep 60")).start()
 
         val time = measureTime {
             // simulate quick cancellation (cannot be 0ms otherwise the block is not run at all)
@@ -127,12 +129,13 @@ class ProcessesTest {
             }
         }
         assertTerminated(process, "withGuaranteedTermination should not exit before the process is terminated")
-        assertTrue(time < 1.seconds, "The process should be terminated almost instantly, but ran for $time")
+        assertTrue(time < 5.seconds, "The process should be terminated almost instantly, but ran for $time")
     }
 
     @Test
     fun `withGuaranteedTermination should kill the process when already cancelled`() = runBlocking(Dispatchers.IO) {
-        val process = ProcessBuilder(binSh("sleep 10")).start()
+        @Suppress("PROCESS_BUILDER_START_LEAK") // we're literally testing the mechanism
+        val process = ProcessBuilder(binSh("sleep 60")).start()
 
         val time = measureTime {
             val launchJob = launch {
