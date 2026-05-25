@@ -126,7 +126,7 @@ class VersionUpdater(val amperRootDir: Path) {
 
         sequenceOf(
             amperWrapperModuleDir / "resources/wrappers/launcher.template.sh",
-            amperRootDir / "amper-from-sources",
+            amperRootDir / "kotlin-from-sources",
         ).replaceEachFileText { initialText ->
             val textWithVersion = initialText
                 .replaceRegexGroup1(Regex("""^\s*zulu_version=(\S+)""", RegexOption.MULTILINE), zuluVersion)
@@ -137,7 +137,7 @@ class VersionUpdater(val amperRootDir: Path) {
         }
 
         sequenceOf(
-            amperRootDir / "amper-from-sources.bat",
+            amperRootDir / "kotlin-from-sources.bat",
         ).replaceEachFileText { initialText ->
             val textWithVersion = initialText
                 .replaceRegexGroup1(Regex("""^\s*set\s+zulu_version=(\S+)""", RegexOption.MULTILINE), zuluVersion)

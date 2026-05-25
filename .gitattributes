@@ -3,9 +3,9 @@
 *.sh text eol=lf
 *.bat text eol=crlf
 
-# Amper wrappers that don't have an extension
-amper text eol=lf
-amper-from-sources text eol=lf
+# Kotlin CLI wrappers that don't have an extension
+kotlin text eol=lf
+kotlin-from-sources text eol=lf
 
 # Docs generation script
 mkdocs text eol=lf

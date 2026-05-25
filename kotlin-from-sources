@@ -1,0 +1,72 @@
+#!/bin/bash
+
+#
+# Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+#
+
+### Runs amper cli from sources
+
+set -e -u -o pipefail
+
+script_dir="$(dirname -- "$0")"
+script_dir="$(cd -- "$script_dir" && pwd)"
+
+die() {
+  echo >&2
+  echo "$@" >&2
+  echo >&2
+  exit 1
+}
+
+# ********** Build Amper from sources **********
+
+case "$(uname)" in
+  # man stat on Mac OS X
+  # N       The name of the file.
+  # z       The size of file in bytes (st_size).
+  # a, m, c, B
+  #         The time file was last accessed or modified, or when the
+  #         inode was last changed, or the birth time of the inode
+  #         (st_atime, st_mtime, st_ctime, st_birthtime).
+  Darwin*) stat_format=(-f '%N %m %z') ;;
+
+  # man stat on Ubuntu and Windows (Git Bash)
+  # %n     file name
+  # %s     total size, in bytes
+  # %Y     time of last data modification, seconds since Epoch
+  Linux* | CYGWIN* | MSYS* | MINGW*) stat_format=(--format='%n %s %Y') ;;
+
+  *)
+    echo "Unsupported system: $(uname)"
+    exit 1
+    ;;
+esac
+
+# Prints a status of all sources files impacting the Amper build
+current_state() {
+  # scan sources directory
+  find "$script_dir/sources" '(' -name build -o -name build-from-sources -o -name .git -o -name .idea ')' -prune -o -type f -print0 | \
+   xargs -0 stat "${stat_format[@]}"
+  stat "${stat_format[@]}" "$script_dir/project.yaml"
+}
+
+# Do not rebuild Amper if nothing changed
+up_to_date_file="$script_dir/build/up-to-date-from-sources-wrapper.txt"
+current="$(current_state)"
+if [ ! -f "$up_to_date_file" ] || [ "$(cat "$up_to_date_file")" != "$current" ]; then
+  # Amper needs a published Amper Android Gradle plugin support for the delegated Gradle builds
+  (cd "$script_dir" && ./kotlin --log-level=warn task :amper-cli:buildUnpacked@amper-distribution && ./kotlin --log-level=warn publish -m amper-android-gradle-plugin mavenLocal)
+  current_state >"$up_to_date_file"
+
+  if [ -n "$TERM" ] && tput clear >/dev/null 2>&1; then
+      clear
+  fi
+fi
+
+# ********** Launch Amper **********
+
+launcher_script="$script_dir/build/tasks/_amper-cli_buildUnpacked@amper-distribution/dist/bin/launcher.sh"
+
+KOTLIN_CLI_WRAPPER_PATH="$(realpath "$0")" \
+AMPER_BUILD_DIR=build-from-sources \
+exec /bin/sh "$launcher_script" "$@"

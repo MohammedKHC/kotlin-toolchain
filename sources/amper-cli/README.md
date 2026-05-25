@@ -51,5 +51,5 @@ as possible, such as:
 
 ## Running Amper CLI from sources
 
-It is possible to use Amper CLI built from sources, please check out the Amper project and use 
-`./amper-from-sources` instead of `./kotlin` (or `./amper-from-sources.bat` instead of `./kotlin.bat`).
+It is possible to use Kotlin CLI built from sources, please check out the Kotlin Toolchain project and use 
+`./kotlin-from-sources` instead of `./kotlin` (or `./kotlin-from-sources.bat` instead of `./kotlin.bat`).
