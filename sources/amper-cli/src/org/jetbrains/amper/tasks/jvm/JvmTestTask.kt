@@ -229,19 +229,19 @@ class JvmTestTask(
             inputValues = mapOf("junit-listeners-classpath" to classpathList),
             inputFiles = emptyList(),
         ) {
-            val launcherDir = tempRoot.path.resolve("amper-junit-listeners").createDirectories()
-            cleanDirectory(launcherDir) // we don't want to keep old dependencies that were potentially removed
+            val listenersDir = tempRoot.path.resolve("amper-junit-listeners").createDirectories()
+            cleanDirectory(listenersDir) // we don't want to keep old dependencies that were potentially removed
             val jarNames = classpathList.lines()
             jarNames.forEach { jarName ->
-                val jarResource = javaClass.getResourceAsStream("/junit-listeners/lib/$jarName")
+                val jarResource = javaClass.getResourceAsStream("/junit-listeners/$jarName")
                     ?: error("Cannot find JUnit listeners jar in resources: $jarName")
                 jarResource.use {
-                    launcherDir.resolve(jarName).outputStream().use { out ->
+                    listenersDir.resolve(jarName).outputStream().use { out ->
                         it.copyTo(out)
                     }
                 }
             }
-            IncrementalCache.ExecutionResult(outputFiles = jarNames.map { launcherDir.resolve(it) })
+            IncrementalCache.ExecutionResult(outputFiles = jarNames.map { listenersDir.resolve(it) })
         }
         return result.outputFiles
     }

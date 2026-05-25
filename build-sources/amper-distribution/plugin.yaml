@@ -19,7 +19,7 @@ tasks:
       thirdPartyStagingDir: ${provisionThirdPartyComponents.action.stagingDir}
 
   buildUnpacked:
-    action: !buildUnpackedClasspath
+    action: !buildUnpackedDist
       outputDir: ${taskOutputDir}/dist
       baseClasspath: ${module.runtimeClasspath}
       extraClasspaths: ${pluginSettings.extraClasspaths}
@@ -45,10 +45,11 @@ tasks:
       repository: jetbrains-team-amper-maven
 
   embedClasspathAsResources:
-    action: !buildUnpackedClasspath
-      outputDir: ${taskOutputDir}
-      baseClasspath: ${pluginSettings.embedClasspathAsResources.classpath}
+    action: !assembleClasspathWithIndex
+      outputRoot: ${taskOutputDir}
+      # we have to use this trick to be able to include the dir itself in the resource path
       subdirectoryName: ${pluginSettings.embedClasspathAsResources.resourceDirName}
+      classpath: ${pluginSettings.embedClasspathAsResources.classpath}
       jarListFileName: classpath.txt
 
   # ********** Home Brew **********
@@ -76,4 +77,5 @@ commands:
 
 generated:
   resources:
-    - directory: ${tasks.embedClasspathAsResources.action.outputDir}
+    # we refer to the root so that the nested dir appears in the jar
+    - directory: ${tasks.embedClasspathAsResources.action.outputRoot}

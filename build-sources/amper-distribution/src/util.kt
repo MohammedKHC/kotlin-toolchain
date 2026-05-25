@@ -13,10 +13,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.bouncycastle.openpgp.api.OpenPGPKeyReader
 import org.bouncycastle.openpgp.api.bc.BcOpenPGPApi
+import org.jetbrains.amper.stdlib.hashing.sha256String
 import java.nio.file.Path
+import kotlin.io.path.copyTo
+import kotlin.io.path.createDirectories
+import kotlin.io.path.extension
 import kotlin.io.path.inputStream
 import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.outputStream
+import kotlin.io.path.pathString
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -78,4 +84,19 @@ internal fun verifyGpgSignature(
         error("GPG signature verification failed for ${dataFile.name}")
     }
     println("GPG signature verified successfully for ${dataFile.name}")
+}
+
+internal fun copyWithDeduplication(destDir: Path, sourcePaths: List<Path>) {
+    destDir.createDirectories()
+    // some jars have the exact same filename even though they don't come from the same artifact
+    val alreadySeenFilenames = mutableSetOf<String>()
+    for (path in sourcePaths) {
+        val alreadyExists = !alreadySeenFilenames.add(path.name)
+        val filename = if (alreadyExists) {
+            "${path.nameWithoutExtension}-${path.pathString.sha256String().take(8)}.${path.extension}"
+        } else {
+            path.name
+        }
+        path.copyTo(destDir.resolve(filename))
+    }
 }
