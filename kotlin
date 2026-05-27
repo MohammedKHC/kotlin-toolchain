@@ -17,9 +17,9 @@
 set -e -u
 
 # The version of the Kotlin Toolchain (and CLI) distribution to provision and use
-kotlin_cli_version=0.12.0-dev-3980
+kotlin_cli_version=0.12.0-dev-3987
 # Establish chain of trust from here by specifying exact checksum of Kotlin Toolchain (and CLI) distribution to be run
-kotlin_cli_sha256=344abf929735e35cbc1dd7501035b2287e4723c36a9af8de4b758062b4510899
+kotlin_cli_sha256=dc1dd0cb972ad965a49d1247641b76d6e45b0d40001ffb9261575ccac6b4eaa4
 
 KOTLIN_CLI_DOWNLOAD_ROOT="${KOTLIN_CLI_DOWNLOAD_ROOT:-https://packages.jetbrains.team/maven/p/amper/amper}"
 
