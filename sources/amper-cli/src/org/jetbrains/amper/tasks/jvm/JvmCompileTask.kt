@@ -32,8 +32,8 @@ import org.jetbrains.amper.compilation.singleLeafFragment
 import org.jetbrains.amper.core.AmperUserCacheRoot
 import org.jetbrains.amper.core.extract.cleanDirectory
 import org.jetbrains.amper.engine.BuildTask
-import org.jetbrains.amper.engine.TaskName
 import org.jetbrains.amper.engine.TaskGraphExecutionContext
+import org.jetbrains.amper.engine.TaskName
 import org.jetbrains.amper.frontend.AmperModule
 import org.jetbrains.amper.frontend.Fragment
 import org.jetbrains.amper.frontend.Platform
@@ -203,7 +203,7 @@ internal class JvmCompileTask(
         val resources = fragments.map { it.resourcesPath }.map { it.toAbsolutePath() } + additionalResources.map { it.path }
         val inputFiles = sources + resources + classpath + javaAnnotationProcessorClasspath
 
-        val result = incrementalCache.execute(taskName.name, inputValues, inputFiles) {
+        val result = incrementalCache.execute(taskName.id.value, inputValues, inputFiles) {
             cleanDirectory(javaAnnotationProcessorsGeneratedDir)
             if (!shouldCompileJavaIncrementally(userSettings.java, javaAnnotationProcessorClasspath)) {
                 cleanDirectory(taskOutputRoot)

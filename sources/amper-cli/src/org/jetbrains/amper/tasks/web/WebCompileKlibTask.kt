@@ -145,7 +145,7 @@ internal abstract class WebCompileKlibTask(
         val sources = fragments.flatMap { it.sourceRoots } + additionalSources.map { it.path }
 
         val artifact = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "kotlin.settings" to Json.encodeToString(kotlinUserSettings),
                 "task.output.root" to taskOutputRoot.path.pathString,

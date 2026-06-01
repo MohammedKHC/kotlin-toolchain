@@ -32,7 +32,7 @@ class TransformAarExternalDependenciesTask(
             .flatMap { classpathExtractor(it) }
 
         val executionResult = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = emptyMap(),
             inputFiles = resolvedAndroidCompileDependencies,
         ) {

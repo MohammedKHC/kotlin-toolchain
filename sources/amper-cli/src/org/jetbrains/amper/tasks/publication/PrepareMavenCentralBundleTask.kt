@@ -58,7 +58,7 @@ class PrepareMavenCentralBundleTask(
             ?: error("Expected single PrepareMavenPublishablesTask.Result from task dependencies")
 
         val checksumPublishables = incrementalCache.execute(
-            key = "${taskName.name}-generate-checksums",
+            key = "${taskName.id.value}-generate-checksums",
             inputValues = mapOf(
                 "publishables" to Json.encodeToString(mainPublishables),
             ),
@@ -74,7 +74,7 @@ class PrepareMavenCentralBundleTask(
 
         val allPublishables = mainPublishables + checksumPublishables
         val zip = incrementalCache.executeForFiles(
-            key = "${taskName.name}-zip-bundle",
+            key = "${taskName.id.value}-zip-bundle",
             inputValues = mapOf("publishables" to Json.encodeToString(allPublishables)),
             inputFiles = allPublishables.map { it.path },
         ) {

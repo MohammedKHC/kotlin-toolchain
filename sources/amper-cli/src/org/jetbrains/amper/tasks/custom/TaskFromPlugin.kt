@@ -131,7 +131,7 @@ class TaskFromPlugin(
         }
 
         incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "action" to description.actionClassJvmName + '.' + description.actionFunctionJvmName,
                 "arguments" to description.actionArguments.toStableJsonLikeString(),
@@ -161,7 +161,7 @@ class TaskFromPlugin(
     ) {
         // TODO: Cache the classloader per plugin?
         val classLoader = URLClassLoader(
-            taskName.name,
+            taskName.id.value,
             taskRuntimeClasspath.map { it.toUri().toURL() }.toTypedArray(),
             ClassLoader.getPlatformClassLoader(),
         )

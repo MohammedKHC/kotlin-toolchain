@@ -33,7 +33,7 @@ class JvmMergedClassesTask(
         val outputDir = taskOutputRoot.path
 
         incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf("outputDir" to outputDir.pathString),
             inputFiles = inputDirs,
         ) {

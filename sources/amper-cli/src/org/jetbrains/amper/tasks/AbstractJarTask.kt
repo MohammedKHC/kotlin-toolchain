@@ -34,7 +34,7 @@ abstract class AbstractJarTask(
         val jarConfig = jarConfig()
 
         incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "jarConfig" to Json.encodeToString(jarConfig),
                 "inputDirsDestPaths" to inputDirs.map { it.destPathInArchive }.toString(),

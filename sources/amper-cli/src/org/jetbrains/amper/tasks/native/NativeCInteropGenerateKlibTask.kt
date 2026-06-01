@@ -88,7 +88,7 @@ internal class NativeCInteropGenerateKlibTask(
             val relevantOutputs = inputDefFiles.map { defFile ->
                 async {
                     incrementalCache.execute(
-                        key = "${taskName.name}-${defFile.nameWithoutExtension}",
+                        key = "${taskName.id.value}-${defFile.nameWithoutExtension}",
                         inputValues = mapOf(
                             "target" to platform.nameForCompiler,
                             "kotlinVersion" to kotlinCompilerVersion,

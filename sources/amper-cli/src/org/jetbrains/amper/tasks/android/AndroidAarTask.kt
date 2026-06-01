@@ -82,7 +82,7 @@ class AndroidAarTask(
                 additionalAssets.map { result -> result.assetsRoots.map { it.path.pathString } }
             ),
         )
-        incrementalCache.execute(taskName.name, inputValues, inputFiles) {
+        incrementalCache.execute(taskName.id.value, inputValues, inputFiles) {
             outputAarPath.deleteIfExists()
             outputAarPath.createParentDirectories()
 

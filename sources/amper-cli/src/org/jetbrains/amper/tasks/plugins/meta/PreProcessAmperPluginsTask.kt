@@ -55,7 +55,7 @@ class PreProcessAmperPluginsTask(
         }
 
         val response = incrementalCache.executeForSerializable(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "plugins" to plugins.values.joinToString(),
             ),

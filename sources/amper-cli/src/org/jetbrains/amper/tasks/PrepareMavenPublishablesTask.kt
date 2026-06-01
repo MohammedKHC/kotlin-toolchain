@@ -60,7 +60,7 @@ class PrepareMavenPublishablesTask(
         val signingEnabled = module.isArtifactSigningEnabled()
 
         val publishables = incrementalCache.executeForSerializable<List<MavenPublishable>>(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "platforms" to platforms.joinToString(),
                 "depsCoordinatesOverrides" to Json.encodeToString(depsCoordinatesOverrides),

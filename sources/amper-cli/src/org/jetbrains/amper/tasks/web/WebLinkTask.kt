@@ -130,7 +130,7 @@ internal abstract class WebLinkTask(
 
 
         val artifact = incrementalCache.executeForFiles(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "kotlin.settings" to Json.encodeToString<KotlinUserSettings>(kotlinUserSettings),
                 "task.output.root" to taskOutputRoot.path.pathString,

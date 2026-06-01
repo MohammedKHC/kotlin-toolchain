@@ -34,11 +34,7 @@ class TaskName(
      * TODO: Maybe use Bundle here somehow?
      */
     val renderOperationMonikerWidget: context(Theme) HorizontalLayoutBuilder.() -> Unit,
-) {
-    @Deprecated("Use `id.value` instead", replaceWith = ReplaceWith("this.id.value"))
-    val name: String
-        get() = id.value
-}
+)
 
 /**
  * Constructs a project-scoped (global) task name.

@@ -149,7 +149,7 @@ internal class NativeLinkTask(
 
         val inputFiles = listOfNotNull(includeArtifact) + compiledKLibs
         val artifact = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "kotlin.settings" to Json.encodeToString(kotlinUserSettings),
                 "entry.point" to (entryPoint ?: ""),

@@ -79,7 +79,7 @@ abstract class AndroidDelegatedGradleTask(
         val jdk = jdkProvider.getJdkOrUserError(module.jdkSettings)
 
         val executionResult = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "jdk.version" to jdk.version,
                 "jdk.home" to jdk.homeDir.pathString,

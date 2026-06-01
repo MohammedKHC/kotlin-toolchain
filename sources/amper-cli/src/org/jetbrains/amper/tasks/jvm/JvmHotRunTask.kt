@@ -103,7 +103,7 @@ class JvmHotRunTask(
             add("-Dcompose.reload.devToolsTransparencyEnabled=true")
             add("-Dcompose.reload.dirtyResolveDepthLimit=5")
             add("-Dcompose.reload.virtualMethodResolveEnabled=true")
-            add("-Damper.build.task=${HotReloadTaskType.Reload.getTaskName(module, platform, isTest = false).name}")
+            add("-Damper.build.task=${HotReloadTaskType.Reload.getTaskName(module, platform, isTest = false).id.value}")
         }
 
         return amperJvmArgs + runSettings.userJvmArgs
@@ -144,7 +144,7 @@ class JvmHotRunTask(
 
     override fun getEnvironment(dependenciesResult: List<TaskResult>): Map<String, String> = mapOf(
         ENV_AMPER_SERVER_PORT to portAvailable.toString(),
-        ENV_AMPER_BUILD_TASK to HotReloadTaskType.Reload.getTaskName(module, platform, isTest = false).name,
+        ENV_AMPER_BUILD_TASK to HotReloadTaskType.Reload.getTaskName(module, platform, isTest = false).id.value,
         ENV_AMPER_BUILD_ROOT to projectRoot.path.pathString,
     )
 }

@@ -33,7 +33,7 @@ class JavadocJarTask(
         // TODO give the option to provide real Javadocs by calling Dokka
         val contentsDir = taskOutputRoot.path / "contents"
         incrementalCache.executeForFiles(
-            key = "${taskName.name}-generateEmptyJavadocJar",
+            key = "${taskName.id.value}-generateEmptyJavadocJar",
             inputValues = emptyMap(),
             inputFiles = emptyList(),
         ) {

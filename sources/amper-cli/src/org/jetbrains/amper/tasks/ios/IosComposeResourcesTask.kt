@@ -51,7 +51,7 @@ class IosComposeResourcesTask(
         }
 
         incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = emptyMap(),
             inputFiles = results.map { it.path },
         ) {

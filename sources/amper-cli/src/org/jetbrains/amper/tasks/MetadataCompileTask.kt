@@ -105,7 +105,7 @@ internal class MetadataCompileTask(
         val sourceDirs = fragment.sourceRoots.map { it.toAbsolutePath() } + additionalKotlinJavaSourceDirs.map { it.path }
         val inputFiles = sourceDirs + classpath + refinesPaths + friendPaths
 
-        incrementalCache.execute(taskName.name, inputValues, inputFiles) {
+        incrementalCache.execute(taskName.id.value, inputValues, inputFiles) {
             cleanDirectory(taskOutputRoot.path)
 
             val existingSourceDirs = sourceDirs.filter { it.exists() }

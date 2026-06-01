@@ -83,7 +83,7 @@ abstract class PureArtifactTaskBase(
         executionContext: TaskGraphExecutionContext
     ): TaskResult {
         incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = extraInputs +
                     ("%outputs%" to produces.joinToString(File.pathSeparator) { it.path.pathString }),
             inputFiles = inputPaths,

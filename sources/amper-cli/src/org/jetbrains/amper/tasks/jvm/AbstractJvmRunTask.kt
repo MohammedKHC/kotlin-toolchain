@@ -87,7 +87,7 @@ abstract class AbstractJvmRunTask(
 
     protected open suspend fun getClasspath(dependenciesResult: List<TaskResult>): List<Path> {
         val runtimeClasspathTask = dependenciesResult.filterIsInstance<JvmRuntimeClasspathTask.Result>().singleOrNull()
-            ?: error("Could not find a single ${JvmRuntimeClasspathTask.Result::class.simpleName} in dependencies of ${taskName.name}")
+            ?: error("Could not find a single ${JvmRuntimeClasspathTask.Result::class.simpleName} in dependencies of ${taskName.id.value}")
         return runtimeClasspathTask.jvmRuntimeClasspath
     }
 

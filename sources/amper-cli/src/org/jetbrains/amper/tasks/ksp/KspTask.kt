@@ -236,7 +236,7 @@ internal class KspTask(
         )
         val inputFiles = kspProcessorClasspath + sources + compileLibraries
 
-        incrementalCache.executeForFiles("${taskName.name}-run-ksp", configuration, inputFiles) {
+        incrementalCache.executeForFiles("${taskName.id.value}-run-ksp", configuration, inputFiles) {
             kspOutputPaths.outputDirs.forEach(::cleanDirectory)
             if (sources.isEmpty()) {
                 logger.debug("No sources were found for ${fragments.identificationPhrase()}, skipping KSP")

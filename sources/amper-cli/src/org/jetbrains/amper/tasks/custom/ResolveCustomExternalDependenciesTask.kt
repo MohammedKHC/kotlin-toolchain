@@ -137,7 +137,7 @@ internal class ResolveCustomExternalDependenciesTask(
         val repositories = module.mavenResolveRepositories.map { it.toRepository() }
 
         val dependencyPaths = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "userCacheRoot" to userCacheRoot.path.pathString,
                 "repositories" to repositories.joinToString("|"),
@@ -146,7 +146,7 @@ internal class ResolveCustomExternalDependenciesTask(
             ),
             inputFiles = emptyList()
         ) {
-            spanBuilder(taskName.name)
+            spanBuilder(taskName.id.value)
                 .setAmperModule(module)
                 .setListAttribute("dependencies-coordinates", externalDependencies.map { it.toString() })
                 .use {
@@ -186,7 +186,7 @@ internal class ResolveCustomExternalDependenciesTask(
         val repositories = module.mavenResolveRepositories.map { it.toRepository() }
 
         val dependencyPaths = incrementalCache.execute(
-            key = taskName.name,
+            key = taskName.id.value,
             inputValues = mapOf(
                 "userCacheRoot" to userCacheRoot.path.pathString,
                 "repositories" to repositories.joinToString("|"),
@@ -195,7 +195,7 @@ internal class ResolveCustomExternalDependenciesTask(
             ),
             inputFiles = emptyList()
         ) {
-            spanBuilder(taskName.name)
+            spanBuilder(taskName.id.value)
                 .setAmperModule(module)
                 .setListAttribute("dependencies-coordinates", externalDependencies.map { it.toString() })
                 .use {
@@ -230,7 +230,7 @@ internal class ResolveCustomExternalDependenciesTask(
             override val source: AmperModuleFileSource =
                 // Unique module source
                 AmperModuleFileSource(
-                    hostModule.source.moduleDir.resolve(taskName.name.replace(Regex("[^a-zA-Z0-9.\\-_]"), ""))
+                    hostModule.source.moduleDir.resolve(taskName.id.value.replace(Regex("[^a-zA-Z0-9.\\-_]"), ""))
                 )
             override val aliases: Map<String, Set<Platform>> = emptyMap()
             override val fragments: MutableList<Fragment> = mutableListOf()

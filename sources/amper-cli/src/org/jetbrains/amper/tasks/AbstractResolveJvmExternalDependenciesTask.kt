@@ -44,7 +44,7 @@ internal abstract class AbstractResolveJvmExternalDependenciesTask(
 
     protected abstract fun getMavenCoordinatesToResolve(): List<UnscopedDependency>
 
-    protected open val incrementalCacheKey: String get() = taskName.name
+    protected open val incrementalCacheKey: String get() = taskName.id.value
 
     override suspend fun run(dependenciesResult: List<TaskResult>, executionContext: TaskGraphExecutionContext): TaskResult {
         val repositories = module.mavenResolveRepositories.map { it.toRepository() }.distinct()
@@ -68,7 +68,7 @@ internal abstract class AbstractResolveJvmExternalDependenciesTask(
             configuration,
             emptyList(),
         ) {
-            spanBuilder(taskName.name)
+            spanBuilder(taskName.id.value)
                 .setAmperModule(module)
                 .setListAttribute("dependencies-coordinates", externalUnscopedDependencies.map {
                     when(it) {

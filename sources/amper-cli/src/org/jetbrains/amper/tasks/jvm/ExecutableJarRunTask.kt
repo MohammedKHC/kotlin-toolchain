@@ -60,5 +60,5 @@ class ExecutableJarRunTask(
 
     private fun findExecutableJarPath(dependenciesResult: List<TaskResult>): Path =
         dependenciesResult.filterIsInstance<ExecutableJarTask.Result>().singleOrNull()?.jarPath
-            ?: error("Could not find a suitable JAR task result in dependencies of ${taskName.name}")
+            ?: error("Could not find a suitable JAR task result in dependencies of ${taskName.id.value}")
 }
