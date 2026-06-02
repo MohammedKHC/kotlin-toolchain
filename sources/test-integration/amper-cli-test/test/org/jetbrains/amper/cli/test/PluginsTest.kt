@@ -53,11 +53,10 @@ class PluginsTest : AmperCliTestBase() {
 
     @Test
     fun `distribution plugin`() = runSlowTest {
-        val taskName = ":app:build@distribution-plugin"
         val testProjectSourcesDir = testProject("extensibility/distribution")
         val r1 = runCli(
             projectDir = testProjectSourcesDir,
-            "task", taskName,
+            "task", ":app:build@distribution-plugin",
         )
 
         val buildDir = tempRoot / "build"
@@ -73,7 +72,11 @@ class PluginsTest : AmperCliTestBase() {
         //   In 'compile', the version is aligned with the runtime classpath of the module.
         //   The runtime classpath of the module gets the default Kotlin version transitively from core/lib because it's
         //   higher, so we expect the default Kotlin version even though it sets Kotlin to 2.2.10 explicitly.
-        val actualOutputSubstituted = r1.extractCustomTaskStdout(taskName)
+        val actualOutputSubstituted = r1.extractCustomTaskStdout(
+            moduleName = "app",
+            taskName = "build",
+            pluginName = "distribution-plugin",
+        )
             .replace(projectDir.toString(), $$"$projectDir")
             .replace(Dirs.userCacheRoot.toString(), $$"${Dirs.userCacheRoot}")
             .replace(DefaultVersions.kotlin, $$"${DefaultVersions.kotlin}")
@@ -96,7 +99,9 @@ class PluginsTest : AmperCliTestBase() {
         val projectDir = r1.projectDir
         val buildDir = tempRoot / "build"
         r1.assertCustomTaskStdoutContains(
-            taskName = ":app1:consume@consume-sources-plugin",
+            moduleName = "app1",
+            taskName = "consume",
+            pluginName = "consume-sources-plugin",
             output = """
             Consuming sources: 1
             Got source path: ${projectDir / "app1" / "src"} - [main.kt]
@@ -107,7 +112,9 @@ class PluginsTest : AmperCliTestBase() {
             projectDir = projectDir,
             "task", ":app2:consume@consume-sources-plugin",
         ).assertCustomTaskStdoutContains(
-            taskName = ":app2:consume@consume-sources-plugin",
+            moduleName = "app2",
+            taskName = "consume",
+            pluginName = "consume-sources-plugin",
             output = """
             Consuming sources: 4
             Got source path: ${projectDir / "app2" / "src"} - [main.kt]
@@ -121,7 +128,9 @@ class PluginsTest : AmperCliTestBase() {
             projectDir = projectDir,
             "task", ":app3:consume@consume-sources-plugin",
         ).assertCustomTaskStdoutContains(
-            taskName = ":app3:consume@consume-sources-plugin",
+            moduleName = "app3",
+            taskName = "consume",
+            pluginName = "consume-sources-plugin",
             output = """
             Consuming sources: 3
             Got source path: ${projectDir / "app3" / "resources"} - [hello]
@@ -134,7 +143,9 @@ class PluginsTest : AmperCliTestBase() {
             projectDir = projectDir,
             "task", ":kmp-lib:consume@consume-sources-plugin",
         ).assertCustomTaskStdoutContains(
-            taskName = ":kmp-lib:consume@consume-sources-plugin",
+            moduleName = "kmp-lib",
+            taskName = "consume",
+            pluginName = "consume-sources-plugin",
             output = """
             Consuming sources: 2
             Got source path: ${projectDir / "kmp-lib" / "src"} - null
@@ -146,7 +157,9 @@ class PluginsTest : AmperCliTestBase() {
             projectDir = projectDir,
             "task", ":kmp-lib2:consume@consume-sources-plugin",
         ).assertCustomTaskStdoutContains(
-            taskName = ":kmp-lib2:consume@consume-sources-plugin",
+            moduleName = "kmp-lib2",
+            taskName = "consume",
+            pluginName = "consume-sources-plugin",
             output = """
             Consuming sources: 2
             Got source path: ${projectDir / "kmp-lib2" / "resources"} - null
@@ -590,7 +603,9 @@ class PluginsTest : AmperCliTestBase() {
                 projectDir = projectDir,
                 "task", ":app:check-settings@plugin",
             ).assertCustomTaskStdoutContains(
-                taskName = ":app:check-settings@plugin",
+                moduleName = "app",
+                taskName = "check-settings",
+                pluginName = "plugin",
                 output = """
                     kotlinVersion: 2.1.10
                     kotlinLanguageVersion: 2.1
@@ -608,7 +623,9 @@ class PluginsTest : AmperCliTestBase() {
                 projectDir = projectDir,
                 "task", ":app-default:check-settings@plugin",
             ).assertCustomTaskStdoutContains(
-                taskName = ":app-default:check-settings@plugin",
+                moduleName = "app-default",
+                taskName = "check-settings",
+                pluginName = "plugin",
                 output = """
                     kotlinVersion: ${DefaultVersions.kotlin}
                     kotlinLanguageVersion: null
@@ -681,30 +698,44 @@ class PluginsTest : AmperCliTestBase() {
     @Test
     fun `parametrized dependencies`() = runSlowTest {
         val testProject = testProject("extensibility/parametrized-dependencies")
-        val taskName = ":app:build@test-plugin"
         val result = runCli(
             projectDir = testProject,
-            "task", taskName,
+            "task", ":app:build@test-plugin",
         )
 
         result.assertCustomTaskStdoutEquals(
-            testProject / "expected-plugin-output.txt",
-            taskName,
+            expected = testProject / "expected-plugin-output.txt",
+            moduleName = "app",
+            taskName = "build",
+            pluginName = "test-plugin",
         )
     }
 
-    private fun AmperCliResult.assertCustomTaskStdoutContains(taskName: String, output: String) =
-        assertContains(extractCustomTaskStdout(taskName), output)
+    private fun AmperCliResult.assertCustomTaskStdoutContains(
+        moduleName: String,
+        taskName: String,
+        pluginName: String,
+        output: String,
+    ) = assertContains(extractCustomTaskStdout(moduleName, taskName, pluginName), output)
 
-    private fun AmperCliResult.assertCustomTaskStdoutEquals(expected: Path, taskName: String) =
-        assertEqualsIgnoreLineSeparator(
-            expected.readText(),
-            extractCustomTaskStdout(taskName),
-            expected,
-        )
+    private fun AmperCliResult.assertCustomTaskStdoutEquals(
+        expected: Path,
+        moduleName: String,
+        taskName: String,
+        pluginName: String,
+    ) = assertEqualsIgnoreLineSeparator(
+        expected.readText(),
+        extractCustomTaskStdout(moduleName, taskName, pluginName),
+        expected,
+    )
 
-    private fun AmperCliResult.extractCustomTaskStdout(taskName: String): String {
-        val taskOutputLineRegex = """^.{9}\s+INFO\s+${Regex.escape(taskName)}\s+(.*)$""".toRegex(RegexOption.MULTILINE)
+    private fun AmperCliResult.extractCustomTaskStdout(
+        moduleName: String,
+        taskName: String,
+        pluginName: String,
+    ): String {
+        // the format is defined in TaskFromPlugin.tagForLogs
+        val taskOutputLineRegex = """^\[${Regex.escape(moduleName)}]\[${Regex.escape("$taskName@$pluginName")}]\s+(.*)$""".toRegex(RegexOption.MULTILINE)
         return taskOutputLineRegex
             .findAll(stdoutClean)
             .joinToString(separator = "\n") { it.groupValues[1] }

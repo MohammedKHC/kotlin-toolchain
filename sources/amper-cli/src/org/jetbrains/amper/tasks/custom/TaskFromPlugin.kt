@@ -6,6 +6,7 @@ package org.jetbrains.amper.tasks.custom
 
 import com.github.ajalt.mordant.terminal.Terminal
 import org.jetbrains.amper.cli.AmperBuildOutputRoot
+import org.jetbrains.amper.cli.logging.withoutConsoleLogging
 import org.jetbrains.amper.cli.telemetry.setAmperModule
 import org.jetbrains.amper.cli.userReadableError
 import org.jetbrains.amper.engine.TaskGraphExecutionContext
@@ -185,8 +186,14 @@ class TaskFromPlugin(
                 try {
                     currentThread.contextClassLoader = classLoader
                     StandardStreamsCapture.capturing(
-                        onStderrLine = { logger.error(it) },
-                        onStdoutLine = { logger.info(it) },
+                        onStderrLine = { logger.error("${tagForLogs()} $it") },
+                        onStdoutLine = {
+                            withoutConsoleLogging {
+                                logger.info(it)
+                            }
+                            val fullTaskId = terminal.theme.muted(tagForLogs())
+                            terminal.println("$fullTaskId $it")
+                        },
                     ) {
                         actionMethod.callBy(argumentsMap)
                     }
@@ -202,6 +209,10 @@ class TaskFromPlugin(
                 }
             }
     }
+
+    // TODO revisit how we present this
+    // This currently happens to match the internal ID, but it is just a happy accident and has no reason to
+    private fun tagForLogs(): String = "[${module.userReadableName}][${description.name}@${description.pluginId.value}]"
 
     private val logger = LoggerFactory.getLogger(javaClass)
 }
